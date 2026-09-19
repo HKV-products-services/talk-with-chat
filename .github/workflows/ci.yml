@@ -1,0 +1,93 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  ci:
+    name: CI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "lts/*"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Check generated constants are in sync with pydantic-ai
+        run: |
+          pnpm run gen:constants
+          git diff --exit-code src/lib/generated/
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Typecheck
+        run: pnpm run typecheck
+
+      - name: Typecheck tests
+        run: pnpm run typecheck:test
+
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Headless tests (vitest)
+        run: pnpm run test:headless
+
+  e2e:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    # Run in the official Playwright image: Chromium and its system deps are
+    # pre-installed, so we skip `playwright install` entirely (it was stalling
+    # for ~1h on the hosted runner's network). The tag is pinned to the
+    # project's Playwright version so the bundled browser matches.
+    container:
+      image: mcr.microsoft.com/playwright:v1.59.1-jammy
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "lts/*"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Run deterministic E2E tests
+        run: pnpm run test:e2e
+
+      # Builds the single-file artifact and asserts it renders with every external
+      # request blocked -- the regression guard for the CDN base leaking back in.
+      - name: Run offline artifact E2E test
+        run: pnpm run test:e2e:offline
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
