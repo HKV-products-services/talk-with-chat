@@ -15,6 +15,7 @@ zodat bijwerken neerkomt op: nieuwe upstream ophalen en deze wijzigingen opnieuw
 | `src/Part.tsx` | toolpart `vervolgopties` rendert als `FollowUps` in plaats van als toolkaart |
 | `src/Chat.tsx` | `vervolgopties` niet in het ingevouwen activiteitenblok; klik verstuurt direct; startvraag via `?vraag=` en verborgen moment, gebied en schermcontext via `?anker=`, `?gebied=` en `?context=` (vanuit het dashboard) |
 | `src/components/welcome-screen.tsx` | kop en ondertitel in het Nederlands |
+| `src/components/ai-elements/prompt-input.tsx` | standaardtekst in het invoerveld in het Nederlands |
 | `src/index.css` | **één blok aan het eind**: de kleuren van het dashboard (warm grijs, zwart voor acties, blauw alleen voor focus en "aangepast") en `--plan`, `--veld`, `--veld-rand` |
 | `src/assets/logo.svg` | een gemaal in plaats van het Pydantic-logo (zoals het laadscherm van het dashboard) |
 | `UPSTREAM.md` | dit bestand |
