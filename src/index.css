@@ -278,3 +278,84 @@ body,
 #root {
   height: 100%;
 }
+
+/* ---- Talk with OptiMalen: dezelfde kleuren als het dashboard -------------------------------------
+   Warm grijs, zwart voor acties, blauw alleen voor focus en "aangepast" (in het dashboard is blauw de
+   kleur van de planning). Eén blok, zodat bijwerken naar een nieuwe upstream simpel blijft; zie
+   UPSTREAM.md. Waarden gelijk aan dashboard/src/styles.css. */
+@theme inline {
+  --color-plan: var(--plan);
+  --color-veld: var(--veld);
+  --color-veld-rand: var(--veld-rand);
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: #fcfcfb;
+  --foreground: #0b0b0b;
+  --card: #fcfcfb;
+  --card-foreground: #0b0b0b;
+  --popover: #fcfcfb;
+  --popover-foreground: #0b0b0b;
+  --primary: #0b0b0b;
+  --primary-foreground: #fcfcfb;
+  --secondary: #f3f2ee;
+  --secondary-foreground: #0b0b0b;
+  --muted: #f3f2ee;
+  --muted-foreground: #52514e;
+  --accent: #f3f2ee;
+  --accent-foreground: #0b0b0b;
+  --border: #e6e5e0;
+  --input: #c3c2b7;
+  --ring: #2a78d6;
+  --sugar: #f9f9f7;
+  --sidebar: #f9f9f7;
+  --sidebar-foreground: #0b0b0b;
+  --sidebar-primary: #0b0b0b;
+  --sidebar-primary-foreground: #fcfcfb;
+  --sidebar-accent: #eceae4;
+  --sidebar-accent-foreground: #0b0b0b;
+  --sidebar-border: #e6e5e0;
+  --sidebar-ring: #2a78d6;
+  --pydantic-brand: #52514e;
+  --plan: #2a78d6;
+  --veld: #ffffff;
+  --veld-rand: #c3c2b7;
+}
+
+.dark {
+  --background: #1a1a19;
+  --foreground: #ffffff;
+  --card: #1a1a19;
+  --card-foreground: #ffffff;
+  --popover: #232321;
+  --popover-foreground: #ffffff;
+  --primary: #ffffff;
+  --primary-foreground: #0d0d0d;
+  --secondary: #232321;
+  --secondary-foreground: #ffffff;
+  --muted: #232321;
+  --muted-foreground: #c3c2b7;
+  --accent: #232321;
+  --accent-foreground: #ffffff;
+  --border: rgb(255 255 255 / 10%);
+  --input: #52514e;
+  --ring: #3987e5;
+  --sugar: #0d0d0d;
+  --sidebar: #0d0d0d;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #ffffff;
+  --sidebar-primary-foreground: #0d0d0d;
+  --sidebar-accent: #232321;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgb(255 255 255 / 10%);
+  --sidebar-ring: #3987e5;
+  --pydantic-brand: #c3c2b7;
+  --plan: #3987e5;
+  --veld: #0d0d0d;
+  --veld-rand: #52514e;
+}
+
+body {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}

@@ -112,22 +112,26 @@ function FollowUpField({ label, icon: Icon, prompt, active, onSubmit }: FollowUp
     }
   }
 
+  // Zelfde vorm als in het dashboard (Duiding.tsx): het label erboven, daaronder één invoervak met de
+  // knop erin, zoals een zoekbalk, zodat zonder uitleg te zien is dat de vraag aan te passen is.
   return (
-    <div
-      className={cn(
-        'group/followup flex items-start gap-2.5 rounded-xl border px-3.5 py-2 text-sm transition-colors',
-        active
-          ? 'focus-within:border-primary/50 focus-within:ring-primary/20 hover:border-primary/40 focus-within:ring-2'
-          : 'text-muted-foreground opacity-70',
-        edited && 'border-primary/40 bg-accent/30',
-      )}
-    >
-      <Icon className="text-primary mt-1.5 size-4 shrink-0" aria-hidden />
-      <div className="flex min-w-0 flex-1 flex-col">
-        <span className="text-muted-foreground pt-1 text-xs font-medium">
-          {label}
-          {edited && <span className="text-primary ml-1.5">· aangepast</span>}
-        </span>
+    <div className={cn('flex flex-col gap-1', !active && 'opacity-70')}>
+      <span className="text-muted-foreground flex items-center gap-1.5 text-xs font-semibold">
+        <Icon className="text-plan size-3.5 shrink-0" aria-hidden />
+        {label}
+        {edited && <span className="text-plan font-normal">· aangepast</span>}
+      </span>
+      <div
+        onClick={() => {
+          textareaRef.current?.focus()
+        }}
+        className={cn(
+          'bg-veld border-veld-rand flex cursor-text items-end gap-1.5 rounded-lg border py-1.5 pr-1.5 pl-2.5 text-sm shadow-[inset_0_1px_2px_rgb(11_11_11/0.06)] transition-[border-color,box-shadow]',
+          active &&
+            'hover:border-muted-foreground focus-within:border-plan focus-within:ring-plan/15 focus-within:ring-3',
+          edited && 'border-plan',
+        )}
+      >
         <textarea
           ref={textareaRef}
           value={value}
@@ -139,43 +143,41 @@ function FollowUpField({ label, icon: Icon, prompt, active, onSubmit }: FollowUp
           }}
           onKeyDown={onKeyDown}
           className={cn(
-            'w-full resize-none overflow-hidden bg-transparent py-0.5 leading-6 outline-none',
+            'min-w-0 flex-1 resize-none overflow-hidden bg-transparent py-0.5 leading-6 outline-none',
             !active && 'cursor-default',
           )}
         />
-      </div>
-      {active && (
-        <div className="flex shrink-0 items-center gap-1 self-center">
-          {edited && (
+        {active && (
+          <div className="flex shrink-0 items-center gap-1">
+            {edited && (
+              <button
+                type="button"
+                onClick={() => {
+                  setDraft(undefined)
+                }}
+                aria-label={`${label}: terug naar het voorstel`}
+                title="Terug naar het voorstel (Esc)"
+                className="text-muted-foreground hover:text-foreground bg-muted flex size-7 cursor-pointer items-center justify-center rounded-md border transition-colors"
+              >
+                <RotateCcwIcon className="size-3.5" />
+              </button>
+            )}
             <button
               type="button"
-              onClick={() => {
-                setDraft(undefined)
-              }}
-              aria-label={`${label}: terug naar het voorstel`}
-              title="Terug naar het voorstel (Esc)"
-              className="text-muted-foreground hover:text-foreground hover:bg-accent flex size-7 cursor-pointer items-center justify-center rounded-lg transition-colors"
+              onClick={submit}
+              disabled={value.trim() === ''}
+              aria-label={`${label}: versturen`}
+              title="Versturen (Enter)"
+              className={cn(
+                'flex size-7 cursor-pointer items-center justify-center rounded-md transition-colors disabled:cursor-default disabled:opacity-40',
+                edited ? 'bg-plan text-white' : 'bg-primary text-primary-foreground hover:bg-primary/90',
+              )}
             >
-              <RotateCcwIcon className="size-3.5" />
+              <ArrowUpIcon className="size-3.5" />
             </button>
-          )}
-          <button
-            type="button"
-            onClick={submit}
-            disabled={value.trim() === ''}
-            aria-label={`${label}: versturen`}
-            title="Versturen (Enter)"
-            className={cn(
-              'flex size-7 cursor-pointer items-center justify-center rounded-lg transition-colors disabled:cursor-default disabled:opacity-40',
-              edited
-                ? 'bg-primary text-primary-foreground hover:bg-primary/90'
-                : 'text-muted-foreground hover:bg-accent hover:text-foreground border',
-            )}
-          >
-            <ArrowUpIcon className="size-3.5" />
-          </button>
-        </div>
-      )}
+          </div>
+        )}
+      </div>
     </div>
   )
 }
