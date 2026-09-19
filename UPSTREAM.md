@@ -13,7 +13,7 @@ zodat bijwerken neerkomt op: nieuwe upstream ophalen en deze wijzigingen opnieuw
 | --- | --- |
 | `src/components/follow-ups.tsx` | **nieuw**: de drie vervolgopties als bewerkbare velden, elk met een eigen verzendknop |
 | `src/Part.tsx` | toolpart `vervolgopties` rendert als `FollowUps` in plaats van als toolkaart |
-| `src/Chat.tsx` | `vervolgopties` niet in het ingevouwen activiteitenblok; klik verstuurt direct; startvraag via `?vraag=` en verborgen moment via `?anker=` (vanuit het dashboard) |
+| `src/Chat.tsx` | `vervolgopties` niet in het ingevouwen activiteitenblok; klik verstuurt direct; startvraag via `?vraag=` en verborgen moment en gebied via `?anker=` en `?gebied=` (vanuit het dashboard) |
 | `src/components/welcome-screen.tsx` | kop en ondertitel in het Nederlands |
 | `UPSTREAM.md` | dit bestand |
 

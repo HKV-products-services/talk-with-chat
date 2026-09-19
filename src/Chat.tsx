@@ -57,6 +57,8 @@ const ChatInner = () => {
   // verzoek in dit gesprek verborgen mee, zodat de server "vannacht" en "gisteren zelfde tijd" aan
   // het juiste moment koppelt. De gebruiker ziet alleen zijn vraag.
   const ankerRef = useRef<string | null>(new URLSearchParams(window.location.search).get('anker'))
+  // En het gebied (NOP of ZOF): de chat beantwoordt de vraag binnen dat gebied (issue #5).
+  const gebiedRef = useRef<string | null>(new URLSearchParams(window.location.search).get('gebied'))
   modelRef.current = model
   const effortRef = useRef(effort)
   effortRef.current = effort
@@ -72,6 +74,7 @@ const ChatInner = () => {
           builtinTools: enabledToolsRef.current,
           effort: effortRef.current,
           ...(ankerRef.current ? { anker: ankerRef.current } : {}),
+          ...(gebiedRef.current ? { gebied: gebiedRef.current } : {}),
         }),
       }),
   )
@@ -376,6 +379,7 @@ const ChatInner = () => {
     const url = new URL(window.location.href)
     url.searchParams.delete('vraag')
     url.searchParams.delete('anker')
+    url.searchParams.delete('gebied')
     window.history.replaceState(window.history.state, '', url)
     sendText(vraag)
   })
