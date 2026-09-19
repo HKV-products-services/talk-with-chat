@@ -45,6 +45,16 @@ import { stripBasePath, withBasePath } from '@/lib/base-path'
 
 // TODO: if just a single model, don't show model selector, just a label.
 
+function leesContext(): unknown {
+  const ruw = new URLSearchParams(window.location.search).get('context')
+  if (!ruw) return null
+  try {
+    return JSON.parse(ruw) as unknown
+  } catch {
+    return null
+  }
+}
+
 const ChatInner = () => {
   const { isFiltered, filters } = useToolFilters()
   const [filtersDialogOpen, setFiltersDialogOpen] = useState(false)
@@ -59,6 +69,9 @@ const ChatInner = () => {
   const ankerRef = useRef<string | null>(new URLSearchParams(window.location.search).get('anker'))
   // En het gebied (NOP of ZOF): de chat beantwoordt de vraag binnen dat gebied (issue #5).
   const gebiedRef = useRef<string | null>(new URLSearchParams(window.location.search).get('gebied'))
+  // En bij een vervolgvraag op een begeleidende tekst: het scherm en de tekst (de server haalt de
+  // feiten er zelf bij), zodat "die 11 kleine verschuivingen" ergens naar verwijzen.
+  const contextRef = useRef<unknown>(leesContext())
   modelRef.current = model
   const effortRef = useRef(effort)
   effortRef.current = effort
@@ -75,6 +88,7 @@ const ChatInner = () => {
           effort: effortRef.current,
           ...(ankerRef.current ? { anker: ankerRef.current } : {}),
           ...(gebiedRef.current ? { gebied: gebiedRef.current } : {}),
+          ...(contextRef.current ? { context: contextRef.current } : {}),
         }),
       }),
   )
@@ -380,6 +394,7 @@ const ChatInner = () => {
     url.searchParams.delete('vraag')
     url.searchParams.delete('anker')
     url.searchParams.delete('gebied')
+    url.searchParams.delete('context')
     window.history.replaceState(window.history.state, '', url)
     sendText(vraag)
   })
