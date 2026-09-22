@@ -4,7 +4,7 @@
  *
  * Dezelfde notatie als `tijdtaal.NOTATIE` in de server en `dashboard/src/tijdnotatie.ts`. Hier wordt
  * hij vóór de Markdown-weergave vervangen door `<time datetime>`, dat `Tijdstip` als klein klokje
- * toont (zie `markdown.tsx`); in een vervolgvraag wordt hij een klokteken (zie `follow-ups.tsx`).
+ * toont (zie `markdown.tsx`); in een vervolgvraag staat alleen de mensentaal (zie `alsVeld`, `follow-ups.tsx`).
  */
 
 export const NOTATIE = /\[\[([^[\]]*)\]\]/g
@@ -35,27 +35,23 @@ export function notatieNaarHtml(tekst: string): string {
   )
 }
 
-// Een eigen klokteken per tijd (🕐, 🕑 …): verwijdert de gebruiker er één, dan weten we welke.
-const KLOKKEN = Array.from({ length: 12 }, (_, i) => String.fromCodePoint(0x1f550 + i))
-
-/** Een vervolgvraag zoals het invoerveld hem toont: elke notatie een klokteken, met de tijden. */
-export function naarVeld(vraag: string): { weergave: string; tijden: Map<string, string>; uitleg: string } {
-  const tijden = new Map<string, string>()
-  const uitleg: string[] = []
-  const weergave = vraag.replace(NOTATIE, (heel, inhoud: string) => {
-    const label = tijdLabel(inhoud)
-    const klok = KLOKKEN[tijden.size] as string | undefined
-    if (label === null || klok === undefined) return heel
-    tijden.set(klok, heel)
-    uitleg.push(`${klok} ${label}`)
-    return klok
-  })
-  return { weergave, tijden, uitleg: uitleg.join(' · ') }
+/** De tekst zonder haken: de mensentaal blijft staan. */
+export function zonderNotatie(tekst: string): string {
+  return tekst.replace(NOTATIE, '').replace(/[ \t]+([.,;:?!])/g, '$1').replace(/[ \t]{2,}/g, ' ').trim()
 }
 
-/** Terug naar de notatie: elk klokteken dat er nog staat, wordt weer zijn `[[…]]`. */
-export function uitVeld(weergave: string, tijden: Map<string, string>): string {
-  let uit = weergave
-  for (const [klok, notatie] of tijden) uit = uit.replace(klok, notatie)
-  return uit
+/**
+ * Een vervolgvraag in een invoerveld toont alleen de mensentaal, zonder notatie en zonder klokje: wat
+ * er staat, is wat er verstuurd wordt. De precisie gaat onzichtbaar mee, met één regel:
+ * - onveranderd verstuurd: het voorstel mét `[[…]]`, dus met de absolute tijden;
+ * - aangepast: precies de tekst in het veld. De chat leest "morgenochtend 7.00" dan vanaf het anker
+ *   (T0 en de woordenlijst gaan verborgen mee), en de tekst die de gebruiker las gaat mee als context.
+ * Zo kan een aangepaste tijd nooit botsen met een verborgen tijd erachter.
+ */
+export function alsVeld(vraag: string): string {
+  return zonderNotatie(vraag)
+}
+
+export function teVersturen(voorstel: string, veld: string): string {
+  return veld.trim() === alsVeld(voorstel).trim() ? voorstel.trim() : veld.trim()
 }

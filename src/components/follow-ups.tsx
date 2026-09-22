@@ -9,7 +9,7 @@ import {
 import { useLayoutEffect, useRef, useState, type KeyboardEvent } from 'react'
 
 import { isRecord } from '@/lib/is-record'
-import { naarVeld, uitVeld } from '@/lib/tijdnotatie'
+import { alsVeld, teVersturen } from '@/lib/tijdnotatie'
 import { cn } from '@/lib/utils'
 
 /** Naam van de output-functie in `talkwithoptimalen.agent`. */
@@ -84,9 +84,9 @@ interface FollowUpFieldProps {
 function FollowUpField({ label, icon: Icon, prompt, active, onSubmit }: FollowUpFieldProps) {
   // `undefined` zolang er niet bewerkt is, zodat een voorstel dat nog binnenstreamt
   // gewoon doorloopt in het veld in plaats van op de eerste letters te bevriezen.
-  // talkwithoptimalen: een tijd `[[…]]` staat in het veld als klokteken (met de tijden als tooltip),
-  // en gaat bij versturen weer als notatie mee (issue #10).
-  const { weergave, tijden, uitleg } = naarVeld(prompt)
+  // talkwithoptimalen: het veld toont alleen de mensentaal; onveranderd verstuurd gaat de notatie
+  // `[[…]]` mee, aangepast precies wat er staat (issue #10, zie `alsVeld`).
+  const weergave = alsVeld(prompt)
   const [draft, setDraft] = useState<string | undefined>(undefined)
   const value = draft ?? weergave
   const edited = draft !== undefined && draft !== weergave
@@ -102,7 +102,7 @@ function FollowUpField({ label, icon: Icon, prompt, active, onSubmit }: FollowUp
 
   const submit = () => {
     if (!active || value.trim() === '') return
-    onSubmit(uitVeld(value.trim(), tijden))
+    onSubmit(teVersturen(prompt, value))
   }
 
   const onKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -141,8 +141,7 @@ function FollowUpField({ label, icon: Icon, prompt, active, onSubmit }: FollowUp
           value={value}
           rows={1}
           readOnly={!active}
-          title={uitleg || undefined}
-          aria-label={`${label}: vervolgvraag, aan te passen voor versturen${uitleg ? ` (${uitleg})` : ''}`}
+          aria-label={`${label}: vervolgvraag, aan te passen voor versturen`}
           onChange={(e) => {
             setDraft(e.target.value)
           }}

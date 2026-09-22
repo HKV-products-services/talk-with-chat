@@ -177,6 +177,9 @@ export function Part({
       />
     )
   } else if (toolNameOfPart(part) === FOLLOW_UPS_TOOL && 'input' in part) {
+    // talkwithoptimalen: een afgewezen poging (de controle vond bijv. "run") blijft als deel in het
+    // bericht staan; alleen de laatste poging is het antwoord.
+    if (message.parts.slice(index + 1).some((p) => toolNameOfPart(p) === FOLLOW_UPS_TOOL)) return null
     return (
       <FollowUps
         input={part.input}
