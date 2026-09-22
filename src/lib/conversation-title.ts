@@ -1,3 +1,4 @@
+import { NOTATIE } from '@/lib/tijdnotatie'
 import type { ConversationEntry } from '@/types'
 
 const UNTITLED = 'Untitled chat'
@@ -13,7 +14,11 @@ export function conversationTitle(entry: Pick<ConversationEntry, 'title' | 'firs
   if (title) return title
   // Blank counts as absent, matching the `title` branch above. `??` here let an
   // empty first message through, so every surface rendered an empty name.
-  const firstMessage = entry?.firstMessage?.trim()
+  // talkwithoptimalen: zonder de tijdnotatie `[[…]]` (issue #10); een titel is platte tekst.
+  const firstMessage = entry?.firstMessage
+    ?.replace(NOTATIE, '')
+    .replace(/\s+([?.!,])/g, '$1')
+    .trim()
   if (firstMessage) return firstMessage
   return UNTITLED
 }

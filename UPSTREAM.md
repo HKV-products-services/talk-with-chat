@@ -15,6 +15,7 @@ zodat bijwerken neerkomt op: nieuwe upstream ophalen en deze wijzigingen opnieuw
 | `src/Part.tsx` | toolpart `vervolgopties` rendert als `FollowUps` in plaats van als toolkaart |
 | `src/Chat.tsx` | `vervolgopties` niet in het ingevouwen activiteitenblok; klik verstuurt direct; startvraag via `?vraag=` en verborgen moment, gebied en schermcontext via `?anker=`, `?gebied=` en `?context=` (vanuit het dashboard) |
 | `src/lib/tijdnotatie.ts` | **nieuw**: de tijdnotatie `mensentaal [[2026-09-15T01:00]]` van talkwithoptimalen (issue #10): tooltiptekst, omzetten naar `<time datetime>`, en naar/van een klokteken in een invoerveld |
+| `src/lib/conversation-title.ts` | de titel uit de eerste vraag zonder de notatie `[[…]]` |
 | `src/components/markdown.tsx` | tekst gaat eerst door `notatieNaarHtml` (vóór de Markdown), en `time` rendert als `Tijdstip`: een klein klokje met de absolute tijd als tooltip bij hover en focus |
 | `src/lib/markdown-plugins.ts` | `time` in de allowlist van de sanitizer (`dateTime` stond er al voor elk element) |
 | `src/components/follow-ups.tsx` (idem) | een tijd `[[…]]` in een vervolgoptie staat in het veld als klokteken, met de tijden als tooltip; bij versturen gaat de notatie weer mee |
