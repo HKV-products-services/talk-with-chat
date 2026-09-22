@@ -69,6 +69,8 @@ const ChatInner = () => {
   const ankerRef = useRef<string | null>(new URLSearchParams(window.location.search).get('anker'))
   // En het gebied (NOP of ZOF): de chat beantwoordt de vraag binnen dat gebied (issue #5).
   const gebiedRef = useRef<string | null>(new URLSearchParams(window.location.search).get('gebied'))
+  // En binnen ZOF de afdeling (hoge of lage vaart, issue #8).
+  const afdelingRef = useRef<string | null>(new URLSearchParams(window.location.search).get('afdeling'))
   // En bij een vervolgvraag op een begeleidende tekst: het scherm en de tekst (de server haalt de
   // feiten er zelf bij), zodat "die 11 kleine verschuivingen" ergens naar verwijzen.
   const contextRef = useRef<unknown>(leesContext())
@@ -88,6 +90,7 @@ const ChatInner = () => {
           effort: effortRef.current,
           ...(ankerRef.current ? { anker: ankerRef.current } : {}),
           ...(gebiedRef.current ? { gebied: gebiedRef.current } : {}),
+          ...(afdelingRef.current ? { afdeling: afdelingRef.current } : {}),
           ...(contextRef.current ? { context: contextRef.current } : {}),
         }),
       }),
@@ -394,6 +397,7 @@ const ChatInner = () => {
     url.searchParams.delete('vraag')
     url.searchParams.delete('anker')
     url.searchParams.delete('gebied')
+    url.searchParams.delete('afdeling')
     url.searchParams.delete('context')
     window.history.replaceState(window.history.state, '', url)
     sendText(vraag)

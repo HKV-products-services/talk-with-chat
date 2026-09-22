@@ -13,7 +13,7 @@ zodat bijwerken neerkomt op: nieuwe upstream ophalen en deze wijzigingen opnieuw
 | --- | --- |
 | `src/components/follow-ups.tsx` | **nieuw**: de drie vervolgopties als bewerkbare velden, elk met een eigen verzendknop; zelfde vorm als in het dashboard (label erboven, invoervak met de knop erin) |
 | `src/Part.tsx` | toolpart `vervolgopties` rendert als `FollowUps` in plaats van als toolkaart |
-| `src/Chat.tsx` | `vervolgopties` niet in het ingevouwen activiteitenblok; klik verstuurt direct; startvraag via `?vraag=` en verborgen moment, gebied en schermcontext via `?anker=`, `?gebied=` en `?context=` (vanuit het dashboard) |
+| `src/Chat.tsx` | `vervolgopties` niet in het ingevouwen activiteitenblok; klik verstuurt direct; startvraag via `?vraag=` en verborgen moment, gebied, afdeling en schermcontext via `?anker=`, `?gebied=`, `?afdeling=` en `?context=` (vanuit het dashboard) |
 | `src/lib/tijdnotatie.ts` | **nieuw**: de tijdnotatie `mensentaal [[2026-09-15T01:00]]` van talkwithoptimalen (issue #10): tooltiptekst, omzetten naar `<time datetime>`, en naar/van een klokteken in een invoerveld |
 | `src/lib/conversation-title.ts` | de titel uit de eerste vraag zonder de notatie `[[…]]` |
 | `src/components/markdown.tsx` | tekst gaat eerst door `notatieNaarHtml` (vóór de Markdown), en `time` rendert als `Tijdstip`: een klein klokje met de absolute tijd als tooltip bij hover en focus |
