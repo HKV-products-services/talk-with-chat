@@ -13,7 +13,7 @@ zodat bijwerken neerkomt op: nieuwe upstream ophalen en deze wijzigingen opnieuw
 | --- | --- |
 | `src/components/follow-ups.tsx` | **nieuw**: de drie vervolgopties als bewerkbare velden, elk met een eigen verzendknop; zelfde vorm als in het dashboard (label erboven, invoervak met de knop erin) |
 | `src/Part.tsx` | toolpart `vervolgopties` rendert als `FollowUps` in plaats van als toolkaart |
-| `src/Chat.tsx` | `vervolgopties` niet in het ingevouwen activiteitenblok; klik verstuurt direct; startvraag via `?vraag=` en verborgen moment, gebied en schermcontext via `?anker=`, `?gebied=` en `?context=` (vanuit het dashboard) |
+| `src/Chat.tsx` | `vervolgopties` niet in het ingevouwen activiteitenblok; klik verstuurt direct; startvraag via `?vraag=` en verborgen moment, gebied, afdeling en schermcontext via `?anker=`, `?gebied=`, `?afdeling=` en `?context=` (vanuit het dashboard) |
 | `src/components/welcome-screen.tsx` | kop en ondertitel in het Nederlands |
 | `src/components/ai-elements/prompt-input.tsx` | standaardtekst in het invoerveld in het Nederlands |
 | `src/index.css` | **één blok aan het eind**: de kleuren van het dashboard (warm grijs, zwart voor acties, blauw alleen voor focus en "aangepast") en `--plan`, `--veld`, `--veld-rand` |
