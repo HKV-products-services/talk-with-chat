@@ -9,7 +9,7 @@ export interface Suggestion {
   prompt: string
 }
 
-// Talk with Optimalen: startvragen over de vijf vaste vergelijkingen. Open eindigende prompts (zonder
+// Talk with Optimalen: startvragen over de vaste vergelijkingen. Open eindigende prompts (zonder
 // vraagteken) worden in het invoerveld gezet om af te maken; de rest is een hele vraag.
 const DEFAULT_SUGGESTIONS: Suggestion[] = [
   {
@@ -23,7 +23,7 @@ const DEFAULT_SUGGESTIONS: Suggestion[] = [
     prompt:
       'Hoe veranderde de planning voor 9 september 20:00-23:00 tussen de runs, en welke invoer veroorzaakte dat?',
   },
-  { icon: WrenchIcon, label: 'Ingrepen', prompt: 'Welke ingrepen deden de beheerders, en met welke reden?' },
+  { icon: WrenchIcon, label: 'Pompmodes', prompt: 'Welke pompen stonden niet op OptiMalen, en met welke reden?' },
   {
     icon: MapPinIcon,
     label: 'Gebiedsregeling',
