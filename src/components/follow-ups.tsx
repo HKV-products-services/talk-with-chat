@@ -9,6 +9,7 @@ import {
 import { useLayoutEffect, useRef, useState, type KeyboardEvent } from 'react'
 
 import { isRecord } from '@/lib/is-record'
+import { naarVeld, uitVeld } from '@/lib/tijdnotatie'
 import { cn } from '@/lib/utils'
 
 /** Naam van de output-functie in `talkwithoptimalen.agent`. */
@@ -83,9 +84,12 @@ interface FollowUpFieldProps {
 function FollowUpField({ label, icon: Icon, prompt, active, onSubmit }: FollowUpFieldProps) {
   // `undefined` zolang er niet bewerkt is, zodat een voorstel dat nog binnenstreamt
   // gewoon doorloopt in het veld in plaats van op de eerste letters te bevriezen.
+  // talkwithoptimalen: een tijd `[[…]]` staat in het veld als klokteken (met de tijden als tooltip),
+  // en gaat bij versturen weer als notatie mee (issue #10).
+  const { weergave, tijden, uitleg } = naarVeld(prompt)
   const [draft, setDraft] = useState<string | undefined>(undefined)
-  const value = draft ?? prompt
-  const edited = draft !== undefined && draft !== prompt
+  const value = draft ?? weergave
+  const edited = draft !== undefined && draft !== weergave
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   // Het veld groeit mee met de tekst, zodat een lange vraag niet in een scrollvak verdwijnt.
@@ -98,7 +102,7 @@ function FollowUpField({ label, icon: Icon, prompt, active, onSubmit }: FollowUp
 
   const submit = () => {
     if (!active || value.trim() === '') return
-    onSubmit(value.trim())
+    onSubmit(uitVeld(value.trim(), tijden))
   }
 
   const onKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -137,7 +141,8 @@ function FollowUpField({ label, icon: Icon, prompt, active, onSubmit }: FollowUp
           value={value}
           rows={1}
           readOnly={!active}
-          aria-label={`${label}: vervolgvraag, aan te passen voor versturen`}
+          title={uitleg || undefined}
+          aria-label={`${label}: vervolgvraag, aan te passen voor versturen${uitleg ? ` (${uitleg})` : ''}`}
           onChange={(e) => {
             setDraft(e.target.value)
           }}
