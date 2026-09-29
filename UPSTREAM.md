@@ -19,9 +19,11 @@ zodat bijwerken neerkomt op: nieuwe upstream ophalen en deze wijzigingen opnieuw
 | `src/components/markdown.tsx` | tekst gaat eerst door `notatieNaarHtml` (vóór de Markdown), en `time` rendert als `Tijdstip`: een klein klokje met de absolute tijd als tooltip bij hover en focus |
 | `src/lib/markdown-plugins.ts` | `time` in de allowlist van de sanitizer (`dateTime` stond er al voor elk element) |
 | `src/components/follow-ups.tsx` (idem) | het veld toont alleen de mensentaal van een vervolgoptie (`alsVeld`); onveranderd verstuurd gaat de notatie `[[…]]` mee, aangepast precies wat er staat (`teVersturen`) |
+| `src/components/bronnen.tsx` | **nieuw**: één kaartje "Bronnen" onder het antwoord met de gebruikte gegevens in gewone woorden; de zoekvragen (SQL) uitklapbaar (29 sep, naar america.gov) |
+| `src/Chat.tsx` (idem) | toolaanroepen `query` niet als losse kaarten in het werkblok maar samen in `Bronnen`, vóór de vervolgvragen |
 | `src/components/welcome-screen.tsx` | kop en ondertitel in het Nederlands |
 | `src/components/ai-elements/prompt-input.tsx` | standaardtekst in het invoerveld in het Nederlands |
-| `src/index.css` | **twee blokken aan het eind**: de tooltip van `.tijdstip`, en de kleuren van het dashboard (warm grijs, zwart voor acties, blauw alleen voor focus en "aangepast") en `--plan`, `--veld`, `--veld-rand` |
+| `src/index.css` | **drie blokken aan het eind**: het bronnenkaartje, de tooltip van `.tijdstip`, en de kleuren van het dashboard (koel neutraal grijs, bijna-zwart voor acties, blauw alleen voor focus en "aangepast") en `--plan`, `--veld`, `--veld-rand` |
 | `src/assets/logo.svg` | een gemaal in plaats van het Pydantic-logo (zoals het laadscherm van het dashboard) |
 | `UPSTREAM.md` | dit bestand |
 

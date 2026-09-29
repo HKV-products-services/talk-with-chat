@@ -280,7 +280,7 @@ body,
 }
 
 /* ---- Talk with OptiMalen: dezelfde kleuren als het dashboard -------------------------------------
-   Warm grijs, zwart voor acties, blauw alleen voor focus en "aangepast" (in het dashboard is blauw de
+   Koel neutraal grijs en een witte pagina (naar america.gov, 29 sep), bijna-zwart voor acties, blauw alleen voor focus en "aangepast" (in het dashboard is blauw de
    kleur van de planning). Eén blok, zodat bijwerken naar een nieuwe upstream simpel blijft; zie
    UPSTREAM.md. Waarden gelijk aan dashboard/src/styles.css. */
 @theme inline {
@@ -291,69 +291,69 @@ body,
 
 :root {
   --radius: 0.625rem;
-  --background: #fcfcfb;
-  --foreground: #0b0b0b;
-  --card: #fcfcfb;
-  --card-foreground: #0b0b0b;
-  --popover: #fcfcfb;
-  --popover-foreground: #0b0b0b;
-  --primary: #0b0b0b;
-  --primary-foreground: #fcfcfb;
-  --secondary: #f3f2ee;
-  --secondary-foreground: #0b0b0b;
-  --muted: #f3f2ee;
-  --muted-foreground: #52514e;
-  --accent: #f3f2ee;
-  --accent-foreground: #0b0b0b;
+  --background: #ffffff;
+  --foreground: #212121;
+  --card: #ffffff;
+  --card-foreground: #212121;
+  --popover: #ffffff;
+  --popover-foreground: #212121;
+  --primary: #212121;
+  --primary-foreground: #ffffff;
+  --secondary: #f2f3f4;
+  --secondary-foreground: #212121;
+  --muted: #f2f3f4;
+  --muted-foreground: #4d5358;
+  --accent: #f2f3f4;
+  --accent-foreground: #212121;
   --border: #e6e5e0;
-  --input: #c3c2b7;
-  --ring: #2a78d6;
-  --sugar: #f9f9f7;
-  --sidebar: #f9f9f7;
-  --sidebar-foreground: #0b0b0b;
-  --sidebar-primary: #0b0b0b;
-  --sidebar-primary-foreground: #fcfcfb;
+  --input: #c8ccd2;
+  --ring: #0062a1;
+  --sugar: #ffffff;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #212121;
+  --sidebar-primary: #212121;
+  --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: #eceae4;
-  --sidebar-accent-foreground: #0b0b0b;
+  --sidebar-accent-foreground: #212121;
   --sidebar-border: #e6e5e0;
-  --sidebar-ring: #2a78d6;
-  --pydantic-brand: #52514e;
-  --plan: #2a78d6;
+  --sidebar-ring: #0062a1;
+  --pydantic-brand: #5a6170;
+  --plan: #0062a1;
   --veld: #ffffff;
-  --veld-rand: #c3c2b7;
+  --veld-rand: #c8ccd2;
 }
 
 .dark {
-  --background: #1a1a19;
+  --background: #151920;
   --foreground: #ffffff;
-  --card: #1a1a19;
+  --card: #151920;
   --card-foreground: #ffffff;
-  --popover: #232321;
+  --popover: #1d222a;
   --popover-foreground: #ffffff;
   --primary: #ffffff;
-  --primary-foreground: #0d0d0d;
-  --secondary: #232321;
+  --primary-foreground: #0b0e13;
+  --secondary: #1d222a;
   --secondary-foreground: #ffffff;
-  --muted: #232321;
-  --muted-foreground: #c3c2b7;
-  --accent: #232321;
+  --muted: #1d222a;
+  --muted-foreground: #c8ccd2;
+  --accent: #1d222a;
   --accent-foreground: #ffffff;
   --border: rgb(255 255 255 / 10%);
-  --input: #52514e;
-  --ring: #3987e5;
-  --sugar: #0d0d0d;
-  --sidebar: #0d0d0d;
+  --input: #5a6170;
+  --ring: #3c8fd0;
+  --sugar: #0b0e13;
+  --sidebar: #0b0e13;
   --sidebar-foreground: #ffffff;
   --sidebar-primary: #ffffff;
-  --sidebar-primary-foreground: #0d0d0d;
-  --sidebar-accent: #232321;
+  --sidebar-primary-foreground: #0b0e13;
+  --sidebar-accent: #1d222a;
   --sidebar-accent-foreground: #ffffff;
   --sidebar-border: rgb(255 255 255 / 10%);
-  --sidebar-ring: #3987e5;
-  --pydantic-brand: #c3c2b7;
-  --plan: #3987e5;
-  --veld: #0d0d0d;
-  --veld-rand: #52514e;
+  --sidebar-ring: #3c8fd0;
+  --pydantic-brand: #c8ccd2;
+  --plan: #3c8fd0;
+  --veld: #0b0e13;
+  --veld-rand: #5a6170;
 }
 
 body {
@@ -386,4 +386,42 @@ body {
 .tijdstip:hover::after,
 .tijdstip:focus::after {
   opacity: 1;
+}
+
+/* talkwithoptimalen: één kaartje "Bronnen" onder het antwoord (components/bronnen.tsx), in plaats
+   van een toolkaart per query. Rustig: grijs, geen kleur, de zoekvragen pas na een klik. */
+.bronnen {
+  border: 0;
+  border-radius: 0;
+  background: var(--color-card);
+  box-shadow: 0 4px 16px rgba(17, 17, 26, 0.05), 0 8px 32px rgba(17, 17, 26, 0.05);
+}
+.bronnen-kop {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 14px;
+  color: var(--color-muted-foreground);
+  cursor: pointer;
+}
+.bronnen-kop:hover { color: var(--color-foreground); }
+.bronnen-titel { font-weight: 600; color: var(--color-foreground); }
+.bronnen-namen { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bronnen-aantal { flex: none; font-size: 13px; }
+.bronnen-pijl { transition: transform 0.15s; }
+.bronnen-kop[aria-expanded='true'] .bronnen-pijl { transform: rotate(90deg); }
+.bronnen-lijst { margin: 0; padding: 0 14px 12px; list-style: none; display: grid; gap: 10px; }
+.bronnen-onderschrift { font-size: 12px; color: var(--color-muted-foreground); margin-bottom: 4px; }
+.bronnen-sql {
+  margin: 0;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--color-muted);
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }

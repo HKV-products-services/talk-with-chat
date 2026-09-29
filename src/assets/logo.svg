@@ -1,10 +1,10 @@
 <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
   <!-- Talk with OptiMalen: een gemaal dat water uit de polder over de dijk slaat (zoals het laadscherm
        van het dashboard). Vaste kleuren: een <img> kent de CSS-variabelen niet. -->
-  <path d="M31 25 H48 V48 H31 Z" fill="#2a78d6" fill-opacity="0.12"/>
+  <path d="M31 25 H48 V48 H31 Z" fill="#0062a1" fill-opacity="0.12"/>
   <path d="M22 48 L28 22 L33 22 L39 48 Z" fill="#f3f2ee" stroke="#c3c2b7" stroke-width="1.5" stroke-linejoin="round"/>
-  <path d="M0 37 H24 L22 48 H0 Z" fill="#2a78d6" fill-opacity="0.12"/>
+  <path d="M0 37 H24 L22 48 H0 Z" fill="#0062a1" fill-opacity="0.12"/>
   <path d="M6 22 L14 15 L22 22 V37 H6 Z" fill="#fcfcfb" stroke="#52514e" stroke-width="2" stroke-linejoin="round"/>
-  <path d="M10 40 V31 H18 V19 H31 V24" stroke="#2a78d6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M10 40 V31 H18 V19 H31 V24" stroke="#0062a1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
   <circle cx="10" cy="31" r="3.2" fill="#fcfcfb" stroke="#52514e" stroke-width="1.6"/>
 </svg>

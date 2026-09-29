@@ -6,6 +6,7 @@ import { ChatError } from '@/components/chat-error'
 import { ConfigErrorBanner } from '@/components/config-error-banner'
 import { ConversationLoadError } from '@/components/conversation-load-error'
 import { EditMessageDialog } from '@/components/edit-message-dialog'
+import { Bronnen, QUERY_TOOL, type Bron } from '@/components/bronnen'
 import { FOLLOW_UPS_TOOL } from '@/components/follow-ups'
 import { HiddenToolsGroup } from '@/components/hidden-tools-group'
 import { ThinkingIndicator } from '@/components/thinking-indicator'
@@ -845,7 +846,7 @@ function renderMessageParts(
 
   // Laid out before anything renders, because a block cannot tell whether it is
   // still live until it knows what follows it.
-  const items: ({ kind: 'activity'; runs: PartRun[] } | { kind: 'part'; run: PartRun })[] = []
+  const items: ({ kind: 'activity'; runs: PartRun[] } | { kind: 'part'; run: PartRun } | { kind: 'bronnen' })[] = []
   // Consecutive work — thinking and tool calls — collects into one foldable
   // block, so a turn reads as "what the agent did" then "what it said" rather
   // than as a stack of cards the answer has to be scrolled past.
@@ -857,7 +858,26 @@ function renderMessageParts(
     activity = []
   }
 
+  // talkwithoptimalen: de queries staan niet als losse kaarten in het werkblok, maar samen in één
+  // kaartje "Bronnen" onder het antwoord (vóór de vervolgvragen).
+  const bronnen: Bron[] = message.parts.flatMap((part, i) => {
+    if (descriptors[i].toolName !== QUERY_TOOL) return []
+    const invoer = 'input' in part && part.input && typeof part.input === 'object' ? (part.input as { sql?: unknown }) : {}
+    const uitvoer = 'output' in part && part.output && typeof part.output === 'object' ? (part.output as { row_count?: unknown }) : {}
+    const staat = partState(part)
+    return [
+      {
+        sql: typeof invoer.sql === 'string' ? invoer.sql : null,
+        rijen: typeof uitvoer.row_count === 'number' ? uitvoer.row_count : null,
+        bezig: !COMPLETE_TOOL_STATES.has(staat),
+      },
+    ]
+  })
+
   for (const run of groupParts(descriptors)) {
+    if (run.kind === 'tool' ? run.toolName === QUERY_TOOL : run.kind === 'single' && descriptors[run.index].toolName === QUERY_TOOL) {
+      continue
+    }
     // Parts the message column draws nothing for still ended the current run,
     // so a tool loop split into a foldable block per invisible marker — the
     // exact shape the single block exists to collect. `step-start` marks a model
@@ -873,8 +893,15 @@ function renderMessageParts(
     items.push({ kind: 'part', run })
   }
   flushActivity()
+  if (bronnen.length > 0) {
+    const vervolg = items.findIndex(
+      (item) => item.kind === 'part' && item.run.kind === 'single' && descriptors[item.run.index].toolName === FOLLOW_UPS_TOOL,
+    )
+    items.splice(vervolg === -1 ? items.length : vervolg, 0, { kind: 'bronnen' })
+  }
 
   return items.map((item, position) => {
+    if (item.kind === 'bronnen') return <Bronnen key={`bronnen-${message.id}`} bronnen={bronnen} />
     if (item.kind === 'part') return renderRun(item.run)
 
     const { runs } = item
