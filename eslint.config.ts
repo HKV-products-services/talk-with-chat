@@ -20,15 +20,7 @@ export default defineConfig(
     },
   },
   {
-    ignores: [
-      'dist/**',
-      'server/**',
-      'node_modules/**',
-      'scratch/**',
-      'agent/**',
-      'src/lib/generated/**',
-      'commitlint.config.js',
-    ],
+    ignores: ['dist/**', 'server/**', 'node_modules/**', 'scratch/**', 'src/lib/generated/**'],
   },
   {
     rules: {

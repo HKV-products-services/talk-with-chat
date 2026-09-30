@@ -6,10 +6,9 @@ import type { Plugin } from 'vite'
 import { defineConfig } from 'vite'
 import { viteSingleFile } from 'vite-plugin-singlefile'
 import tsconfigPaths from 'vite-tsconfig-paths'
-// import { analyzer } from 'vite-bundle-analyzer'
 
 // 8000 is quite common for backend, avoid the clash
-const BACKEND_DEV_SERVER_PORT = process.env.BACKEND_PORT ?? 38001
+const BACKEND_DEV_SERVER_PORT = process.env.BACKEND_PORT ?? 7932
 const API_PROXY_PATH = process.env.API_PROXY_PATH ?? '/api'
 
 function apiProxy(pathPrefix: string) {

@@ -43,6 +43,13 @@ pnpm build:offline      # -> offline/index.html, één bestand, geen CDN
 De backend (`talkwithoptimalen.server`) serveert `offline/index.html` op `/chat/`, en zet daarbij
 `window.PYDANTIC_AI_CHAT_CONFIG` in de pagina (basePath `/chat/`). Het dashboard staat op `/`.
 
+**Opgeruimd.** Alles uit ai-chat-ui dat hier niet gebruikt wordt, is weg: de demo-backend (`agent/`),
+`specs/`, `CHANGELOG.md`, `bun.lock`, de hooks en releaseconfiguratie (`.husky/`, `lefthook.yml`,
+`commitlint.config.js`, `cspell.json`, `.releaserc.json`, `.github/`) en de pakketten die daarbij hoorden.
+`package.json` heet `talkwithoptimalen-chat` en is privé: niet publiceerbaar. `pnpm dev` stuurt `/api`
+naar de server van talkwithoptimalen (7932). `README.md` beschrijft deze fork; `LICENSE` blijft die van
+ai-chat-ui.
+
 **Tests.** De testsuite van ai-chat-ui (vitest, Playwright en hun testserver in `tests/`, met
 `playwright*.config.ts`, `vitest.config.ts` en `tsconfig.test.json`) is weggehaald: die testte de
 demo-app van ai-chat-ui, niet OptiMalen, en draaide hier nergens. De backend van de chat valt onder de
