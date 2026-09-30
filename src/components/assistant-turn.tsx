@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react'
 
-
 /**
  * One assistant turn: an avatar gutter plus a single column holding everything
  * the agent produced — reasoning, tool cards, and the answer. Keeping the whole

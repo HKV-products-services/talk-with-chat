@@ -58,7 +58,9 @@ function tabellen(sql: string): string[] {
 export function Bronnen({ bronnen }: { bronnen: Bron[] }) {
   const [open, setOpen] = useState(false)
   const bezig = bronnen.some((b) => b.bezig)
-  const namen = [...new Set(bronnen.flatMap((b) => (b.sql ? tabellen(b.sql) : [])).map((t) => NAAM[t] ?? t.replace(/_/g, ' ')))]
+  const namen = [
+    ...new Set(bronnen.flatMap((b) => (b.sql ? tabellen(b.sql) : [])).map((t) => NAAM[t] ?? t.replace(/_/g, ' '))),
+  ]
   const aantal = bronnen.length
 
   return (
@@ -71,7 +73,11 @@ export function Bronnen({ bronnen }: { bronnen: Bron[] }) {
           setOpen((o) => !o)
         }}
       >
-        {bezig ? <LoaderIcon className="size-4 shrink-0 animate-spin" /> : <DatabaseIcon className="size-4 shrink-0" />}
+        {bezig ? (
+          <LoaderIcon className="size-4 shrink-0 animate-spin" />
+        ) : (
+          <DatabaseIcon className="size-4 shrink-0" />
+        )}
         <span className="bronnen-titel">Bronnen</span>
         <span className="bronnen-namen">{namen.length ? namen.join(', ') : bezig ? 'gegevens opzoeken…' : '—'}</span>
         <span className="bronnen-aantal">
@@ -85,7 +91,11 @@ export function Bronnen({ bronnen }: { bronnen: Bron[] }) {
             <li key={i}>
               <div className="bronnen-onderschrift">
                 Zoekvraag {i + 1}
-                {b.bezig ? ' · bezig' : b.rijen === null ? ' · geen resultaat' : ` · ${b.rijen} ${b.rijen === 1 ? 'rij' : 'rijen'}`}
+                {b.bezig
+                  ? ' · bezig'
+                  : b.rijen === null
+                    ? ' · geen resultaat'
+                    : ` · ${b.rijen} ${b.rijen === 1 ? 'rij' : 'rijen'}`}
               </div>
               {b.sql && <pre className="bronnen-sql">{b.sql.trim()}</pre>}
             </li>

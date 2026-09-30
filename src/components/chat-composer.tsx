@@ -104,15 +104,15 @@ export function ChatComposer({
           <PromptInputTools className="no-scrollbar min-w-0 flex-1 overflow-x-auto [&>*]:shrink-0">
             {/* talkwithoptimalen: filter, model en denkniveau alleen als er iets te kiezen valt */}
             {kiesbaar && (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <PromptInputButton variant="ghost" aria-label="Hidden tools" onClick={onOpenFilters}>
-                  <FilterIcon className="size-4" />
-                  {hiddenToolCount > 0 && <span className="text-xs tabular-nums">{hiddenToolCount}</span>}
-                </PromptInputButton>
-              </TooltipTrigger>
-              <TooltipContent>Hidden tools</TooltipContent>
-            </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <PromptInputButton variant="ghost" aria-label="Hidden tools" onClick={onOpenFilters}>
+                    <FilterIcon className="size-4" />
+                    {hiddenToolCount > 0 && <span className="text-xs tabular-nums">{hiddenToolCount}</span>}
+                  </PromptInputButton>
+                </TooltipTrigger>
+                <TooltipContent>Hidden tools</TooltipContent>
+              </Tooltip>
             )}
 
             <ToolToggleBar tools={availableTools} enabled={enabledTools} onToggle={onToggleTool} />

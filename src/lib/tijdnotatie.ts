@@ -37,7 +37,11 @@ export function notatieNaarHtml(tekst: string): string {
 
 /** De tekst zonder haken: de mensentaal blijft staan. */
 export function zonderNotatie(tekst: string): string {
-  return tekst.replace(NOTATIE, '').replace(/[ \t]+([.,;:?!])/g, '$1').replace(/[ \t]{2,}/g, ' ').trim()
+  return tekst
+    .replace(NOTATIE, '')
+    .replace(/[ \t]+([.,;:?!])/g, '$1')
+    .replace(/[ \t]{2,}/g, ' ')
+    .trim()
 }
 
 /**

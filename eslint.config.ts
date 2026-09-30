@@ -26,7 +26,6 @@ export default defineConfig(
       'node_modules/**',
       'scratch/**',
       'agent/**',
-      'tests/server/**',
       'src/lib/generated/**',
       'commitlint.config.js',
     ],

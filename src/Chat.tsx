@@ -862,8 +862,12 @@ function renderMessageParts(
   // kaartje "Bronnen" onder het antwoord (vóór de vervolgvragen).
   const bronnen: Bron[] = message.parts.flatMap((part, i) => {
     if (descriptors[i].toolName !== QUERY_TOOL) return []
-    const invoer = 'input' in part && part.input && typeof part.input === 'object' ? (part.input as { sql?: unknown }) : {}
-    const uitvoer = 'output' in part && part.output && typeof part.output === 'object' ? (part.output as { row_count?: unknown }) : {}
+    const invoer =
+      'input' in part && part.input && typeof part.input === 'object' ? (part.input as { sql?: unknown }) : {}
+    const uitvoer =
+      'output' in part && part.output && typeof part.output === 'object'
+        ? (part.output as { row_count?: unknown })
+        : {}
     const staat = partState(part)
     return [
       {
@@ -875,7 +879,11 @@ function renderMessageParts(
   })
 
   for (const run of groupParts(descriptors)) {
-    if (run.kind === 'tool' ? run.toolName === QUERY_TOOL : run.kind === 'single' && descriptors[run.index].toolName === QUERY_TOOL) {
+    if (
+      run.kind === 'tool'
+        ? run.toolName === QUERY_TOOL
+        : run.kind === 'single' && descriptors[run.index].toolName === QUERY_TOOL
+    ) {
       continue
     }
     // Parts the message column draws nothing for still ended the current run,
@@ -895,7 +903,8 @@ function renderMessageParts(
   flushActivity()
   if (bronnen.length > 0) {
     const vervolg = items.findIndex(
-      (item) => item.kind === 'part' && item.run.kind === 'single' && descriptors[item.run.index].toolName === FOLLOW_UPS_TOOL,
+      (item) =>
+        item.kind === 'part' && item.run.kind === 'single' && descriptors[item.run.index].toolName === FOLLOW_UPS_TOOL,
     )
     items.splice(vervolg === -1 ? items.length : vervolg, 0, { kind: 'bronnen' })
   }

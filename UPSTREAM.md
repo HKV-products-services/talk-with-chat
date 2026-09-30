@@ -43,6 +43,9 @@ pnpm build:offline      # -> offline/index.html, één bestand, geen CDN
 De backend (`talkwithoptimalen.server`) serveert `offline/index.html` op `/chat/`, en zet daarbij
 `window.PYDANTIC_AI_CHAT_CONFIG` in de pagina (basePath `/chat/`). Het dashboard staat op `/`.
 
-**Tests van upstream.** De Playwright-specs in `tests/e2e/` gaan uit van de upstream-kop, -teksten en
--tokenregel; sinds de rustronde van 30 sep kloppen een paar daarvan niet meer (app-header, reasoning,
-composer, navigation). Ze draaien hier niet in CI; bij een upgrade van upstream opnieuw nalopen.
+**Tests.** De testsuite van ai-chat-ui (vitest, Playwright en hun testserver in `tests/`, met
+`playwright*.config.ts`, `vitest.config.ts` en `tsconfig.test.json`) is weggehaald: die testte de
+demo-app van ai-chat-ui, niet OptiMalen, en draaide hier nergens. De backend van de chat valt onder de
+Python-tests van talkwithoptimalen; een wijziging in de frontend controleer je met `pnpm typecheck`,
+`pnpm lint`, `pnpm build:offline` en in de browser. Haal je een nieuwe versie van ai-chat-ui op, laat
+de tests dan weg.
