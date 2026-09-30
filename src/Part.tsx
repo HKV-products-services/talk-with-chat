@@ -178,8 +178,11 @@ export function Part({
     )
   } else if (toolNameOfPart(part) === FOLLOW_UPS_TOOL && 'input' in part) {
     // talkwithoptimalen: een afgewezen poging (de controle vond bijv. "run") blijft als deel in het
-    // bericht staan; alleen de laatste poging is het antwoord.
+    // bericht staan; alleen de laatste poging is het antwoord. Ook die laatste kan afgewezen zijn (de
+    // herkansingen op, 30 sep): dan staat er de foutkaart, en geen vervolgvragen die niet door de
+    // controle kwamen.
     if (message.parts.slice(index + 1).some((p) => toolNameOfPart(p) === FOLLOW_UPS_TOOL)) return null
+    if ('state' in part && part.state === 'output-error') return null
     return (
       <FollowUps
         input={part.input}
