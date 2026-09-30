@@ -17,7 +17,7 @@ export function ThinkingIndicator() {
           />
         ))}
       </span>
-      <span>Thinking</span>
+      <span>Denkt na</span>
     </div>
   )
 }

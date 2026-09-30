@@ -78,6 +78,6 @@ test.describe('a conversation list that will not load', () => {
     // something about this conversation that the app has no way to know, in the
     // heading and in the tab it names.
     await expect(page.getByRole('heading', { level: 1 })).not.toHaveText('Untitled chat')
-    await expect(page).toHaveTitle('Pydantic AI')
+    await expect(page).toHaveTitle('OptiMalen')
   })
 })

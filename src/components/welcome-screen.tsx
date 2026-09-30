@@ -1,8 +1,6 @@
 import { ActivityIcon, GaugeIcon, MapPinIcon, WrenchIcon, type LucideIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
 
-import logoSvg from '@/assets/logo.svg'
-
 export interface Suggestion {
   icon: LucideIcon
   label: string
@@ -49,16 +47,15 @@ export function WelcomeScreen({ onSelect, composer, suggestions = DEFAULT_SUGGES
     // own, and the same box it occupies on this screen it occupies once the
     // conversation starts — otherwise it visibly narrowed on the first send.
     <div className="animate-fade-in mx-auto flex w-full max-w-3xl flex-col items-center text-center">
-      <img src={logoSvg} alt="" className="mb-5 size-11" />
       {/* h2: the header's conversation title is the page's h1. */}
-      <h2 className="px-4 text-2xl font-semibold tracking-tight text-balance sm:text-3xl">Waar wil je naar kijken?</h2>
-      <p className="text-muted-foreground mt-2 max-w-md px-4 text-sm text-balance">
-        Duid de pompplanning: wat was er gepland, wat draaide er, en waarom. Je ziet welke query de agent draait.
+      <h2 className="welkom-titel px-4 text-balance">Waar wil je naar kijken?</h2>
+      <p className="text-muted-foreground mt-3 max-w-xl px-4 text-lg">
+        Vraag wat er gepland was, wat de gemalen deden, en waarom.
       </p>
 
-      {composer && <div className="mt-7 w-full">{composer}</div>}
+      {composer && <div className="mt-9 w-full">{composer}</div>}
 
-      <ul className="mt-5 flex flex-wrap justify-center gap-2 px-4">
+      <ul className="mt-6 flex flex-wrap justify-center gap-2 px-4">
         {suggestions.map((suggestion) => (
           <li key={suggestion.label}>
             <button
@@ -66,9 +63,8 @@ export function WelcomeScreen({ onSelect, composer, suggestions = DEFAULT_SUGGES
               onClick={() => {
                 onSelect(suggestion.prompt)
               }}
-              className="text-muted-foreground hover:border-primary/40 hover:bg-accent/50 hover:text-foreground focus-visible:ring-ring flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:outline-none"
+              className="startvraag"
             >
-              <suggestion.icon className="text-primary size-3.5" />
               {suggestion.label}
             </button>
           </li>

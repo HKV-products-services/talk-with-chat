@@ -1,9 +1,8 @@
-import { KeyboardIcon, SquarePenIcon } from 'lucide-react'
+import { SquarePenIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
+import logoSvg from '@/assets/logo.svg'
 import { KeyboardShortcutsDialog, shortcutLabel } from '@/components/keyboard-shortcuts-dialog'
-import { ModeToggle } from '@/components/mode-toggle'
-import { Button } from '@/components/ui/button'
 import { SidebarTrigger } from '@/components/ui/sidebar'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { useConversationIdFromUrl } from '@/hooks/useConversationIdFromUrl'
@@ -21,6 +20,21 @@ function startNewConversation() {
   window.dispatchEvent(new Event('history-state-changed'))
 }
 
+// talkwithoptimalen: vanuit de lade van het dashboard naar de chat op volle pagina (?terug=…). Het
+// adres gaat mee in deze sessie, ook als je daarna een nieuw gesprek begint (dat laat de query weg).
+// Alleen een pad op dezelfde oorsprong, nooit een ander domein.
+const TERUG = 'optimalen.terug'
+function terugNaarDashboard(): string | null {
+  if (typeof window === 'undefined' || window.self !== window.top) return null // in de lade: geen knop
+  try {
+    const terug = new URLSearchParams(window.location.search).get('terug')
+    if (terug?.startsWith('/') && !terug.startsWith('//')) window.sessionStorage.setItem(TERUG, terug)
+    return window.sessionStorage.getItem(TERUG) ?? '/'
+  } catch {
+    return '/'
+  }
+}
+
 /**
  * Slim application bar above the conversation. It gives the chat a fixed
  * anchor: where you are (the conversation title), how to get out of a
@@ -31,6 +45,7 @@ export function AppHeader() {
   const { conversations, loaded, failed } = useConversationsState()
   const [shortcutsOpen, setShortcutsOpen] = useState(false)
 
+  const [terug] = useState(terugNaarDashboard)
   const current = conversations.find((entry) => entry.id === conversationId)
   const isNew = conversationId === '/'
   // Until the store has been read there is no entry to find, which is not the
@@ -67,56 +82,46 @@ export function AppHeader() {
     }
   }, [])
 
+  // talkwithoptimalen: een rustige kop zoals het dashboard (naar america.gov): woordmerk, de titel van
+  // het gesprek klein in het midden, en "Nieuw gesprek". Geen rand, geen thema- of sneltoetsknop
+  // (de sneltoetsen werken nog; het thema volgt het systeem).
   return (
-    <header className="bg-background/80 sticky top-0 z-20 flex h-14 shrink-0 items-center gap-2 border-b px-3 backdrop-blur-md">
+    <header className="bg-background/90 sticky top-0 z-20 flex h-16 shrink-0 items-center gap-3 px-4 backdrop-blur-md">
       <Tooltip>
         <TooltipTrigger asChild>
           <SidebarTrigger className="text-muted-foreground hover:text-foreground -ml-1" />
         </TooltipTrigger>
-        <TooltipContent>Toggle sidebar &middot; {shortcutLabel('toggle-sidebar')}</TooltipContent>
+        <TooltipContent>Gesprekken &middot; {shortcutLabel('toggle-sidebar')}</TooltipContent>
       </Tooltip>
 
-      <div className="min-w-0 flex-1">
+      <button type="button" className="woordmerk" onClick={startNewConversation}>
+        <img src={logoSvg} alt="" className="size-6" />
+        <span>OptiMalen</span>
+      </button>
+
+      <div className="min-w-0 flex-1 text-center">
         {/* The app's h1: without it the document outline started at h2 on any
             open conversation. */}
-        <h1 className="truncate text-sm font-medium" title={title}>
-          {title}
+        <h1 className="text-muted-foreground truncate text-[15px] font-normal" title={title}>
+          {isNew ? '' : title}
         </h1>
       </div>
 
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label="Keyboard shortcuts"
-            onClick={() => {
-              setShortcutsOpen(true)
-            }}
-            className="text-muted-foreground hover:text-foreground hidden sm:inline-flex"
-          >
-            <KeyboardIcon className="size-4" />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent>Keyboard shortcuts &middot; {shortcutLabel('shortcuts')}</TooltipContent>
-      </Tooltip>
+      {terug && (
+        <a className="terug-dashboard" href={terug}>
+          ← Dashboard
+        </a>
+      )}
 
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label="New chat"
-            onClick={startNewConversation}
-            className="text-muted-foreground hover:text-foreground"
-          >
+          <button type="button" className="nieuw-gesprek" onClick={startNewConversation}>
             <SquarePenIcon className="size-4" />
-          </Button>
+            <span className="hidden sm:inline">Nieuw gesprek</span>
+          </button>
         </TooltipTrigger>
-        <TooltipContent>New chat &middot; {shortcutLabel('new-chat')}</TooltipContent>
+        <TooltipContent>Nieuw gesprek &middot; {shortcutLabel('new-chat')}</TooltipContent>
       </Tooltip>
-
-      <ModeToggle className="text-muted-foreground hover:text-foreground" />
 
       <KeyboardShortcutsDialog open={shortcutsOpen} onOpenChange={setShortcutsOpen} />
     </header>

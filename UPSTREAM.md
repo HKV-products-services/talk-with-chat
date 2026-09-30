@@ -24,6 +24,12 @@ zodat bijwerken neerkomt op: nieuwe upstream ophalen en deze wijzigingen opnieuw
 | `src/components/welcome-screen.tsx` | kop en ondertitel in het Nederlands |
 | `src/components/ai-elements/prompt-input.tsx` | standaardtekst in het invoerveld in het Nederlands |
 | `src/index.css` | **drie blokken aan het eind**: het bronnenkaartje, de tooltip van `.tijdstip`, en de kleuren van het dashboard (koel neutraal grijs, bijna-zwart voor acties, blauw alleen voor focus en "aangepast") en `--plan`, `--veld`, `--veld-rand` |
+| `index.html`, `src/components/app-sidebar.tsx` | de naam "OptiMalen" in plaats van "Pydantic AI" (tabtitel en zijbalk; 30 sep) |
+| `src/App.tsx`, `src/components/app-sidebar.tsx` | de gesprekken standaard dicht en helemaal weg als ze dicht zijn (`offcanvas` i.p.v. een icoonstrook; 30 sep, "minder zijpaneel") |
+| `src/components/app-header.tsx` | "← Dashboard" terug naar het scherm waar "Volledig scherm" vandaan kwam (`?terug=`, alleen een pad op dezelfde oorsprong; niet in de lade); rustige kop: woordmerk, titel klein in het midden, pil "Nieuw gesprek"; geen rand, geen thema- en sneltoetsknop (de sneltoetsen werken nog) |
+| `src/components/chat-composer.tsx` | het invoerveld als één pil met een ronde blauwe knop; filter, model en denkniveau alleen als er iets te kiezen valt; geen regel met sneltoetsen en tokens eronder |
+| `src/components/welcome-screen.tsx` | grote titel met schreef, één zin eronder, startvragen als stille pillen zonder icoon |
+| `src/components/assistant-turn.tsx`, `reasoning-block.tsx`, `thinking-indicator.tsx` | geen avatar naast het antwoord; "Denkt na" / "Nagedacht" |
 | `src/assets/logo.svg` | een gemaal in plaats van het Pydantic-logo (zoals het laadscherm van het dashboard) |
 | `UPSTREAM.md` | dit bestand |
 
@@ -36,3 +42,7 @@ pnpm build:offline      # -> offline/index.html, één bestand, geen CDN
 
 De backend (`talkwithoptimalen.server`) serveert `offline/index.html` op `/chat/`, en zet daarbij
 `window.PYDANTIC_AI_CHAT_CONFIG` in de pagina (basePath `/chat/`). Het dashboard staat op `/`.
+
+**Tests van upstream.** De Playwright-specs in `tests/e2e/` gaan uit van de upstream-kop, -teksten en
+-tokenregel; sinds de rustronde van 30 sep kloppen een paar daarvan niet meer (app-header, reasoning,
+composer, navigation). Ze draaien hier niet in CI; bij een upgrade van upstream opnieuw nalopen.

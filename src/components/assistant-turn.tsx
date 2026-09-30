@@ -1,7 +1,5 @@
 import type { ReactNode } from 'react'
 
-import logoSvg from '@/assets/logo.svg'
-import { cn } from '@/lib/utils'
 
 /**
  * One assistant turn: an avatar gutter plus a single column holding everything
@@ -12,18 +10,11 @@ import { cn } from '@/lib/utils'
  * While the turn is live the avatar pulses, so a long stretch of tool calls
  * with no prose still reads as "working" rather than "stuck".
  */
-export function AssistantTurn({ children, isStreaming = false }: { children: ReactNode; isStreaming?: boolean }) {
+export function AssistantTurn({ children }: { children: ReactNode; isStreaming?: boolean }) {
   return (
     <div className="animate-message-in group/assistant flex w-full gap-3 py-3">
-      <span
-        aria-hidden
-        className={cn(
-          'bg-card mt-0.5 hidden size-7 shrink-0 items-center justify-center rounded-lg border shadow-xs sm:flex',
-          isStreaming && 'ring-primary/30 animate-pulse ring-2',
-        )}
-      >
-        <img src={logoSvg} alt="" className="size-4" />
-      </span>
+      {/* talkwithoptimalen: geen avatar naast het antwoord (rust); de tekst loopt op dezelfde lijn
+          als de vraag en het invoerveld. Dat hij werkt, zeggen "Denkt na" en het bronnenkaartje. */}
       <div className="flex min-w-0 flex-1 flex-col gap-3">{children}</div>
     </div>
   )

@@ -74,11 +74,10 @@ export function ChatComposer({
   onOpenFilters,
   hiddenToolCount,
   isLoadingModels,
-  usage,
-  showHint = true,
   canSend = true,
 }: ChatComposerProps) {
   const isBusy = status === 'submitted' || status === 'streaming'
+  const kiesbaar = models.length > 1 || availableTools.length > 0 || hiddenToolCount > 0
 
   return (
     // `px-4` matches `ConversationContent`, so the composer's border sits on the
@@ -86,11 +85,12 @@ export function ChatComposer({
     // composer was 16px wider on each side — a visible step between the box you
     // type into and the column it lands in.
     <div className="mx-auto w-full max-w-3xl px-4">
-      <PromptInput onSubmit={onSubmit} className="ring-primary/25 rounded-2xl shadow-sm">
+      {/* talkwithoptimalen: één pil zoals op america.gov en in het dashboard; knop rechts in de pil */}
+      <PromptInput onSubmit={onSubmit} className="invoerpil">
         <PromptInputTextarea
           // The vendored Textarea floors at min-h-16, which left a band of dead
           // space under a one-line draft; grow from a single line instead.
-          className="min-h-11 px-3.5 py-3"
+          className="min-h-11 px-5 py-3.5"
           ref={textareaRef}
           onChange={(e) => {
             onInputChange(e.target.value)
@@ -102,6 +102,8 @@ export function ChatComposer({
           {/* The run controls scroll sideways on a narrow screen instead of
               pushing the send button off the edge. */}
           <PromptInputTools className="no-scrollbar min-w-0 flex-1 overflow-x-auto [&>*]:shrink-0">
+            {/* talkwithoptimalen: filter, model en denkniveau alleen als er iets te kiezen valt */}
+            {kiesbaar && (
             <Tooltip>
               <TooltipTrigger asChild>
                 <PromptInputButton variant="ghost" aria-label="Hidden tools" onClick={onOpenFilters}>
@@ -111,6 +113,7 @@ export function ChatComposer({
               </TooltipTrigger>
               <TooltipContent>Hidden tools</TooltipContent>
             </Tooltip>
+            )}
 
             <ToolToggleBar tools={availableTools} enabled={enabledTools} onToggle={onToggleTool} />
 
@@ -118,7 +121,7 @@ export function ChatComposer({
                 flight, so the toolbar does not jump once it lands. */}
             {isLoadingModels && <Skeleton className="h-8 w-24 rounded-lg" />}
 
-            {models.length > 0 && model && (
+            {kiesbaar && model && (
               <PromptInputModelSelect onValueChange={onModelChange} value={model}>
                 <PromptInputModelSelectTrigger>
                   <PromptInputModelSelectValue />
@@ -133,7 +136,7 @@ export function ChatComposer({
               </PromptInputModelSelect>
             )}
 
-            <EffortMeter value={effort} onValueChange={onEffortChange} />
+            {kiesbaar && <EffortMeter value={effort} onValueChange={onEffortChange} />}
           </PromptInputTools>
 
           {/* While a run is in flight the submit button is disabled (there is no
@@ -163,20 +166,8 @@ export function ChatComposer({
         </PromptInputToolbar>
       </PromptInput>
 
-      {/* Hint centred, usage pinned right: a three-column grid keeps the hint
-          centred on the composer even when the usage chip is present. */}
-      <div className="mt-2 grid grid-cols-[1fr_auto_1fr] items-center gap-2">
-        <span />
-        {showHint ? (
-          <p className="text-muted-foreground hidden text-center text-xs sm:block">
-            <kbd className="font-sans">Enter</kbd> to send &middot; <kbd className="font-sans">Shift</kbd> +{' '}
-            <kbd className="font-sans">Enter</kbd> for a new line
-          </p>
-        ) : (
-          <span />
-        )}
-        <div className="justify-self-end">{usage}</div>
-      </div>
+      {/* talkwithoptimalen: geen regel met sneltoetsen en tokenverbruik onder het veld (rust; een
+          beheerder heeft er niets aan). `usage` en `showHint` blijven in de props voor upstream. */}
     </div>
   )
 }

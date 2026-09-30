@@ -28,7 +28,8 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="system" storageKey="pydantic-chat-ui-theme">
-        <SidebarProvider defaultOpen>
+        {/* talkwithoptimalen: de gesprekken staan standaard dicht; het gesprek is het scherm (naar america.gov) */}
+        <SidebarProvider defaultOpen={false}>
           <AppSidebar />
 
           <SidebarInset className="h-svh min-w-0 overflow-hidden">

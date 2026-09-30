@@ -425,3 +425,79 @@ body {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
+
+/* talkwithoptimalen: rustiger, naar america.gov en het dashboard (30 sep). Een woordmerk in de kop,
+   een grote titel met schreef, één pil als invoerveld met een ronde blauwe knop, en startvragen als
+   stille pillen zonder icoon. */
+.woordmerk {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--color-foreground);
+  cursor: pointer;
+}
+.nieuw-gesprek {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 999px;
+  padding: 8px 18px;
+  background: var(--plan);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.nieuw-gesprek:hover { filter: brightness(1.08); }
+.terug-dashboard {
+  font-size: 14px;
+  color: var(--color-muted-foreground);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.terug-dashboard:hover { color: var(--color-foreground); text-decoration: underline; }
+.welkom-titel {
+  font-family: ui-serif, Georgia, 'Times New Roman', serif;
+  font-size: clamp(32px, 5vw, 44px);
+  line-height: 1.15;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}
+.startvraag {
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  padding: 7px 16px;
+  font-size: 14px;
+  color: var(--color-muted-foreground);
+  background: var(--color-background);
+  transition: color 0.15s, border-color 0.15s;
+  cursor: pointer;
+}
+.startvraag:hover { color: var(--color-foreground); border-color: var(--color-muted-foreground); }
+.startvraag:focus-visible { outline: 2px solid var(--plan); outline-offset: 2px; }
+
+/* de pil: veld en knop op één regel; groeit het veld, dan blijft de knop onderaan */
+form.invoerpil {
+  display: flex;
+  align-items: flex-end;
+  border: 1px solid var(--color-border);
+  border-radius: 28px;
+  background: var(--color-background);
+  box-shadow: 0 6px 24px rgba(17, 17, 26, 0.08);
+  transition: box-shadow 0.15s, border-color 0.15s;
+}
+form.invoerpil > * { border-top: 0 !important; }
+form.invoerpil:focus-within { border-color: var(--plan); box-shadow: 0 10px 32px rgba(17, 17, 26, 0.12); --tw-ring-shadow: 0 0 #0000; }
+form.invoerpil textarea { flex: 1; font-size: 16px; background: transparent; }
+form.invoerpil > div:last-child { flex: none; padding: 6px 7px 7px 0; }
+form.invoerpil button[type='submit'] {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  background: var(--plan);
+  color: #fff;
+}
+form.invoerpil button[type='submit']:disabled { background: var(--color-muted); color: var(--color-muted-foreground); opacity: 1; }

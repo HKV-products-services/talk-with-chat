@@ -16,7 +16,8 @@ import { cn } from '@/lib/utils'
 export function ReasoningBlock({ text, isStreaming }: { text: string; isStreaming: boolean }) {
   const { open, onOpenChange, duration } = useStreamingDisclosure({ isStreaming })
 
-  const label = isStreaming ? 'Thinking' : duration > 0 ? `Thought for ${duration}s` : 'Thinking completed'
+  // talkwithoptimalen: in het Nederlands
+  const label = isStreaming ? 'Denkt na' : duration > 0 ? `${duration} s nagedacht` : 'Nagedacht'
 
   return (
     <Collapsible open={open} onOpenChange={onOpenChange} className="not-prose w-full">
