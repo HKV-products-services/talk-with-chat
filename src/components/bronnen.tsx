@@ -2,10 +2,10 @@ import { ChevronRightIcon, DatabaseIcon, LoaderIcon } from 'lucide-react'
 import { useState } from 'react'
 
 /**
- * Eén kaartje "Bronnen" onder het antwoord, in plaats van een toolkaart per query (talkwithoptimalen,
- * 29 sep, naar het voorbeeld van america.gov). Dicht noemt het in gewone woorden welke gegevens het
+ * Eén kaartje "Bronnen" onder het antwoord, in plaats van een toolkaart per query (naar het voorbeeld
+ * van america.gov). Dicht noemt het in gewone woorden welke gegevens het
  * antwoord gebruikte; open staan de zoekvragen zelf, voor wie het wil nalopen. Het antwoord rust
- * altijd op meerdere queries: een kaart per query was te veel.
+ * altijd op meerdere queries: een kaart per query is te veel.
  */
 export const QUERY_TOOL = 'query'
 

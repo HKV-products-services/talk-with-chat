@@ -85,7 +85,7 @@ function FollowUpField({ label, icon: Icon, prompt, active, onSubmit }: FollowUp
   // `undefined` zolang er niet bewerkt is, zodat een voorstel dat nog binnenstreamt
   // gewoon doorloopt in het veld in plaats van op de eerste letters te bevriezen.
   // talkwithoptimalen: het veld toont alleen de mensentaal; onveranderd verstuurd gaat de notatie
-  // `[[…]]` mee, aangepast precies wat er staat (issue #10, zie `alsVeld`).
+  // `[[…]]` mee, aangepast precies wat er staat.
   const weergave = alsVeld(prompt)
   const [draft, setDraft] = useState<string | undefined>(undefined)
   const value = draft ?? weergave

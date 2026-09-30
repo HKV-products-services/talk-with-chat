@@ -1,5 +1,5 @@
 /**
- * De tijdnotatie van talkwithoptimalen (issue #10): mensentaal, direct gevolgd door de absolute tijd
+ * De tijdnotatie van talkwithoptimalen: mensentaal, direct gevolgd door de absolute tijd
  * tussen dubbele blokhaken. "vannacht 1.00 [[2026-09-15T01:00]]", of een periode "[[van/tot]]".
  *
  * Dezelfde notatie als `tijdtaal.NOTATIE` in de server en `dashboard/src/tijdnotatie.ts`. Hier wordt

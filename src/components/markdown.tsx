@@ -19,7 +19,7 @@ import { notatieNaarHtml, tijdLabel } from '@/lib/tijdnotatie'
  * keeps that from being a thing anyone can do by accident.
  *
  * talkwithoptimalen: een tijd in de notatie `[[…]]` wordt vóór de Markdown een
- * `<time datetime>`, dat `Tijdstip` als klein klokje toont (issue #10).
+ * `<time datetime>`, dat `Tijdstip` als klein klokje toont.
  */
 export function Markdown({ children, components, ...props }: Omit<ComponentProps<typeof Response>, 'rehypePlugins'>) {
   return (

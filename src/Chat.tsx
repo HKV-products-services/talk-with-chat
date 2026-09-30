@@ -68,9 +68,9 @@ const ChatInner = () => {
   // verzoek in dit gesprek verborgen mee, zodat de server "vannacht" en "gisteren zelfde tijd" aan
   // het juiste moment koppelt. De gebruiker ziet alleen zijn vraag.
   const ankerRef = useRef<string | null>(new URLSearchParams(window.location.search).get('anker'))
-  // En het gebied (NOP of ZOF): de chat beantwoordt de vraag binnen dat gebied (issue #5).
+  // En het gebied (NOP of ZOF): de chat beantwoordt de vraag binnen dat gebied.
   const gebiedRef = useRef<string | null>(new URLSearchParams(window.location.search).get('gebied'))
-  // En binnen ZOF de afdeling (hoge of lage vaart, issue #8).
+  // En binnen ZOF de afdeling (hoge of lage vaart).
   const afdelingRef = useRef<string | null>(new URLSearchParams(window.location.search).get('afdeling'))
   // En bij een vervolgvraag op een begeleidende tekst: het scherm en de tekst (de server haalt de
   // feiten er zelf bij), zodat "die 11 kleine verschuivingen" ergens naar verwijzen.

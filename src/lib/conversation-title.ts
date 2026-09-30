@@ -14,7 +14,7 @@ export function conversationTitle(entry: Pick<ConversationEntry, 'title' | 'firs
   if (title) return title
   // Blank counts as absent, matching the `title` branch above. `??` here let an
   // empty first message through, so every surface rendered an empty name.
-  // talkwithoptimalen: zonder de tijdnotatie `[[…]]` (issue #10); een titel is platte tekst.
+  // talkwithoptimalen: zonder de tijdnotatie `[[…]]`; een titel is platte tekst.
   const firstMessage = entry?.firstMessage
     ?.replace(NOTATIE, '')
     .replace(/\s+([?.!,])/g, '$1')

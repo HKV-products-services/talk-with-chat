@@ -17,9 +17,8 @@ const DEFAULT_SUGGESTIONS: Suggestion[] = [
   },
   {
     icon: ActivityIcon,
-    label: 'Herplanning',
-    prompt:
-      'Hoe veranderde de planning voor 9 september 20:00-23:00 tussen de runs, en welke invoer veroorzaakte dat?',
+    label: 'Controle',
+    prompt: 'Waarom zou de controle van 9 september 22:00 anders kiezen dan de goedgekeurde planning?',
   },
   { icon: WrenchIcon, label: 'Pompmodes', prompt: 'Welke pompen stonden niet op OptiMalen, en met welke reden?' },
   {

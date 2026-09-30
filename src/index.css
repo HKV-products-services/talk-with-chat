@@ -280,7 +280,7 @@ body,
 }
 
 /* ---- Talk with OptiMalen: dezelfde kleuren als het dashboard -------------------------------------
-   Koel neutraal grijs en een witte pagina (naar america.gov, 29 sep), bijna-zwart voor acties, blauw alleen voor focus en "aangepast" (in het dashboard is blauw de
+   Koel neutraal grijs en een witte pagina (naar america.gov), bijna-zwart voor acties, blauw alleen voor focus en "aangepast" (in het dashboard is blauw de
    kleur van de planning). Eén blok, zodat bijwerken naar een nieuwe upstream simpel blijft; zie
    UPSTREAM.md. Waarden gelijk aan dashboard/src/styles.css. */
 @theme inline {
@@ -364,7 +364,7 @@ body {
     sans-serif;
 }
 
-/* talkwithoptimalen: de tooltip van een tijd in de notatie [[…]] (issue #10), bij hover én focus. */
+/* talkwithoptimalen: de tooltip van een tijd in de notatie [[…]], bij hover én focus. */
 .tijdstip::after {
   content: attr(data-tijd);
   position: absolute;
@@ -426,7 +426,7 @@ body {
   overflow-wrap: anywhere;
 }
 
-/* talkwithoptimalen: rustiger, naar america.gov en het dashboard (30 sep). Een woordmerk in de kop,
+/* talkwithoptimalen: rustiger, naar america.gov en het dashboard. Een woordmerk in de kop,
    een grote titel met schreef, één pil als invoerveld met een ronde blauwe knop, en startvragen als
    stille pillen zonder icoon. */
 .woordmerk {
