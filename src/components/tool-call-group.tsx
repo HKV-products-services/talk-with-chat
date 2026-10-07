@@ -27,7 +27,7 @@ export function ToolCallGroup({ toolName, states, children }: ToolCallGroupProps
   const { done, running } = splitStates(states)
   const expanded = override ?? running > 0
 
-  const progress = running > 0 ? `${done} done / ${running} running` : 'done'
+  const progress = running > 0 ? `${done} klaar / ${running} bezig` : 'klaar'
 
   const toggle = (
     <button
@@ -42,7 +42,7 @@ export function ToolCallGroup({ toolName, states, children }: ToolCallGroupProps
       <span className="font-medium">{toolName}</span>
       <span className="tabular-nums">x{count}</span>
       <span className="text-muted-foreground/70">{progress}</span>
-      <span className="underline underline-offset-2">{expanded ? 'collapse' : 'show'}</span>
+      <span className="underline underline-offset-2">{expanded ? 'inklappen' : 'tonen'}</span>
     </button>
   )
 

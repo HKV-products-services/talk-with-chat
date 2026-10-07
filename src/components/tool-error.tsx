@@ -10,7 +10,7 @@ import { ToolSection } from '@/components/tool-section'
 export function ToolError({ errorText }: { errorText: string }) {
   return (
     <ToolSection
-      label="Error"
+      label="Fout"
       copyText={errorText}
       className="border-destructive/20 bg-destructive/5"
       contentClassName="bg-destructive/5"

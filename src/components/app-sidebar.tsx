@@ -125,7 +125,7 @@ export function AppSidebar() {
     setConversationToRename(null)
     patchConversation(id, { title }).catch((err: unknown) => {
       console.error('Failed to rename conversation:', err)
-      toast.error('Failed to rename chat')
+      toast.error('Hernoemen is niet gelukt')
     })
   }
 
@@ -138,11 +138,11 @@ export function AppSidebar() {
       deleteConversation(conversationToDelete.id)
         .then(() => {
           setDeleteDialogOpen(false)
-          toast.success('Chat deleted successfully')
+          toast.success('Gesprek verwijderd')
         })
         .catch((err: unknown) => {
           console.error('Failed to delete conversation:', err)
-          toast.error('Failed to delete chat')
+          toast.error('Verwijderen is niet gelukt')
         })
     }
   }
@@ -166,7 +166,7 @@ export function AppSidebar() {
             >
               <a href={withBasePath('/')} onClick={handleNavigate}>
                 <PlusIcon className="text-primary" />
-                <span>New conversation</span>
+                <span>Nieuw gesprek</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -181,8 +181,8 @@ export function AppSidebar() {
               onChange={(e) => {
                 setQuery(e.target.value)
               }}
-              placeholder="Search conversations"
-              aria-label="Search conversations"
+              placeholder="Zoek in gesprekken"
+              aria-label="Zoek in gesprekken"
               className="h-8 pl-8 text-sm"
             />
           </div>
@@ -246,10 +246,10 @@ export function AppSidebar() {
           }}
         >
           <DialogHeader>
-            <DialogTitle>Delete conversation?</DialogTitle>
+            <DialogTitle>Gesprek verwijderen?</DialogTitle>
             <DialogDescription>
-              &ldquo;{conversationTitle(conversationToDelete ?? undefined)}&rdquo; and its messages will be removed
-              from this browser. This action cannot be undone.
+              &ldquo;{conversationTitle(conversationToDelete ?? undefined)}&rdquo; en de berichten erin worden uit deze
+              browser verwijderd. Dat kan niet ongedaan worden gemaakt.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -260,10 +260,10 @@ export function AppSidebar() {
                 setDeleteDialogOpen(false)
               }}
             >
-              Cancel
+              Annuleren
             </Button>
             <Button variant="destructive" onClick={handleConfirmDelete}>
-              Delete
+              Verwijderen
             </Button>
           </DialogFooter>
         </DialogContent>

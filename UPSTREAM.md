@@ -32,6 +32,8 @@ zodat bijwerken neerkomt op: nieuwe upstream ophalen en deze wijzigingen opnieuw
 | `src/components/assistant-turn.tsx`, `reasoning-block.tsx`, `thinking-indicator.tsx` | geen avatar naast het antwoord; "Denkt na" / "Nagedacht" |
 | `src/assets/logo.svg` | een gemaal in plaats van het Pydantic-logo (zoals het laadscherm van het dashboard) |
 | `src/lib/config.ts`, `chat-db.ts`, `welcome-screen.tsx`, `chat-composer.tsx`, `app-header.tsx`, `app-sidebar.tsx`, `hooks/useDocumentTitle.ts` | naam, welkom (titel, zin, invoerveld, startvragen) en de opslag van de gesprekken uit `PYDANTIC_AI_CHAT_CONFIG`, zodat dezelfde chat ook `/chat-kennisbank/` dient met eigen gesprekken; zonder is het de chat van OptiMalen (7 okt) |
+| `src/components/turn-activity.tsx`, `tool-call-group.tsx`, `tool-part-header.tsx`, `tool-part.tsx`, `tool-error.tsx`, `app-sidebar.tsx`, `conversation-*.tsx`, dialogen, `Part.tsx`, `copy-button.tsx`, `chat-composer.tsx`, `Chat.tsx`, `lib/format-time.ts`, `lib/conversation-title.ts` | zichtbare teksten in het Nederlands ("4 s gewerkt", "Klaar", "Zojuist", "Nieuw gesprek"), tijden in `nl-NL`; een geslaagde tool grijs, een fout als rood vierkant met kruis (7 okt) |
+| `src/components/chat-error.tsx`, `src/index.css` | een mislukte run als rustige kaart (`.fout`) met het alarm voor prioriteit hoog en de pillen van "Nieuw gesprek" en de startvragen; de melding achter "Foutmelding" (7 okt) |
 | `UPSTREAM.md` | dit bestand |
 
 ## Bouwen

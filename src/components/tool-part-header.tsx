@@ -7,7 +7,7 @@ import {
   ShieldAlertIcon,
   ShieldCheckIcon,
   ShieldXIcon,
-  XCircleIcon,
+  SquareXIcon,
 } from 'lucide-react'
 
 import { useMemo } from 'react'
@@ -26,13 +26,13 @@ interface StatusEntry {
 }
 
 const STATUS: Record<ToolState, StatusEntry> = {
-  'input-streaming': { label: 'Pending', icon: CircleDashedIcon, className: 'text-muted-foreground' },
-  'input-available': { label: 'Running', icon: LoaderIcon, className: 'text-primary' },
-  'approval-requested': { label: 'Approval Required', icon: ShieldAlertIcon, className: 'text-amber-500' },
-  'approval-responded': { label: 'Approval Responded', icon: ShieldCheckIcon, className: 'text-blue-500' },
-  'output-available': { label: 'Completed', icon: CheckCircle2Icon, className: 'text-primary' },
-  'output-error': { label: 'Error', icon: XCircleIcon, className: 'text-destructive' },
-  'output-denied': { label: 'Denied', icon: ShieldXIcon, className: 'text-destructive' },
+  'input-streaming': { label: 'Wacht', icon: CircleDashedIcon, className: 'text-muted-foreground' },
+  'input-available': { label: 'Bezig', icon: LoaderIcon, className: 'text-primary' },
+  'approval-requested': { label: 'Akkoord nodig', icon: ShieldAlertIcon, className: 'text-amber-500' },
+  'approval-responded': { label: 'Akkoord gegeven', icon: ShieldCheckIcon, className: 'text-blue-500' },
+  'output-available': { label: 'Klaar', icon: CheckCircle2Icon, className: 'text-muted-foreground' },
+  'output-error': { label: 'Fout', icon: SquareXIcon, className: 'text-destructive' },
+  'output-denied': { label: 'Geweigerd', icon: ShieldXIcon, className: 'text-destructive' },
 }
 
 interface ToolPartHeaderProps {

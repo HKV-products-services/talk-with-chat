@@ -21,22 +21,22 @@ export function EditMessageDialog({ open, onOpenChange, onModify, onFork }: Edit
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent showCloseButton={false}>
         <DialogHeader>
-          <DialogTitle>Edit message</DialogTitle>
-          <DialogDescription>What would you like to do with your edited message?</DialogDescription>
+          <DialogTitle>Vraag aanpassen</DialogTitle>
+          <DialogDescription>Wat wil je met de aangepaste vraag doen?</DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-2">
           <Button variant="outline" className="justify-start gap-3 h-auto py-3 px-4" onClick={onModify}>
             <PenLineIcon className="size-4 shrink-0" />
             <div className="flex flex-col items-start text-left">
-              <span className="font-medium">Update conversation</span>
-              <span className="text-xs text-muted-foreground">Replace this message and get a new response</span>
+              <span className="font-medium">Gesprek bijwerken</span>
+              <span className="text-xs text-muted-foreground">Vervang deze vraag en krijg een nieuw antwoord</span>
             </div>
           </Button>
           <Button variant="outline" className="justify-start gap-3 h-auto py-3 px-4" onClick={onFork}>
             <GitForkIcon className="size-4 shrink-0" />
             <div className="flex flex-col items-start text-left">
-              <span className="font-medium">Fork conversation</span>
-              <span className="text-xs text-muted-foreground">Create a new conversation from this point</span>
+              <span className="font-medium">Nieuw gesprek vanaf hier</span>
+              <span className="text-xs text-muted-foreground">Begin een nieuw gesprek vanaf deze vraag</span>
             </div>
           </Button>
         </div>
@@ -47,7 +47,7 @@ export function EditMessageDialog({ open, onOpenChange, onModify, onFork }: Edit
               onOpenChange(false)
             }}
           >
-            Cancel
+            Annuleren
           </Button>
         </DialogFooter>
       </DialogContent>

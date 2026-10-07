@@ -336,7 +336,7 @@ const ChatInner = () => {
     // `model: ''` either fails the request or lets the backend pick something the
     // user did not choose.
     if (!model) {
-      toast.error('No model available yet. Check that the backend is configured.')
+      toast.error('Er is nog geen model. Controleer de instellingen van de server.')
       return
     }
 
@@ -369,7 +369,7 @@ const ChatInner = () => {
       // trailing turn goes — including any prose above it. That is a lot to
       // remove without a word, and it is easy to trigger by typing instead of
       // answering an approval prompt.
-      toast.info('Removed the unfinished tool call so your message could be sent.')
+      toast.info('De onafgemaakte toolaanroep is weggehaald, zodat je vraag verstuurd kon worden.')
       queueSend(text, messages.length - 1)
       setInput('')
       return

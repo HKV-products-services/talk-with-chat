@@ -24,7 +24,7 @@ function availableClipboard(): Clipboard | undefined {
  * Copy action that confirms itself: without the tick, a click on a silent icon
  * gives no sign the clipboard actually took the text.
  */
-export function CopyButton({ text, label = 'Copy' }: { text: string; label?: string }) {
+export function CopyButton({ text, label = 'Kopiëren' }: { text: string; label?: string }) {
   const [copied, setCopied] = useState(false)
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -38,7 +38,7 @@ export function CopyButton({ text, label = 'Copy' }: { text: string; label?: str
   const copy = () => {
     const clipboard = availableClipboard()
     if (!clipboard) {
-      toast.error('Copying needs a secure (https) connection.')
+      toast.error('Kopiëren kan alleen via een beveiligde verbinding (https).')
       return
     }
     clipboard
@@ -56,7 +56,7 @@ export function CopyButton({ text, label = 'Copy' }: { text: string; label?: str
   }
 
   return (
-    <MessageAction label={copied ? 'Copied' : label} onClick={copy}>
+    <MessageAction label={copied ? 'Gekopieerd' : label} onClick={copy}>
       {copied ? <CheckIcon className="text-primary size-3.5" /> : <CopyIcon className="size-3.5" />}
     </MessageAction>
   )

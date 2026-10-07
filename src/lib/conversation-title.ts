@@ -1,7 +1,7 @@
 import { NOTATIE } from '@/lib/tijdnotatie'
 import type { ConversationEntry } from '@/types'
 
-const UNTITLED = 'Untitled chat'
+const UNTITLED = 'Nieuw gesprek'
 
 /**
  * Display name for a conversation: the name the user gave it, else the opening

@@ -1,4 +1,12 @@
-import { ChevronRightIcon, LoaderIcon, ShieldAlertIcon, ShieldXIcon, SparklesIcon, XCircleIcon } from 'lucide-react'
+import {
+  ChevronRightIcon,
+  LoaderIcon,
+  ShieldAlertIcon,
+  ShieldXIcon,
+  SparklesIcon,
+  SquareXIcon,
+  XCircleIcon,
+} from 'lucide-react'
 import { type ReactNode } from 'react'
 
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
@@ -70,28 +78,28 @@ export function TurnActivity({ calls, hasReasoning, isStreaming, children }: Tur
   let tone = ''
 
   if (needsApproval) {
-    label = 'Waiting for your approval'
+    label = 'Wacht op je akkoord'
     Icon = ShieldAlertIcon
     tone = 'text-amber-600 dark:text-amber-500'
   } else if (isStreaming) {
-    label = running ? `Running ${running}` : hasReasoning ? 'Thinking' : 'Working'
+    label = running ? `Bezig met ${running}` : hasReasoning ? 'Denkt na' : 'Bezig'
     Icon = LoaderIcon
   } else if (hasError) {
-    label = trail ? `Ran into a problem · ${trail}` : 'Ran into a problem'
-    Icon = XCircleIcon
+    label = trail ? `Liep vast · ${trail}` : 'Liep vast'
+    Icon = SquareXIcon
     tone = 'text-destructive'
   } else if (stopped) {
-    label = trail ? `Stopped before finishing · ${trail}` : 'Stopped before finishing'
+    label = trail ? `Gestopt voor het klaar was · ${trail}` : 'Gestopt voor het klaar was'
     Icon = XCircleIcon
     tone = 'text-destructive'
   } else if (denied) {
-    label = trail ? `Denied · ${trail}` : 'Denied'
+    label = trail ? `Geweigerd · ${trail}` : 'Geweigerd'
     Icon = ShieldXIcon
     tone = 'text-destructive'
   } else if (duration > 0) {
-    label = trail ? `Worked for ${String(duration)}s · ${trail}` : `Worked for ${String(duration)}s`
+    label = trail ? `${String(duration)} s gewerkt · ${trail}` : `${String(duration)} s gewerkt`
   } else {
-    label = trail || 'Activity'
+    label = trail || 'Activiteit'
   }
 
   return (
@@ -106,7 +114,7 @@ export function TurnActivity({ calls, hasReasoning, isStreaming, children }: Tur
           // The visible line is part of the name rather than replaced by it: a
           // name that drops it leaves speech input unable to say the control
           // (WCAG 2.5.3) and a screen reader unable to hear what the turn did.
-          aria-label={`${open ? 'Hide' : 'Show'} activity: ${label}`}
+          aria-label={`${open ? 'Verberg' : 'Toon'} activiteit: ${label}`}
           className={cn(
             'text-muted-foreground hover:text-foreground group flex max-w-full items-center gap-1.5 text-sm transition-colors',
             tone,

@@ -12,9 +12,9 @@ import { RetryBanner } from '@/components/retry-banner'
  */
 export function ConversationLoadError({ onRetry }: { onRetry: () => void }) {
   return (
-    <RetryBanner icon={DatabaseBackupIcon} onRetry={onRetry} retryLabel="Try again">
-      Couldn&apos;t open this conversation from browser storage. Its messages are still saved — sending is paused so a
-      new reply cannot overwrite them.
+    <RetryBanner icon={DatabaseBackupIcon} onRetry={onRetry} retryLabel="Opnieuw proberen">
+      Dit gesprek kon niet uit de browser worden geopend. De berichten zijn nog bewaard; versturen staat stil, zodat
+      een nieuw antwoord ze niet overschrijft.
     </RetryBanner>
   )
 }

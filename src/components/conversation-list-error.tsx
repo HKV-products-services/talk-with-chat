@@ -15,8 +15,8 @@ import { RetryBanner } from '@/components/retry-banner'
 export function ConversationListError({ onRetry }: { onRetry: () => void }) {
   return (
     <div className="group-data-[state=collapsed]:hidden">
-      <RetryBanner icon={DatabaseBackupIcon} onRetry={onRetry} retryLabel="Try again">
-        Couldn&apos;t load your chats from browser storage.
+      <RetryBanner icon={DatabaseBackupIcon} onRetry={onRetry} retryLabel="Opnieuw proberen">
+        De gesprekken konden niet uit de browser worden gelezen.
       </RetryBanner>
     </div>
   )

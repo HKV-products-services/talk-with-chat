@@ -48,7 +48,7 @@ export function ConversationMenu({ conversation, title, onRename, onTogglePin, o
           }}
         >
           <PencilIcon className="size-3.5" />
-          Rename
+          Hernoemen
         </DropdownMenuItem>
         <DropdownMenuItem
           onSelect={() => {
@@ -56,7 +56,7 @@ export function ConversationMenu({ conversation, title, onRename, onTogglePin, o
           }}
         >
           {conversation.pinned ? <PinOffIcon className="size-3.5" /> : <PinIcon className="size-3.5" />}
-          {conversation.pinned ? 'Unpin' : 'Pin'}
+          {conversation.pinned ? 'Losmaken' : 'Vastzetten'}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
@@ -66,7 +66,7 @@ export function ConversationMenu({ conversation, title, onRename, onTogglePin, o
           }}
         >
           <Trash2Icon className="size-3.5" />
-          Delete
+          Verwijderen
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

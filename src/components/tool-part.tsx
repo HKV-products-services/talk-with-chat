@@ -72,7 +72,7 @@ export function ToolPart({ part, onApprovalResponse }: ToolPartProps) {
           card made it disappear. */}
       <button
         type="button"
-        aria-label="Hide this tool"
+        aria-label="Verberg deze tool"
         title={`Hide ${toolName} tool cards`}
         onClick={() => {
           addFilter(toolName)
@@ -93,7 +93,7 @@ export function ToolPart({ part, onApprovalResponse }: ToolPartProps) {
               (isRunCode ? (
                 <RunCodeInput input={part.input} />
               ) : (
-                <ToolSection label="Arguments" copyText={inputText} contentClassName="bg-muted/40">
+                <ToolSection label="Invoer" copyText={inputText} contentClassName="bg-muted/40">
                   <ToolOutputCode output={part.input} />
                 </ToolSection>
               ))}
@@ -116,7 +116,7 @@ export function ToolPart({ part, onApprovalResponse }: ToolPartProps) {
               ) : (
                 part.output !== undefined && (
                   <ToolSection
-                    label="Result"
+                    label="Uitkomst"
                     copyText={outputText}
                     contentClassName="bg-muted/40 overflow-x-auto [&_table]:w-full"
                   >

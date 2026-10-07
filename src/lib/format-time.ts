@@ -10,22 +10,22 @@ function startOfDay(timestamp: number): number {
 }
 
 /**
- * Short, human relative time for a conversation entry: `Just now`, `12m`,
- * `3h`, `Yesterday`, then a calendar date once it is older than a week.
+ * Short, human relative time for a conversation entry: `Zojuist`, `12 min geleden`,
+ * `3 uur geleden`, `Gisteren`, then a calendar date once it is older than a week.
  */
 export function relativeTime(timestamp: number, now = Date.now()): string {
   const elapsed = now - timestamp
-  if (elapsed < MINUTE) return 'Just now'
-  if (elapsed < HOUR) return `${Math.floor(elapsed / MINUTE)}m ago`
+  if (elapsed < MINUTE) return 'Zojuist'
+  if (elapsed < HOUR) return `${Math.floor(elapsed / MINUTE)} min geleden`
 
   const dayDelta = Math.round((startOfDay(now) - startOfDay(timestamp)) / DAY)
-  if (dayDelta === 0) return `${Math.floor(elapsed / HOUR)}h ago`
-  if (dayDelta === 1) return 'Yesterday'
-  if (dayDelta < 7) return `${dayDelta}d ago`
+  if (dayDelta === 0) return `${Math.floor(elapsed / HOUR)} uur geleden`
+  if (dayDelta === 1) return 'Gisteren'
+  if (dayDelta < 7) return `${dayDelta} dagen geleden`
 
   const date = new Date(timestamp)
   const sameYear = date.getFullYear() === new Date(now).getFullYear()
-  return date.toLocaleDateString(undefined, {
+  return date.toLocaleDateString('nl-NL', {
     month: 'short',
     day: 'numeric',
     ...(sameYear ? {} : { year: 'numeric' }),
@@ -34,7 +34,7 @@ export function relativeTime(timestamp: number, now = Date.now()): string {
 
 // Constructing an Intl formatter is expensive and these run per sidebar row on
 // every render; build each one once.
-const absoluteFormatter = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' })
+const absoluteFormatter = new Intl.DateTimeFormat('nl-NL', { dateStyle: 'medium', timeStyle: 'short' })
 
 /** Full timestamp, for the tooltip behind the relative label. */
 export function absoluteTime(timestamp: number): string {
@@ -47,11 +47,11 @@ export function absoluteTime(timestamp: number): string {
  */
 export function dateGroupLabel(timestamp: number, now = Date.now()): string {
   const dayDelta = Math.round((startOfDay(now) - startOfDay(timestamp)) / DAY)
-  if (dayDelta <= 0) return 'Today'
-  if (dayDelta === 1) return 'Yesterday'
-  if (dayDelta < 7) return 'Previous 7 days'
-  if (dayDelta < 30) return 'Previous 30 days'
-  return 'Older'
+  if (dayDelta <= 0) return 'Vandaag'
+  if (dayDelta === 1) return 'Gisteren'
+  if (dayDelta < 7) return 'Afgelopen 7 dagen'
+  if (dayDelta < 30) return 'Afgelopen 30 dagen'
+  return 'Ouder'
 }
 
 export interface DateGroup<T> {

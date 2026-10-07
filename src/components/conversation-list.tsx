@@ -42,7 +42,7 @@ export function ConversationList({
   const pinned = conversations.filter((entry) => entry.pinned)
   const rest = conversations.filter((entry) => !entry.pinned)
   const groups: DateGroup<ConversationEntry>[] = [
-    ...(pinned.length > 0 ? [{ label: 'Pinned', items: pinned }] : []),
+    ...(pinned.length > 0 ? [{ label: 'Vastgezet', items: pinned }] : []),
     ...groupByDate(rest, (entry) => entry.timestamp),
   ]
 

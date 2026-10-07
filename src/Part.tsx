@@ -84,7 +84,7 @@ export function Part({
           </UserBubble>
           <div className="mt-1 flex items-center justify-end gap-0.5">
             <MessageAction
-              label="Submit edit"
+              label="Aanpassing versturen"
               onClick={() => {
                 onSubmitEdit?.(message.id, editText)
               }}
@@ -93,7 +93,7 @@ export function Part({
               <CheckIcon className="size-3.5" />
             </MessageAction>
             <MessageAction
-              label="Cancel edit"
+              label="Aanpassing annuleren"
               onClick={() => {
                 onCancelEdit?.(message.id, editText)
               }}
@@ -121,14 +121,14 @@ export function Part({
               {status !== 'submitted' && status !== 'streaming' && (
                 <>
                   <MessageAction
-                    label="Edit message"
+                    label="Vraag aanpassen"
                     onClick={() => {
                       onStartEdit?.(message.id)
                     }}
                   >
                     <PencilIcon className="size-3.5" />
                   </MessageAction>
-                  <CopyButton text={part.text} label="Copy message" />
+                  <CopyButton text={part.text} label="Vraag kopiëren" />
                 </>
               )}
               {conversationId && messageIndex !== undefined && onNavigateToFork && (
@@ -155,9 +155,9 @@ export function Part({
             glyph sits on the same left edge as the prose above it. */}
         {index === message.parts.length - 1 && (
           <div className="mt-1 -ml-[7px] flex items-center gap-0.5">
-            <CopyButton text={part.text} label="Copy response" />
+            <CopyButton text={part.text} label="Antwoord kopiëren" />
             <MessageAction
-              label="Regenerate response"
+              label="Opnieuw antwoorden"
               onClick={() => {
                 regen(message.id)
               }}

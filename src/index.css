@@ -501,3 +501,13 @@ form.invoerpil button[type='submit'] {
   color: #fff;
 }
 form.invoerpil button[type='submit']:disabled { background: var(--color-muted); color: var(--color-muted-foreground); opacity: 1; }
+
+/* talkwithoptimalen: een mislukte run (components/chat-error.tsx) als rustige kaart, zoals "Bronnen"; kleur
+   alleen in het alarm: prioriteit hoog, een rood vierkant met kruis, zoals in het dashboard. */
+.fout {
+  overflow: hidden;
+  background: var(--color-card);
+  box-shadow: 0 4px 16px rgba(17, 17, 26, 0.05), 0 8px 32px rgba(17, 17, 26, 0.05);
+}
+.fout-vlak { fill: var(--color-destructive); }
+.fout-teken { stroke: #fff; stroke-width: 1.8; stroke-linecap: round; fill: none; }

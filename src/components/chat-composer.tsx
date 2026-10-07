@@ -147,11 +147,11 @@ export function ChatComposer({
           {isBusy ? (
             <Tooltip>
               <TooltipTrigger asChild>
-                <PromptInputSubmit type="button" aria-label="Stop generating" onClick={onStop} className="shrink-0">
+                <PromptInputSubmit type="button" aria-label="Stoppen" onClick={onStop} className="shrink-0">
                   <SquareIcon className="size-4 fill-current" />
                 </PromptInputSubmit>
               </TooltipTrigger>
-              <TooltipContent>Stop generating</TooltipContent>
+              <TooltipContent>Stoppen</TooltipContent>
             </Tooltip>
           ) : (
             // `status` is deliberately not forwarded: the busy states are handled
@@ -161,7 +161,7 @@ export function ChatComposer({
             // button reads as "cancel", on a control that still sends.
             <PromptInputSubmit
               disabled={!input.trim() || !model || !canSend}
-              aria-label="Send message"
+              aria-label="Versturen"
               className="shrink-0"
             />
           )}

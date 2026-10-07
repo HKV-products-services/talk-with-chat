@@ -45,8 +45,8 @@ export function RenameConversationDialog({
       <DialogContent>
         <form onSubmit={submit}>
           <DialogHeader>
-            <DialogTitle>Rename conversation</DialogTitle>
-            <DialogDescription>Give this chat a name you will recognise later.</DialogDescription>
+            <DialogTitle>Gesprek hernoemen</DialogTitle>
+            <DialogDescription>Geef dit gesprek een naam die je later herkent.</DialogDescription>
           </DialogHeader>
 
           <Input
@@ -54,8 +54,8 @@ export function RenameConversationDialog({
             onChange={(event) => {
               setDraft(event.target.value)
             }}
-            aria-label="Conversation name"
-            placeholder="Conversation name"
+            aria-label="Naam van het gesprek"
+            placeholder="Naam van het gesprek"
             className="my-4"
             autoFocus
           />
@@ -68,10 +68,10 @@ export function RenameConversationDialog({
                 onOpenChange(false)
               }}
             >
-              Cancel
+              Annuleren
             </Button>
             <Button type="submit" disabled={draft.trim() === ''}>
-              Save
+              Opslaan
             </Button>
           </DialogFooter>
         </form>
