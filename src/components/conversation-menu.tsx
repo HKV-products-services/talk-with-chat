@@ -30,7 +30,7 @@ export function ConversationMenu({ conversation, title, onRename, onTogglePin, o
         <Button
           variant="ghost"
           size="icon"
-          aria-label={`Conversation options: ${title}`}
+          aria-label={`Opties voor ${title}`}
           className="text-muted-foreground hover:text-foreground data-[state=open]:bg-accent absolute top-1.5 right-1 size-7 opacity-0 transition-opacity group-hover/row:opacity-100 focus-visible:opacity-100 data-[state=open]:opacity-100 group-data-[state=collapsed]:hidden"
           onClick={(event) => {
             // The row is a link; keep the menu from navigating.
@@ -60,7 +60,6 @@ export function ConversationMenu({ conversation, title, onRename, onTogglePin, o
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
-          variant="destructive"
           onSelect={() => {
             onDelete(conversation)
           }}

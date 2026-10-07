@@ -279,82 +279,93 @@ body,
   height: 100%;
 }
 
-/* ---- Talk with OptiMalen: dezelfde kleuren als het dashboard -------------------------------------
-   Koel neutraal grijs en een witte pagina (naar america.gov), bijna-zwart voor acties, blauw alleen voor focus en "aangepast" (in het dashboard is blauw de
-   kleur van de planning). Eén blok, zodat bijwerken naar een nieuwe upstream simpel blijft; zie
-   UPSTREAM.md. Waarden gelijk aan dashboard/src/styles.css. */
+/* ---- Talk with OptiMalen: het palet van het dashboard ------------------------------------------------
+   ISA-101: grijs is normaal, kleur alleen voor een afwijking (met icoon en label) en blauw voor focus en de
+   hoofdactie. De basistokens hebben de namen en waarden van dashboard/src/styles.css; elke kleur van
+   shadcn verwijst daarnaar, zodat de chat geen eigen grijzen krijgt. Donker definieert alleen de basis
+   opnieuw. Eén blok, zodat bijwerken naar een nieuwe upstream simpel blijft; zie UPSTREAM.md. */
 @theme inline {
   --color-plan: var(--plan);
   --color-veld: var(--veld);
   --color-veld-rand: var(--veld-rand);
+  --color-paneel: var(--paneel);
+  --color-warning: var(--warning);
+  /* rechte hoeken, zoals de kaarten en menu's van het dashboard; een pil zet zijn eigen ronding */
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: #ffffff;
-  --foreground: #212121;
-  --card: #ffffff;
-  --card-foreground: #212121;
-  --popover: #ffffff;
-  --popover-foreground: #212121;
-  --primary: #212121;
-  --primary-foreground: #ffffff;
-  --secondary: #f2f3f4;
-  --secondary-foreground: #212121;
-  --muted: #f2f3f4;
-  --muted-foreground: #4d5358;
-  --accent: #f2f3f4;
-  --accent-foreground: #212121;
-  --border: #e6e5e0;
-  --input: #c8ccd2;
-  --ring: #0062a1;
-  --sugar: #ffffff;
-  --sidebar: #ffffff;
-  --sidebar-foreground: #212121;
-  --sidebar-primary: #212121;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #eceae4;
-  --sidebar-accent-foreground: #212121;
-  --sidebar-border: #e6e5e0;
-  --sidebar-ring: #0062a1;
-  --pydantic-brand: #5a6170;
-  --plan: #0062a1;
-  --veld: #ffffff;
+  /* de basis: dezelfde tokens als het dashboard */
+  --page: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #f2f3f4;
+  --ink: #212121;
+  --ink-2: #4d5358;
+  --border: rgba(33, 33, 33, 0.1);
   --veld-rand: #c8ccd2;
+  --plan: #0062a1;
+  --paneel: #f0f6fa;
+  --warning: #fab219;
+  --critical: #d03b3b;
+  --op-kleur: #ffffff; /* tekst en tekens op een kleurvlak: de blauwe knop, het alarm */
+  --schaduw: 0 4px 16px rgba(17, 17, 26, 0.05), 0 8px 32px rgba(17, 17, 26, 0.05);
+  --schaduw-zwevend: 0 6px 24px rgba(17, 17, 26, 0.08);
+  --schaduw-focus: 0 10px 32px rgba(17, 17, 26, 0.12);
+
+  /* shadcn, afgeleid van de basis */
+  --radius: 0.625rem;
+  --veld: var(--page);
+  --background: var(--surface);
+  --foreground: var(--ink);
+  --card: var(--surface);
+  --card-foreground: var(--ink);
+  --popover: var(--surface);
+  --popover-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: var(--page);
+  --secondary: var(--surface-2);
+  --secondary-foreground: var(--ink);
+  --muted: var(--surface-2);
+  --muted-foreground: var(--ink-2);
+  --accent: var(--surface-2);
+  --accent-foreground: var(--ink);
+  --destructive: var(--critical);
+  --input: var(--veld-rand);
+  --ring: var(--plan);
+  --sugar: var(--page);
+  --sidebar: var(--page);
+  --sidebar-foreground: var(--ink);
+  --sidebar-primary: var(--ink);
+  --sidebar-primary-foreground: var(--page);
+  /* een rij in een lijst of menu, zoals de plekkiezer van het dashboard */
+  --sidebar-accent: var(--paneel);
+  --sidebar-accent-foreground: var(--ink);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--plan);
+  --pydantic-brand: var(--ink-2);
 }
 
 .dark {
-  --background: #151920;
-  --foreground: #ffffff;
-  --card: #151920;
-  --card-foreground: #ffffff;
-  --popover: #1d222a;
-  --popover-foreground: #ffffff;
-  --primary: #ffffff;
-  --primary-foreground: #0b0e13;
-  --secondary: #1d222a;
-  --secondary-foreground: #ffffff;
-  --muted: #1d222a;
-  --muted-foreground: #c8ccd2;
-  --accent: #1d222a;
-  --accent-foreground: #ffffff;
-  --border: rgb(255 255 255 / 10%);
-  --input: #5a6170;
-  --ring: #3c8fd0;
-  --sugar: #0b0e13;
-  --sidebar: #0b0e13;
-  --sidebar-foreground: #ffffff;
-  --sidebar-primary: #ffffff;
-  --sidebar-primary-foreground: #0b0e13;
-  --sidebar-accent: #1d222a;
-  --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: rgb(255 255 255 / 10%);
-  --sidebar-ring: #3c8fd0;
-  --pydantic-brand: #c8ccd2;
-  --plan: #3c8fd0;
-  --veld: #0b0e13;
+  --page: #0b0e13;
+  --surface: #151920;
+  --surface-2: #1d222a;
+  --ink: #ffffff;
+  --ink-2: #c8ccd2;
+  --border: rgba(255, 255, 255, 0.1);
   --veld-rand: #5a6170;
+  --plan: #3c8fd0;
+  --paneel: rgba(60, 143, 208, 0.14);
 }
+
+/* Menu's als de plekkiezer van het dashboard: schaduw en een rand, de rij in de paneeltint. */
+[data-slot='dropdown-menu-content'] {
+  border: 0;
+  box-shadow: var(--schaduw), 0 0 0 1px var(--border);
+}
+[data-slot='dropdown-menu-item'][data-highlighted] { background: var(--paneel); }
 
 body {
   font-family:
@@ -394,7 +405,7 @@ body {
   border: 0;
   border-radius: 0;
   background: var(--color-card);
-  box-shadow: 0 4px 16px rgba(17, 17, 26, 0.05), 0 8px 32px rgba(17, 17, 26, 0.05);
+  box-shadow: var(--schaduw);
 }
 .bronnen-kop {
   display: flex;
@@ -446,7 +457,7 @@ body {
   border-radius: 999px;
   padding: 8px 18px;
   background: var(--plan);
-  color: #fff;
+  color: var(--op-kleur);
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -486,11 +497,11 @@ form.invoerpil {
   border: 1px solid var(--color-border);
   border-radius: 28px;
   background: var(--color-background);
-  box-shadow: 0 6px 24px rgba(17, 17, 26, 0.08);
+  box-shadow: var(--schaduw-zwevend);
   transition: box-shadow 0.15s, border-color 0.15s;
 }
 form.invoerpil > * { border-top: 0 !important; }
-form.invoerpil:focus-within { border-color: var(--plan); box-shadow: 0 10px 32px rgba(17, 17, 26, 0.12); --tw-ring-shadow: 0 0 #0000; }
+form.invoerpil:focus-within { border-color: var(--plan); box-shadow: var(--schaduw-focus); --tw-ring-shadow: 0 0 #0000; }
 form.invoerpil textarea { flex: 1; font-size: 16px; background: transparent; }
 form.invoerpil > div:last-child { flex: none; padding: 6px 7px 7px 0; }
 form.invoerpil button[type='submit'] {
@@ -498,7 +509,7 @@ form.invoerpil button[type='submit'] {
   height: 42px;
   border-radius: 999px;
   background: var(--plan);
-  color: #fff;
+  color: var(--op-kleur);
 }
 form.invoerpil button[type='submit']:disabled { background: var(--color-muted); color: var(--color-muted-foreground); opacity: 1; }
 
@@ -507,7 +518,7 @@ form.invoerpil button[type='submit']:disabled { background: var(--color-muted); 
 .fout {
   overflow: hidden;
   background: var(--color-card);
-  box-shadow: 0 4px 16px rgba(17, 17, 26, 0.05), 0 8px 32px rgba(17, 17, 26, 0.05);
+  box-shadow: var(--schaduw);
 }
 .fout-vlak { fill: var(--color-destructive); }
-.fout-teken { stroke: #fff; stroke-width: 1.8; stroke-linecap: round; fill: none; }
+.fout-teken { stroke: var(--op-kleur); stroke-width: 1.8; stroke-linecap: round; fill: none; }

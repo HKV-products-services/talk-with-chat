@@ -139,7 +139,7 @@ export async function saveConversation(
     lastKnownActivity.set(conversation.id, conversation.timestamp)
     if (notify) notifyConversationsChanged()
   } catch (error) {
-    toast.error('Failed to save conversation. Your browser storage may be full or unavailable.')
+    toast.error('Het gesprek kon niet worden bewaard. De opslag van de browser is misschien vol of niet beschikbaar.')
     throw error
   }
 }
@@ -189,7 +189,9 @@ async function updateConversation(
     return write.happened
   } catch (error) {
     if (toastOnFailure) {
-      toast.error('Failed to save conversation. Your browser storage may be full or unavailable.')
+      toast.error(
+        'Het gesprek kon niet worden bewaard. De opslag van de browser is misschien vol of niet beschikbaar.',
+      )
     }
     throw error
   }
@@ -406,7 +408,9 @@ export async function saveMessages(
     }
     await transactionDone(tx, 'Failed to save messages')
   } catch (error) {
-    toast.error('Failed to save messages. Your browser storage may be full or unavailable.')
+    toast.error(
+      'De berichten konden niet worden bewaard. De opslag van de browser is misschien vol of niet beschikbaar.',
+    )
     throw error
   }
 

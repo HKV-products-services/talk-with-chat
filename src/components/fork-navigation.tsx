@@ -28,7 +28,7 @@ export function ForkNavigation({
         onClick={() => {
           onNavigate(siblings[currentIndex - 1].id)
         }}
-        aria-label="Previous fork"
+        aria-label="Vorige versie"
       >
         <ChevronLeftIcon className="size-3.5" />
       </button>
@@ -42,7 +42,7 @@ export function ForkNavigation({
         onClick={() => {
           onNavigate(siblings[currentIndex + 1].id)
         }}
-        aria-label="Next fork"
+        aria-label="Volgende versie"
       >
         <ChevronRightIcon className="size-3.5" />
       </button>

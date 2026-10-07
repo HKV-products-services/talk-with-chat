@@ -56,7 +56,7 @@ export function AppHeader() {
   // so the heading says the neutral thing it does know rather than asserting
   // the conversation is untitled, and the tab keeps the app's own title.
   const named = loaded && !failed
-  const title = isNew ? 'New chat' : named ? conversationTitle(current) : failed ? 'Chat' : ''
+  const title = isNew ? 'Nieuw gesprek' : named ? conversationTitle(current) : failed ? 'Gesprek' : ''
 
   useDocumentTitle(isNew || !named ? null : title)
 

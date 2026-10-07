@@ -80,7 +80,7 @@ export function TurnActivity({ calls, hasReasoning, isStreaming, children }: Tur
   if (needsApproval) {
     label = 'Wacht op je akkoord'
     Icon = ShieldAlertIcon
-    tone = 'text-amber-600 dark:text-amber-500'
+    tone = 'text-warning'
   } else if (isStreaming) {
     label = running ? `Bezig met ${running}` : hasReasoning ? 'Denkt na' : 'Bezig'
     Icon = LoaderIcon

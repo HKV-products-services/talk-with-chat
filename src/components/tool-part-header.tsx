@@ -28,8 +28,8 @@ interface StatusEntry {
 const STATUS: Record<ToolState, StatusEntry> = {
   'input-streaming': { label: 'Wacht', icon: CircleDashedIcon, className: 'text-muted-foreground' },
   'input-available': { label: 'Bezig', icon: LoaderIcon, className: 'text-primary' },
-  'approval-requested': { label: 'Akkoord nodig', icon: ShieldAlertIcon, className: 'text-amber-500' },
-  'approval-responded': { label: 'Akkoord gegeven', icon: ShieldCheckIcon, className: 'text-blue-500' },
+  'approval-requested': { label: 'Akkoord nodig', icon: ShieldAlertIcon, className: 'text-warning' },
+  'approval-responded': { label: 'Akkoord gegeven', icon: ShieldCheckIcon, className: 'text-plan' },
   'output-available': { label: 'Klaar', icon: CheckCircle2Icon, className: 'text-muted-foreground' },
   'output-error': { label: 'Fout', icon: SquareXIcon, className: 'text-destructive' },
   'output-denied': { label: 'Geweigerd', icon: ShieldXIcon, className: 'text-destructive' },

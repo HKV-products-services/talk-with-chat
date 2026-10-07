@@ -13,9 +13,9 @@ export function ConfigErrorBanner({ onRetry, isRetrying }: { onRetry: () => void
       icon={WifiOffIcon}
       onRetry={onRetry}
       disabled={isRetrying}
-      retryLabel={isRetrying ? 'Retrying' : 'Retry'}
+      retryLabel={isRetrying ? 'Opnieuw proberen…' : 'Opnieuw proberen'}
     >
-      Couldn&apos;t reach the agent to load models.
+      De server is niet bereikbaar; er is nog geen model.
     </RetryBanner>
   )
 }

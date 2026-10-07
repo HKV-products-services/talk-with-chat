@@ -8,12 +8,12 @@ const SHIFT = IS_MAC ? '⇧' : 'Shift'
 const SHORTCUTS = [
   // macOS orders modifiers ⌃⌥⇧⌘ and writes them unseparated, so the Mac
   // spelling is ⇧⌘O rather than ⌘ShiftO.
-  { id: 'new-chat', keys: IS_MAC ? [SHIFT, MOD, 'O'] : [MOD, SHIFT, 'O'], description: 'New chat' },
-  { id: 'toggle-sidebar', keys: [MOD, 'B'], description: 'Toggle sidebar' },
-  { id: 'shortcuts', keys: [MOD, '/'], description: 'Show this list' },
-  { id: 'send', keys: ['Enter'], description: 'Send message' },
-  { id: 'newline', keys: [SHIFT, 'Enter'], description: 'New line in the composer' },
-  { id: 'cancel-edit', keys: ['Esc'], description: 'Cancel an edit' },
+  { id: 'new-chat', keys: IS_MAC ? [SHIFT, MOD, 'O'] : [MOD, SHIFT, 'O'], description: 'Nieuw gesprek' },
+  { id: 'toggle-sidebar', keys: [MOD, 'B'], description: 'Gesprekken tonen of verbergen' },
+  { id: 'shortcuts', keys: [MOD, '/'], description: 'Deze lijst tonen' },
+  { id: 'send', keys: ['Enter'], description: 'Versturen' },
+  { id: 'newline', keys: [SHIFT, 'Enter'], description: 'Nieuwe regel in het invoerveld' },
+  { id: 'cancel-edit', keys: ['Esc'], description: 'Aanpassen annuleren' },
 ] as const
 
 /**
@@ -39,8 +39,8 @@ export function KeyboardShortcutsDialog({ open, onOpenChange }: KeyboardShortcut
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Keyboard shortcuts</DialogTitle>
-          <DialogDescription>Move around without reaching for the mouse.</DialogDescription>
+          <DialogTitle>Sneltoetsen</DialogTitle>
+          <DialogDescription>Alles bereikbaar zonder muis.</DialogDescription>
         </DialogHeader>
 
         <dl className="divide-border divide-y">

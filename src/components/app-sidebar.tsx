@@ -159,13 +159,9 @@ export function AppSidebar() {
 
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              tooltip="New conversation"
-              className="bg-primary/10 text-foreground hover:bg-primary/15 font-medium"
-            >
+            <SidebarMenuButton asChild tooltip="Nieuw gesprek" className="font-medium">
               <a href={withBasePath('/')} onClick={handleNavigate}>
-                <PlusIcon className="text-primary" />
+                <PlusIcon />
                 <span>Nieuw gesprek</span>
               </a>
             </SidebarMenuButton>
@@ -196,7 +192,7 @@ export function AppSidebar() {
               <ConversationListError onRetry={retryConversations} />
             ) : (
               <p className="text-muted-foreground px-2 py-6 text-center text-xs group-data-[state=collapsed]:hidden">
-                {conversations.length === 0 ? 'No conversations yet.' : 'No conversations match your search.'}
+                {conversations.length === 0 ? 'Nog geen gesprekken.' : 'Geen gesprek gevonden.'}
               </p>
             )}
           </SidebarGroup>
@@ -216,7 +212,7 @@ export function AppSidebar() {
         {/* The theme toggle lives in the header; a second one here gave the app
             two controls with the same accessible name. */}
         <p className="text-muted-foreground px-2 text-xs group-data-[state=collapsed]:hidden">
-          Chats are stored in this browser
+          Gesprekken staan in deze browser
         </p>
       </SidebarFooter>
 
@@ -262,9 +258,7 @@ export function AppSidebar() {
             >
               Annuleren
             </Button>
-            <Button variant="destructive" onClick={handleConfirmDelete}>
-              Verwijderen
-            </Button>
+            <Button onClick={handleConfirmDelete}>Verwijderen</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

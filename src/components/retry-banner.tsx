@@ -26,7 +26,7 @@ export function RetryBanner({
   icon: Icon,
   children,
   onRetry,
-  retryLabel = 'Retry',
+  retryLabel = 'Opnieuw proberen',
   disabled = false,
 }: RetryBannerProps) {
   return (
