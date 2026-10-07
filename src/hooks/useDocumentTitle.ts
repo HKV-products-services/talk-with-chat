@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
 
-// Read once, before anything overwrites it: whatever the host page shipped in
-// its <title> is the app name we suffix conversation titles with.
-const BASE_TITLE = typeof document === 'undefined' ? '' : document.title
+import { startupConfig } from '@/lib/config'
+
+// Talk with Optimalen: de naam van deze chat (OptiMalen of de kennisbank), niet de <title> van de pagina.
+const BASE_TITLE = startupConfig.naam
 
 /**
  * Reflect the active conversation in the tab title, so several agent runs open

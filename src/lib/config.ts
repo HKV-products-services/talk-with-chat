@@ -2,14 +2,53 @@ import { z } from 'zod'
 
 import type { BuiltinTool, ModelConfig } from '@/types'
 
+// Talk with Optimalen: dezelfde chat dient ook de kennisbank (`/chat-kennisbank/`). Naam, welkom en de
+// opslag van de gesprekken komen daarom uit de paginaconfiguratie; zonder is het de chat van OptiMalen.
+export interface Welkom {
+  titel: string
+  zin: string
+  /** De tekst in het lege invoerveld. */
+  invoer: string
+  vragen: { label: string; prompt: string }[]
+}
+
+const WELKOM_OPTIMALEN: Welkom = {
+  titel: 'Waar wil je naar kijken?',
+  zin: 'Vraag wat er gepland was, wat de gemalen deden, en waarom.',
+  invoer: 'Wat wil je weten over de planning?',
+  // Open eindigende prompts (zonder vraagteken) worden in het invoerveld gezet om af te maken.
+  vragen: [
+    {
+      label: 'Planning en inzet',
+      prompt: 'Waar week de gedraaide inzet de afgelopen twee weken af van de planning, en waarom?',
+    },
+    {
+      label: 'Controle',
+      prompt: 'Waarom zou de controle van 9 september 22:00 anders kiezen dan de goedgekeurde planning?',
+    },
+    { label: 'Pompmodes', prompt: 'Welke pompen stonden niet op OptiMalen, en met welke reden?' },
+    {
+      label: 'Gebiedsregeling',
+      prompt: 'Wat deed OptiMalen anders dan de gebiedsregeling in de eerste dagen van september?',
+    },
+  ],
+}
+
 export interface StartupConfig {
   basePath?: string
   apiPath?: string
+  naam?: string
+  opslag?: string
+  welkom?: Welkom
 }
 
 export interface ResolvedStartupConfig {
   readonly basePath: string
   readonly apiPath: string
+  readonly naam: string
+  /** De naam van de IndexedDB met de gesprekken: elke chat zijn eigen gesprekken. */
+  readonly opslag: string
+  readonly welkom: Welkom
 }
 
 export interface RemoteConfig {
@@ -38,6 +77,16 @@ const startupConfigSchema = z
     {
       basePath: z.string({ error: 'PYDANTIC_AI_CHAT_CONFIG.basePath must be a string' }).optional(),
       apiPath: z.string({ error: 'PYDANTIC_AI_CHAT_CONFIG.apiPath must be a string' }).optional(),
+      naam: z.string().optional(),
+      opslag: z.string().optional(),
+      welkom: z
+        .object({
+          titel: z.string(),
+          zin: z.string(),
+          invoer: z.string(),
+          vragen: z.array(z.object({ label: z.string(), prompt: z.string() })),
+        })
+        .optional(),
     },
     { error: 'PYDANTIC_AI_CHAT_CONFIG must be an object' },
   )
@@ -51,10 +100,13 @@ export function resolveStartupConfig(
   if (!parsedConfig.success) {
     throw new TypeError(parsedConfig.error.issues[0].message)
   }
-  const { basePath, apiPath } = parsedConfig.data ?? {}
+  const { basePath, apiPath, naam, opslag, welkom } = parsedConfig.data ?? {}
   return Object.freeze({
     basePath: basePath === undefined ? defaultBasePath(viteBase) : normalizeDirectoryPath(basePath, 'basePath'),
     apiPath: apiPath === undefined ? '/api/' : normalizeDirectoryPath(apiPath, 'apiPath'),
+    naam: naam ?? 'OptiMalen',
+    opslag: opslag ?? 'chat-storage',
+    welkom: welkom ?? WELKOM_OPTIMALEN,
   })
 }
 

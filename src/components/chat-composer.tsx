@@ -19,6 +19,7 @@ import { EffortMeter } from '@/components/effort-meter'
 import { ToolToggleBar } from '@/components/tool-toggle-bar'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { startupConfig } from '@/lib/config'
 import type { ThinkingEffort } from '@/lib/generated/thinking-effort.gen'
 import type { BuiltinTool, ModelConfig } from '@/types'
 
@@ -88,6 +89,7 @@ export function ChatComposer({
       {/* talkwithoptimalen: één pil zoals op america.gov en in het dashboard; knop rechts in de pil */}
       <PromptInput onSubmit={onSubmit} className="invoerpil">
         <PromptInputTextarea
+          placeholder={startupConfig.welkom.invoer}
           // The vendored Textarea floors at min-h-16, which left a band of dead
           // space under a one-line draft; grow from a single line instead.
           className="min-h-11 px-5 py-3.5"

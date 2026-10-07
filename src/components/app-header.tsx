@@ -10,6 +10,7 @@ import { useConversationsState } from '@/hooks/useConversations'
 import { useDocumentTitle } from '@/hooks/useDocumentTitle'
 import { stripBasePath, withBasePath } from '@/lib/base-path'
 import { conversationTitle } from '@/lib/conversation-title'
+import { startupConfig } from '@/lib/config'
 
 function startNewConversation() {
   // Already on a new chat: pushing again stacks identical `/` entries, and Back
@@ -96,7 +97,7 @@ export function AppHeader() {
 
       <button type="button" className="woordmerk" onClick={startNewConversation}>
         <img src={logoSvg} alt="" className="size-6" />
-        <span>OptiMalen</span>
+        <span>{startupConfig.naam}</span>
       </button>
 
       <div className="min-w-0 flex-1 text-center">

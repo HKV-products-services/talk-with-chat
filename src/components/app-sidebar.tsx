@@ -33,6 +33,7 @@ import { stripBasePath, withBasePath } from '@/lib/base-path'
 import { deleteConversation as deleteConv, patchConversation } from '@/lib/chat-db'
 import { conversationTitle } from '@/lib/conversation-title'
 import type { ConversationEntry } from '@/types'
+import { startupConfig } from '@/lib/config'
 import logoSvg from '../assets/logo.svg'
 
 // Below this many conversations the list is short enough to scan, and a search
@@ -151,7 +152,9 @@ export function AppSidebar() {
       <SidebarHeader className="gap-3">
         <div className="flex h-8 items-center gap-2 px-1">
           <img src={logoSvg} alt="" className="size-5 shrink-0" />
-          <span className="truncate text-sm font-semibold group-data-[state=collapsed]:hidden">OptiMalen</span>
+          <span className="truncate text-sm font-semibold group-data-[state=collapsed]:hidden">
+            {startupConfig.naam}
+          </span>
         </div>
 
         <SidebarMenu>

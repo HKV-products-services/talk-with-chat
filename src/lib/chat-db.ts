@@ -2,7 +2,9 @@ import type { ConversationEntry } from '@/types'
 import type { UIMessage } from 'ai'
 import { toast } from 'sonner'
 
-const DB_NAME = 'chat-storage'
+import { startupConfig } from '@/lib/config'
+
+const DB_NAME = startupConfig.opslag
 const DB_VERSION = 1
 const CONVERSATIONS_STORE = 'conversations'
 const MESSAGES_STORE = 'messages'

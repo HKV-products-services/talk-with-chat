@@ -31,6 +31,7 @@ zodat bijwerken neerkomt op: nieuwe upstream ophalen en deze wijzigingen opnieuw
 | `src/components/welcome-screen.tsx` | grote titel met schreef, één zin eronder, startvragen als stille pillen zonder icoon |
 | `src/components/assistant-turn.tsx`, `reasoning-block.tsx`, `thinking-indicator.tsx` | geen avatar naast het antwoord; "Denkt na" / "Nagedacht" |
 | `src/assets/logo.svg` | een gemaal in plaats van het Pydantic-logo (zoals het laadscherm van het dashboard) |
+| `src/lib/config.ts`, `chat-db.ts`, `welcome-screen.tsx`, `chat-composer.tsx`, `app-header.tsx`, `app-sidebar.tsx`, `hooks/useDocumentTitle.ts` | naam, welkom (titel, zin, invoerveld, startvragen) en de opslag van de gesprekken uit `PYDANTIC_AI_CHAT_CONFIG`, zodat dezelfde chat ook `/chat-kennisbank/` dient met eigen gesprekken; zonder is het de chat van OptiMalen (7 okt) |
 | `UPSTREAM.md` | dit bestand |
 
 ## Bouwen
