@@ -10,6 +10,14 @@ const UNTITLED = 'Nieuw gesprek'
  * lands everywhere at once.
  */
 export function conversationTitle(entry: Pick<ConversationEntry, 'title' | 'firstMessage'> | undefined): string {
+  return namedTitle(entry) || UNTITLED
+}
+
+/**
+ * talkwithoptimalen: de naam of de eerste vraag, leeg als er nog geen van beide is. De kop en de tab tonen
+ * dan niets, in plaats van "Nieuw gesprek" boven een gesprek dat nog moet beginnen.
+ */
+export function namedTitle(entry: Pick<ConversationEntry, 'title' | 'firstMessage'> | undefined): string {
   const title = entry?.title?.trim()
   if (title) return title
   // Blank counts as absent, matching the `title` branch above. `??` here let an
@@ -19,6 +27,5 @@ export function conversationTitle(entry: Pick<ConversationEntry, 'title' | 'firs
     ?.replace(NOTATIE, '')
     .replace(/\s+([?.!,])/g, '$1')
     .trim()
-  if (firstMessage) return firstMessage
-  return UNTITLED
+  return firstMessage ?? ''
 }

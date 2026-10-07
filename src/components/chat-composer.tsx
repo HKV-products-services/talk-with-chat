@@ -108,12 +108,12 @@ export function ChatComposer({
             {kiesbaar && (
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <PromptInputButton variant="ghost" aria-label="Hidden tools" onClick={onOpenFilters}>
+                  <PromptInputButton variant="ghost" aria-label="Verborgen tools" onClick={onOpenFilters}>
                     <FilterIcon className="size-4" />
                     {hiddenToolCount > 0 && <span className="text-xs tabular-nums">{hiddenToolCount}</span>}
                   </PromptInputButton>
                 </TooltipTrigger>
-                <TooltipContent>Hidden tools</TooltipContent>
+                <TooltipContent>Verborgen tools</TooltipContent>
               </Tooltip>
             )}
 

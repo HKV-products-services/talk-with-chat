@@ -10,19 +10,19 @@ import { cn } from '@/lib/utils'
 // via the generated module. The Records are exhaustive over ThinkingEffort, so
 // adding a level upstream forces copy here rather than silently dropping it.
 const EFFORT_LABELS: Record<ThinkingEffort, string> = {
-  minimal: 'Minimal',
-  low: 'Low',
-  medium: 'Medium',
-  high: 'High',
-  xhigh: 'X-High',
+  minimal: 'Minimaal',
+  low: 'Laag',
+  medium: 'Gemiddeld',
+  high: 'Hoog',
+  xhigh: 'Zeer hoog',
 }
 
 const EFFORT_DESCRIPTIONS: Record<ThinkingEffort, string> = {
-  minimal: 'Answer straight away',
-  low: 'A quick think first',
-  medium: 'Balanced — the default',
-  high: 'Work the problem through',
-  xhigh: 'Take as long as it needs',
+  minimal: 'Meteen antwoorden',
+  low: 'Eerst kort nadenken',
+  medium: 'In balans; de standaard',
+  high: 'Het probleem doordenken',
+  xhigh: 'Zo lang als nodig',
 }
 
 interface EffortMeterProps {
@@ -62,7 +62,7 @@ export function EffortMeter({ value, onValueChange }: EffortMeterProps) {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger
-        aria-label={`Thinking effort: ${EFFORT_LABELS[value]}`}
+        aria-label={`Denkniveau: ${EFFORT_LABELS[value]}`}
         className="text-muted-foreground hover:bg-accent hover:text-foreground data-[state=open]:bg-accent data-[state=open]:text-foreground group flex h-8 shrink-0 items-center gap-2 rounded-lg px-2.5 text-sm font-medium transition-colors"
       >
         <EffortBars level={current} className="group-hover:opacity-90" />
@@ -72,8 +72,8 @@ export function EffortMeter({ value, onValueChange }: EffortMeterProps) {
       </PopoverTrigger>
 
       <PopoverContent align="start" className="w-64 p-1.5">
-        <p className="text-muted-foreground px-2 py-1.5 text-xs font-medium">Thinking effort</p>
-        <div role="radiogroup" aria-label="Thinking effort" onKeyDown={onKeyDown}>
+        <p className="text-muted-foreground px-2 py-1.5 text-xs font-medium">Denkniveau</p>
+        <div role="radiogroup" aria-label="Denkniveau" onKeyDown={onKeyDown}>
           {THINKING_EFFORT_LEVELS.map((option, index) => {
             const selected = option === value
             return (

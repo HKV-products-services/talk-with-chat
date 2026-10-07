@@ -34,13 +34,13 @@ export const ModeToggle: FC<{ className?: string }> = ({ className }) => {
   const getTooltipText = () => {
     switch (theme) {
       case 'light':
-        return 'Switch to dark theme'
+        return 'Naar donker'
       case 'dark':
-        return 'Switch to system theme'
+        return 'Volg het systeem'
       case 'system':
-        return 'Switch to light theme'
+        return 'Naar licht'
       default:
-        return 'Toggle theme'
+        return 'Licht of donker'
     }
   }
 
@@ -49,7 +49,7 @@ export const ModeToggle: FC<{ className?: string }> = ({ className }) => {
       <TooltipTrigger asChild>
         <Button variant="ghost" size="icon" onClick={toggleTheme} className={className}>
           {getIcon()}
-          <span className="sr-only">Toggle theme</span>
+          <span className="sr-only">Licht of donker</span>
         </Button>
       </TooltipTrigger>
       <TooltipContent>{getTooltipText()}</TooltipContent>

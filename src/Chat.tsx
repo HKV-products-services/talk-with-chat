@@ -722,7 +722,7 @@ const ChatInner = () => {
 
   return (
     <>
-      <Conversation className="h-full" aria-label="Conversation">
+      <Conversation className="h-full" aria-label="Gesprek">
         <ConversationContent className="mx-auto flex w-full max-w-3xl flex-col px-4 pt-2 pb-6">
           {messages.map((message, messageIndex) => {
             if (message.role !== 'assistant') {

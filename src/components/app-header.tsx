@@ -10,7 +10,7 @@ import { useConversationsState } from '@/hooks/useConversations'
 import { useDocumentTitle } from '@/hooks/useDocumentTitle'
 import { stripBasePath, withBasePath } from '@/lib/base-path'
 import { startupConfig } from '@/lib/config'
-import { conversationTitle } from '@/lib/conversation-title'
+import { namedTitle } from '@/lib/conversation-title'
 
 function startNewConversation() {
   // Already on a new chat: pushing again stacks identical `/` entries, and Back
@@ -56,9 +56,10 @@ export function AppHeader() {
   // so the heading says the neutral thing it does know rather than asserting
   // the conversation is untitled, and the tab keeps the app's own title.
   const named = loaded && !failed
-  const title = isNew ? 'Nieuw gesprek' : named ? conversationTitle(current) : failed ? 'Gesprek' : ''
+  // talkwithoptimalen: zonder vraag of naam geen titel; de knop "Nieuw gesprek" staat er al naast
+  const title = isNew ? '' : named ? namedTitle(current) : failed ? 'Gesprek' : ''
 
-  useDocumentTitle(isNew || !named ? null : title)
+  useDocumentTitle(named && title ? title : null)
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -104,7 +105,7 @@ export function AppHeader() {
         {/* The app's h1: without it the document outline started at h2 on any
             open conversation. */}
         <h1 className="text-muted-foreground truncate text-[15px] font-normal" title={title}>
-          {isNew ? '' : title}
+          {title}
         </h1>
       </div>
 

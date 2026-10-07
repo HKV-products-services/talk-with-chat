@@ -24,13 +24,15 @@ export function ToolFiltersDialog({ open, onOpenChange }: ToolFiltersDialogProps
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Hidden tools</DialogTitle>
-          <DialogDescription>Hide tool-call cards by name or glob, e.g. set_* or run_code</DialogDescription>
+          <DialogTitle>Verborgen tools</DialogTitle>
+          <DialogDescription>Verberg toolkaarten op naam of patroon, bijvoorbeeld sql_* of sparql.</DialogDescription>
         </DialogHeader>
 
         <div className="flex flex-col gap-2">
           {filters.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No filters yet. Add a tool name or glob below.</p>
+            <p className="text-sm text-muted-foreground">
+              Er is nog niets verborgen. Voeg hieronder een toolnaam of patroon toe.
+            </p>
           ) : (
             filters.map((filter) => (
               <div key={filter} className="flex items-center justify-between gap-2 rounded-md border px-3 py-1.5">
@@ -39,7 +41,7 @@ export function ToolFiltersDialog({ open, onOpenChange }: ToolFiltersDialogProps
                   variant="ghost"
                   size="icon"
                   className="size-6"
-                  aria-label={`Remove ${filter}`}
+                  aria-label={`${filter} weer tonen`}
                   onClick={() => {
                     removeFilter(filter)
                   }}
@@ -54,13 +56,13 @@ export function ToolFiltersDialog({ open, onOpenChange }: ToolFiltersDialogProps
         <form className="flex items-center gap-2" onSubmit={submit}>
           <Input
             value={draft}
-            placeholder="Tool name or glob (e.g. set_*)"
+            placeholder="Toolnaam of patroon (bijv. sql_*)"
             onChange={(e) => {
               setDraft(e.target.value)
             }}
           />
           <Button type="submit" disabled={draft.trim() === ''}>
-            Add
+            Toevoegen
           </Button>
         </form>
       </DialogContent>

@@ -45,7 +45,7 @@ interface ToolPartHeaderProps {
 // A state outside the seven mapped ones can only arrive from a newer adapter or
 // a conversation persisted by another build. Degrade to a neutral row rather
 // than throwing mid-render — there is no error boundary above this.
-const UNKNOWN_STATUS: StatusEntry = { label: 'Unknown', icon: CircleDashedIcon, className: 'text-muted-foreground' }
+const UNKNOWN_STATUS: StatusEntry = { label: 'Onbekend', icon: CircleDashedIcon, className: 'text-muted-foreground' }
 
 /** The key is typed as one of the seven, but it arrives off the wire, so it is looked up rather than trusted. */
 function statusFor(state: ToolState): StatusEntry {
