@@ -9,6 +9,7 @@ export interface Welkom {
   zin: string
   /** De tekst in het lege invoerveld. */
   invoer: string
+  /** Startvragen. Een open eindigende (zonder vraagteken) komt in het invoerveld om af te maken. */
   vragen: { label: string; prompt: string }[]
 }
 
@@ -16,7 +17,6 @@ const WELKOM_OPTIMALEN: Welkom = {
   titel: 'Waar wil je naar kijken?',
   zin: 'Vraag wat er gepland was, wat de gemalen deden, en waarom.',
   invoer: 'Wat wil je weten over de planning?',
-  // Open eindigende prompts (zonder vraagteken) worden in het invoerveld gezet om af te maken.
   vragen: [
     {
       label: 'Planning en inzet',

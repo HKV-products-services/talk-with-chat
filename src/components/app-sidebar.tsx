@@ -31,9 +31,9 @@ import { useConversationIdFromUrl } from '@/hooks/useConversationIdFromUrl'
 import { retryConversations, useConversationsState } from '@/hooks/useConversations'
 import { stripBasePath, withBasePath } from '@/lib/base-path'
 import { deleteConversation as deleteConv, patchConversation } from '@/lib/chat-db'
+import { startupConfig } from '@/lib/config'
 import { conversationTitle } from '@/lib/conversation-title'
 import type { ConversationEntry } from '@/types'
-import { startupConfig } from '@/lib/config'
 import logoSvg from '../assets/logo.svg'
 
 // Below this many conversations the list is short enough to scan, and a search

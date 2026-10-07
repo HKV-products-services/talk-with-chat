@@ -9,8 +9,8 @@ import { useConversationIdFromUrl } from '@/hooks/useConversationIdFromUrl'
 import { useConversationsState } from '@/hooks/useConversations'
 import { useDocumentTitle } from '@/hooks/useDocumentTitle'
 import { stripBasePath, withBasePath } from '@/lib/base-path'
-import { conversationTitle } from '@/lib/conversation-title'
 import { startupConfig } from '@/lib/config'
+import { conversationTitle } from '@/lib/conversation-title'
 
 function startNewConversation() {
   // Already on a new chat: pushing again stacks identical `/` entries, and Back
