@@ -39,6 +39,7 @@ zodat bijwerken neerkomt op: nieuwe upstream ophalen en deze wijzigingen opnieuw
 | `src/components/voorstel-kaart.tsx` | **nieuw**: een tool die goedkeuring vraagt en in `PYDANTIC_AI_CHAT_CONFIG.voorstel` staat, als kaart: wat verandert ten opzichte van de waarden van nu (van het adres `huidig`), de toelichting, en Overnemen, Aanpassen en Laten |
 | `src/lib/host.ts`, `src/Chat.tsx` | **nieuw**: berichten met de pagina eromheen als de chat in een iframe staat: `context` gaat bij elke volgende vraag mee, `vraag` stelt een vraag; terug gaan `aanpassen` en `uitgevoerd` |
 | `src/Part.tsx`, `src/Chat.tsx` (idem) | de kaart van een voorstel in plaats van de toolkaart, en niet in het ingevouwen activiteitenblok |
+| `src/components/app-header.tsx` (idem) | "Nieuw gesprek" heeft een `aria-label`: in een smalle lade staat alleen het pictogram |
 | `UPSTREAM.md` | dit bestand |
 
 ## Bouwen

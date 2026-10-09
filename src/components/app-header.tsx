@@ -117,7 +117,8 @@ export function AppHeader() {
 
       <Tooltip>
         <TooltipTrigger asChild>
-          <button type="button" className="nieuw-gesprek" onClick={startNewConversation}>
+          {/* ook een naam als de tekst verborgen is: in een smalle lade staat alleen het pictogram */}
+          <button type="button" className="nieuw-gesprek" aria-label="Nieuw gesprek" onClick={startNewConversation}>
             <SquarePenIcon className="size-4" />
             <span className="hidden sm:inline">Nieuw gesprek</span>
           </button>
