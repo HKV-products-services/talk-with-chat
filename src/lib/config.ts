@@ -34,12 +34,48 @@ const WELKOM_OPTIMALEN: Welkom = {
   ],
 }
 
+/** Het pictogram bij een soort vervolgvraag. */
+export type Icoon = 'zoeken' | 'vergelijken' | 'verklaren' | 'onderbouwen' | 'verbeteren' | 'verbinden'
+
+/**
+ * De vervolgvragen: de output-functie van de agent die het antwoord afsluit, en per soort de sleutel van zijn
+ * argument, het label en het pictogram, in de volgorde waarin ze onder het antwoord staan.
+ */
+export interface Vervolgopties {
+  tool: string
+  soorten: { sleutel: string; label: string; icoon: Icoon }[]
+}
+
+const VERVOLGOPTIES_OPTIMALEN: Vervolgopties = {
+  tool: 'vervolgopties',
+  soorten: [
+    { sleutel: 'inzoomen', label: 'Inzoomen', icoon: 'zoeken' },
+    { sleutel: 'vergelijken', label: 'Vergelijken', icoon: 'vergelijken' },
+    { sleutel: 'verklaren', label: 'Verklaren', icoon: 'verklaren' },
+  ],
+}
+
+/**
+ * Een tool die een wijziging voorstelt en goedkeuring vraagt, als kaart: wat verandert ten opzichte van nu, en
+ * waarom, met Overnemen, Aanpassen en Laten. `huidig` is een adres met `{argument}` erin dat de waarden van nu
+ * geeft, in de vorm van de argumenten (404: er is nog niets). `titel` en `toelichting` zijn namen van argumenten.
+ */
+export interface Voorstel {
+  tool: string
+  titel: string
+  toelichting: string
+  velden: { sleutel: string; label: string }[]
+  huidig: string
+}
+
 export interface StartupConfig {
   basePath?: string
   apiPath?: string
   naam?: string
   opslag?: string
   welkom?: Welkom
+  vervolgopties?: Vervolgopties
+  voorstel?: Voorstel
 }
 
 export interface ResolvedStartupConfig {
@@ -49,6 +85,8 @@ export interface ResolvedStartupConfig {
   /** De naam van de IndexedDB met de gesprekken: elke chat zijn eigen gesprekken. */
   readonly opslag: string
   readonly welkom: Welkom
+  readonly vervolgopties: Vervolgopties
+  readonly voorstel: Voorstel | null
 }
 
 export interface RemoteConfig {
@@ -87,6 +125,27 @@ const startupConfigSchema = z
           vragen: z.array(z.object({ label: z.string(), prompt: z.string() })),
         })
         .optional(),
+      vervolgopties: z
+        .object({
+          tool: z.string(),
+          soorten: z.array(
+            z.object({
+              sleutel: z.string(),
+              label: z.string(),
+              icoon: z.enum(['zoeken', 'vergelijken', 'verklaren', 'onderbouwen', 'verbeteren', 'verbinden']),
+            }),
+          ),
+        })
+        .optional(),
+      voorstel: z
+        .object({
+          tool: z.string(),
+          titel: z.string(),
+          toelichting: z.string(),
+          velden: z.array(z.object({ sleutel: z.string(), label: z.string() })),
+          huidig: z.string(),
+        })
+        .optional(),
     },
     { error: 'PYDANTIC_AI_CHAT_CONFIG must be an object' },
   )
@@ -100,13 +159,15 @@ export function resolveStartupConfig(
   if (!parsedConfig.success) {
     throw new TypeError(parsedConfig.error.issues[0].message)
   }
-  const { basePath, apiPath, naam, opslag, welkom } = parsedConfig.data ?? {}
+  const { basePath, apiPath, naam, opslag, welkom, vervolgopties, voorstel } = parsedConfig.data ?? {}
   return Object.freeze({
     basePath: basePath === undefined ? defaultBasePath(viteBase) : normalizeDirectoryPath(basePath, 'basePath'),
     apiPath: apiPath === undefined ? '/api/' : normalizeDirectoryPath(apiPath, 'apiPath'),
     naam: naam ?? 'OptiMalen',
     opslag: opslag ?? 'chat-storage',
     welkom: welkom ?? WELKOM_OPTIMALEN,
+    vervolgopties: vervolgopties ?? VERVOLGOPTIES_OPTIMALEN,
+    voorstel: voorstel ?? null,
   })
 }
 

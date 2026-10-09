@@ -8,6 +8,8 @@ import { ConversationLoadError } from '@/components/conversation-load-error'
 import { EditMessageDialog } from '@/components/edit-message-dialog'
 import { Bronnen, QUERY_TOOL, type Bron } from '@/components/bronnen'
 import { FOLLOW_UPS_TOOL } from '@/components/follow-ups'
+import { VOORSTEL } from '@/components/voorstel-kaart'
+import { luisterNaarHost } from '@/lib/host'
 import { HiddenToolsGroup } from '@/components/hidden-tools-group'
 import { ThinkingIndicator } from '@/components/thinking-indicator'
 import { ToolCallGroup } from '@/components/tool-call-group'
@@ -380,6 +382,19 @@ const ChatInner = () => {
     })
     setInput('')
   }
+
+  // Staat de chat in een iframe, dan geeft de pagina eromheen door wat de gebruiker nu ziet (gaat bij de
+  // volgende vraag mee), en een vraag van de pagina gaat door hetzelfde verzendpad als typen.
+  const sendTextRef = useRef(sendText)
+  sendTextRef.current = sendText
+  useEffect(
+    () =>
+      luisterNaarHost((bericht) => {
+        if (bericht.soort === 'context') contextRef.current = bericht.context
+        else sendTextRef.current(bericht.tekst)
+      }),
+    [],
+  )
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault()
@@ -959,8 +974,10 @@ function isRenderedPart(part: UIMessagePart<UIDataTypes, UITools>, toolName: str
 // Prose is the answer and stays out of it; sources render in their own strip
 // above the turn.
 function isActivityPart(part: UIMessagePart<UIDataTypes, UITools>, toolName: string | null): boolean {
-  // De vervolgopties zijn deel van het antwoord, niet van het werk ervoor.
-  return part.type === 'reasoning' || (toolName !== null && toolName !== FOLLOW_UPS_TOOL)
+  // De vervolgopties en een voorstel zijn deel van het antwoord, niet van het werk ervoor.
+  return (
+    part.type === 'reasoning' || (toolName !== null && toolName !== FOLLOW_UPS_TOOL && toolName !== VOORSTEL?.tool)
+  )
 }
 
 // A tool part's lifecycle state (e.g. `output-available`). Non-tool parts have

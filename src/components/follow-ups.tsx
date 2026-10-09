@@ -1,36 +1,40 @@
 import {
   ArrowRightIcon,
   ArrowUpIcon,
+  CircleHelpIcon,
   GitCompareArrowsIcon,
+  LinkIcon,
+  PencilIcon,
   RotateCcwIcon,
   SearchIcon,
   type LucideIcon,
 } from 'lucide-react'
 import { useLayoutEffect, useRef, useState, type KeyboardEvent } from 'react'
 
+import { startupConfig, type Icoon } from '@/lib/config'
 import { isRecord } from '@/lib/is-record'
 import { alsVeld, teVersturen } from '@/lib/tijdnotatie'
 import { cn } from '@/lib/utils'
 
-/** Naam van de output-functie in `talkwithoptimalen.agent`. */
-export const FOLLOW_UPS_TOOL = 'vervolgopties'
+/** Naam van de output-functie van de agent die het antwoord met vervolgvragen afsluit. */
+export const FOLLOW_UPS_TOOL = startupConfig.vervolgopties.tool
 
-type KindKey = 'inzoomen' | 'vergelijken' | 'verklaren'
-
-interface Kind {
-  key: KindKey
-  label: string
-  icon: LucideIcon
+const ICONEN: Record<Icoon, LucideIcon> = {
+  zoeken: SearchIcon,
+  vergelijken: GitCompareArrowsIcon,
+  verklaren: ArrowRightIcon,
+  onderbouwen: CircleHelpIcon,
+  verbeteren: PencilIcon,
+  verbinden: LinkIcon,
 }
 
-// Vaste volgorde en een vast icoon per soort: de gebruiker leert zo dat de eerste
-// optie altijd dieper gaat, de tweede altijd naast iets anders legt, de derde naar het
-// waarom vraagt. Dezelfde drie soorten als in de instructies van de agent.
-const KINDS: Kind[] = [
-  { key: 'inzoomen', label: 'Inzoomen', icon: SearchIcon },
-  { key: 'vergelijken', label: 'Vergelijken', icon: GitCompareArrowsIcon },
-  { key: 'verklaren', label: 'Verklaren', icon: ArrowRightIcon },
-]
+// Vaste volgorde en een vast icoon per soort, uit de configuratie van de app: de gebruiker leert zo
+// waar elke optie heen gaat. Dezelfde soorten als in de instructies van de agent.
+const KINDS = startupConfig.vervolgopties.soorten.map((s) => ({
+  key: s.sleutel,
+  label: s.label,
+  icon: ICONEN[s.icoon],
+}))
 
 interface FollowUpsProps {
   input: unknown
