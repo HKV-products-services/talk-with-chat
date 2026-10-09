@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-The chat of talkwithoptimalen: a React chat interface for Pydantic AI (Vite + React + TypeScript, Vercel AI SDK and Elements), forked from `pydantic/ai-chat-ui`. `UPSTREAM.md` lists every change against it. The backend is not in this folder: it is `talkwithoptimalen.server` in the repository root.
+The chat used by the HKV talk-with apps: a React chat interface for Pydantic AI (Vite + React + TypeScript, Vercel AI SDK and Elements), forked from `pydantic/ai-chat-ui`. `UPSTREAM.md` lists every change against it. The backend is not in this repository: each app serves `offline/index.html` with its own `PYDANTIC_AI_CHAT_CONFIG` and its own agent.
 
 ## Development Commands
 
@@ -18,13 +18,12 @@ pnpm lint-fix            # Fix ESLint issues
 pnpm format              # Prettier
 ```
 
-The backend: `uv run python -m talkwithoptimalen` in the repository root (port 7932).
+A backend for `pnpm dev`: for example talk-with-optimalen (`uv run python -m talkwithoptimalen`, port 7932).
 
 **Testing:**
 
 The test suite of upstream ai-chat-ui (vitest, Playwright, its FastAPI test server) is not part of
-this fork: it tested the upstream demo app, not OptiMalen. The chat's backend is covered by the Python
-tests of talkwithoptimalen (`uv run pytest` in the repository root). Check a frontend change with
+this fork: it tested the upstream demo app. Each app tests its own backend. Check a frontend change with
 `pnpm typecheck`, `pnpm lint`, `pnpm build:offline`, and in the browser.
 
 ## Architecture
@@ -70,8 +69,8 @@ The shell is composed as sidebar → `AppHeader` → conversation → `ChatCompo
 
 ### Backend Structure
 
-In the repository root: `src/talkwithoptimalen/server.py` (the chat endpoint and `/api/configure`, plus the
-dashboard's API) and `src/talkwithoptimalen/agent.py` (the Pydantic AI agent with the `query` tool and the
+In each app, for example talk-with-optimalen: `src/talkwithoptimalen/server.py` (the chat endpoint and
+`/api/configure`) and `src/talkwithoptimalen/agent.py` (the Pydantic AI agent with the `query` tool and the
 `vervolgopties` output function).
 
 ### Backend Integration
@@ -131,12 +130,12 @@ Two normalizations are part of vendoring itself, not local modifications: files 
 - **Vite base URL**: CDN path for production (`jsdelivr.net/npm/@pydantic/pydantic-ai-chat/dist/`)
 - **Runtime paths**: `window.PYDANTIC_AI_CHAT_CONFIG` supplies independent `basePath` and `apiPath` values
 - **Dev proxy**: `/api` proxied to `localhost:7932` (the talkwithoptimalen server)
-- **Package**: private (`talkwithoptimalen-chat`), never published
+- **Package**: private (`talk-with-chat`), never published
 
 ## Tech Stack
 
 - React 19, TypeScript, Vite, Tailwind CSS 4
 - Vercel AI SDK (`@ai-sdk/react`, `ai`)
 - Radix UI primitives
-- Backend (repository root): Starlette, Pydantic AI, DuckDB
+- Backend: in each app (Starlette, Pydantic AI)
 - ESLint (neostandard), Prettier
