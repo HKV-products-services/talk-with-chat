@@ -76,7 +76,9 @@ const ChatInner = () => {
   const afdelingRef = useRef<string | null>(new URLSearchParams(window.location.search).get('afdeling'))
   // En bij een vervolgvraag op een begeleidende tekst: het scherm en de tekst (de server haalt de
   // feiten er zelf bij), zodat "die 11 kleine verschuivingen" ergens naar verwijzen.
-  const contextRef = useRef<unknown>(leesContext())
+  const [context, setContext] = useState<unknown>(leesContext)
+  const contextRef = useRef(context)
+  contextRef.current = context
   modelRef.current = model
   const effortRef = useRef(effort)
   effortRef.current = effort
@@ -390,7 +392,7 @@ const ChatInner = () => {
   useEffect(
     () =>
       luisterNaarHost((bericht) => {
-        if (bericht.soort === 'context') contextRef.current = bericht.context
+        if (bericht.soort === 'context') setContext(bericht.context)
         else sendTextRef.current(bericht.tekst)
       }),
     [],
@@ -721,6 +723,7 @@ const ChatInner = () => {
           <div className="my-auto w-full">
             <WelcomeScreen
               onSelect={handleSuggestion}
+              context={context}
               composer={
                 <>
                   {configBanner}

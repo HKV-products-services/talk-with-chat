@@ -91,11 +91,12 @@ const MATHML_ATTRIBUTES = [
   'width',
 ]
 
-// talkwithoptimalen: `<time datetime>` voor de tijdnotatie `[[…]]` (zie `lib/tijdnotatie.ts`).
+// talkwithoptimalen: `<time datetime>` voor de tijdnotatie `[[…]]` (zie `lib/tijdnotatie.ts`), en `<mark>` voor een
+// waarde die de pagina in een startvraag invulde (zie `lib/ingevuld.ts`).
 // `dateTime` staat al voor elk element in de allowlist; `time` zelf draagt geen gedrag.
 const mathSchema = {
   ...defaultSchema,
-  tagNames: [...(defaultSchema.tagNames ?? []), ...MATHML_TAGS, 'time'],
+  tagNames: [...(defaultSchema.tagNames ?? []), ...MATHML_TAGS, 'time', 'mark'],
   attributes: {
     ...defaultSchema.attributes,
     ...Object.fromEntries(MATHML_TAGS.map((tag) => [tag, MATHML_ATTRIBUTES])),

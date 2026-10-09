@@ -363,9 +363,13 @@ body,
 /* Menu's als de plekkiezer van het dashboard: schaduw en een rand, de rij in de paneeltint. */
 [data-slot='dropdown-menu-content'] {
   border: 0;
-  box-shadow: var(--schaduw), 0 0 0 1px var(--border);
+  box-shadow:
+    var(--schaduw),
+    0 0 0 1px var(--border);
 }
-[data-slot='dropdown-menu-item'][data-highlighted] { background: var(--paneel); }
+[data-slot='dropdown-menu-item'][data-highlighted] {
+  background: var(--paneel);
+}
 
 body {
   font-family:
@@ -418,14 +422,42 @@ body {
   color: var(--color-muted-foreground);
   cursor: pointer;
 }
-.bronnen-kop:hover { color: var(--color-foreground); }
-.bronnen-titel { font-weight: 600; color: var(--color-foreground); }
-.bronnen-namen { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.bronnen-aantal { flex: none; font-size: 13px; }
-.bronnen-pijl { transition: transform 0.15s; }
-.bronnen-kop[aria-expanded='true'] .bronnen-pijl { transform: rotate(90deg); }
-.bronnen-lijst { margin: 0; padding: 0 14px 12px; list-style: none; display: grid; gap: 10px; }
-.bronnen-onderschrift { font-size: 12px; color: var(--color-muted-foreground); margin-bottom: 4px; }
+.bronnen-kop:hover {
+  color: var(--color-foreground);
+}
+.bronnen-titel {
+  font-weight: 600;
+  color: var(--color-foreground);
+}
+.bronnen-namen {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.bronnen-aantal {
+  flex: none;
+  font-size: 13px;
+}
+.bronnen-pijl {
+  transition: transform 0.15s;
+}
+.bronnen-kop[aria-expanded='true'] .bronnen-pijl {
+  transform: rotate(90deg);
+}
+.bronnen-lijst {
+  margin: 0;
+  padding: 0 14px 12px;
+  list-style: none;
+  display: grid;
+  gap: 10px;
+}
+.bronnen-onderschrift {
+  font-size: 12px;
+  color: var(--color-muted-foreground);
+  margin-bottom: 4px;
+}
 .bronnen-sql {
   margin: 0;
   padding: 8px 10px;
@@ -462,14 +494,19 @@ body {
   font-weight: 600;
   cursor: pointer;
 }
-.nieuw-gesprek:hover { filter: brightness(1.08); }
+.nieuw-gesprek:hover {
+  filter: brightness(1.08);
+}
 .terug-dashboard {
   font-size: 14px;
   color: var(--color-muted-foreground);
   text-decoration: none;
   white-space: nowrap;
 }
-.terug-dashboard:hover { color: var(--color-foreground); text-decoration: underline; }
+.terug-dashboard:hover {
+  color: var(--color-foreground);
+  text-decoration: underline;
+}
 .welkom-titel {
   font-family: ui-serif, Georgia, 'Times New Roman', serif;
   font-size: clamp(32px, 5vw, 44px);
@@ -484,11 +521,19 @@ body {
   font-size: 14px;
   color: var(--color-muted-foreground);
   background: var(--color-background);
-  transition: color 0.15s, border-color 0.15s;
+  transition:
+    color 0.15s,
+    border-color 0.15s;
   cursor: pointer;
 }
-.startvraag:hover { color: var(--color-foreground); border-color: var(--color-muted-foreground); }
-.startvraag:focus-visible { outline: 2px solid var(--plan); outline-offset: 2px; }
+.startvraag:hover {
+  color: var(--color-foreground);
+  border-color: var(--color-muted-foreground);
+}
+.startvraag:focus-visible {
+  outline: 2px solid var(--plan);
+  outline-offset: 2px;
+}
 
 /* de pil: veld en knop op één regel; groeit het veld, dan blijft de knop onderaan */
 form.invoerpil {
@@ -498,12 +543,27 @@ form.invoerpil {
   border-radius: 28px;
   background: var(--color-background);
   box-shadow: var(--schaduw-zwevend);
-  transition: box-shadow 0.15s, border-color 0.15s;
+  transition:
+    box-shadow 0.15s,
+    border-color 0.15s;
 }
-form.invoerpil > * { border-top: 0 !important; }
-form.invoerpil:focus-within { border-color: var(--plan); box-shadow: var(--schaduw-focus); --tw-ring-shadow: 0 0 #0000; }
-form.invoerpil textarea { flex: 1; font-size: 16px; background: transparent; }
-form.invoerpil > div:last-child { flex: none; padding: 6px 7px 7px 0; }
+form.invoerpil > * {
+  border-top: 0 !important;
+}
+form.invoerpil:focus-within {
+  border-color: var(--plan);
+  box-shadow: var(--schaduw-focus);
+  --tw-ring-shadow: 0 0 #0000;
+}
+form.invoerpil textarea {
+  flex: 1;
+  font-size: 16px;
+  background: transparent;
+}
+form.invoerpil > div:last-child {
+  flex: none;
+  padding: 6px 7px 7px 0;
+}
 form.invoerpil button[type='submit'] {
   width: 42px;
   height: 42px;
@@ -511,7 +571,11 @@ form.invoerpil button[type='submit'] {
   background: var(--plan);
   color: var(--op-kleur);
 }
-form.invoerpil button[type='submit']:disabled { background: var(--color-muted); color: var(--color-muted-foreground); opacity: 1; }
+form.invoerpil button[type='submit']:disabled {
+  background: var(--color-muted);
+  color: var(--color-muted-foreground);
+  opacity: 1;
+}
 
 /* talkwithoptimalen: een mislukte run (components/chat-error.tsx) als rustige kaart, zoals "Bronnen"; kleur
    alleen in het alarm: prioriteit hoog, een rood vierkant met kruis, zoals in het dashboard. */
@@ -520,5 +584,22 @@ form.invoerpil button[type='submit']:disabled { background: var(--color-muted); 
   background: var(--color-card);
   box-shadow: var(--schaduw);
 }
-.fout-vlak { fill: var(--color-destructive); }
-.fout-teken { stroke: var(--op-kleur); stroke-width: 1.8; stroke-linecap: round; fill: none; }
+.fout-vlak {
+  fill: var(--color-destructive);
+}
+.fout-teken {
+  stroke: var(--op-kleur);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  fill: none;
+}
+
+/* een waarde die de pagina invulde (de term die open staat): in een startvraag en in het bericht */
+mark,
+.ingevuld {
+  background: color-mix(in srgb, var(--plan) 14%, transparent);
+  color: inherit;
+  border-radius: 4px;
+  padding: 0 4px;
+  font-weight: 600;
+}
