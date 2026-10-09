@@ -35,6 +35,11 @@ zodat bijwerken neerkomt op: nieuwe upstream ophalen en deze wijzigingen opnieuw
 | `src/components/turn-activity.tsx`, `tool-call-group.tsx`, `tool-part-header.tsx`, `tool-part.tsx`, `tool-error.tsx`, `app-sidebar.tsx`, `conversation-*.tsx`, dialogen, `Part.tsx`, `copy-button.tsx`, `chat-composer.tsx`, `Chat.tsx`, `lib/format-time.ts`, `lib/conversation-title.ts` | zichtbare teksten in het Nederlands ("4 s gewerkt", "Klaar", "Zojuist", "Nieuw gesprek"), tijden in `nl-NL`; een geslaagde tool grijs, een fout als rood vierkant met kruis (7 okt) |
 | `src/components/chat-error.tsx`, `src/index.css` | een mislukte run als rustige kaart (`.fout`) met het alarm voor prioriteit hoog en de pillen van "Nieuw gesprek" en de startvragen; de melding achter "Foutmelding" (7 okt) |
 | `src/index.css` (palet), `app-sidebar.tsx`, `conversation-menu.tsx`, `tool-part-header.tsx`, `turn-activity.tsx` | één palet met de basistokens van het dashboard (`--page`, `--surface`, `--surface-2`, `--ink`, `--ink-2`, `--plan`, `--paneel`, `--critical`, `--schaduw`, …); elke shadcn-kleur verwijst daarnaar en donker definieert alleen de basis opnieuw. Rechte hoeken (`--radius-*` op 0), een rij in een lijst of menu in de paneeltint, geen rood voor "Verwijderen", geen vaste Tailwind-kleuren meer (`text-warning`, `text-plan`) (7 okt) |
+| `src/lib/config.ts`, `src/components/follow-ups.tsx` | de soorten vervolgvragen (tool, sleutel, label, pictogram) uit `PYDANTIC_AI_CHAT_CONFIG.vervolgopties`; zonder die van OptiMalen |
+| `src/components/voorstel-kaart.tsx` | **nieuw**: een tool die goedkeuring vraagt en in `PYDANTIC_AI_CHAT_CONFIG.voorstel` staat, als kaart: wat verandert ten opzichte van de waarden van nu (van het adres `huidig`), de toelichting, en Overnemen, Aanpassen en Laten |
+| `src/lib/host.ts`, `src/Chat.tsx` | **nieuw**: berichten met de pagina eromheen als de chat in een iframe staat: `context` gaat bij elke volgende vraag mee, `vraag` stelt een vraag; terug gaan `aanpassen` en `uitgevoerd` |
+| `src/Part.tsx`, `src/Chat.tsx` (idem) | de kaart van een voorstel in plaats van de toolkaart, en niet in het ingevouwen activiteitenblok |
+| `src/components/app-header.tsx` (idem) | "Nieuw gesprek" heeft een `aria-label`: in een smalle lade staat alleen het pictogram |
 | `UPSTREAM.md` | dit bestand |
 
 ## Bouwen

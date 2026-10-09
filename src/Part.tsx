@@ -4,6 +4,7 @@ import type { ChatAddToolApproveResponseFunction, UIDataTypes, UIMessagePart, UI
 import { useEffect, useState } from 'react'
 import { CopyButton } from '@/components/copy-button'
 import { FOLLOW_UPS_TOOL, FollowUps } from '@/components/follow-ups'
+import { VOORSTEL, VoorstelKaart } from '@/components/voorstel-kaart'
 import { ForkNavigation } from '@/components/fork-navigation'
 import { MessageAction } from '@/components/message-action'
 import { MessageUsage } from '@/components/message-usage'
@@ -190,6 +191,8 @@ export function Part({
         active={lastMessage && status === 'ready' && onFollowUp !== undefined}
       />
     )
+  } else if (toolNameOfPart(part) === VOORSTEL?.tool && (part.type === 'dynamic-tool' || 'toolCallId' in part)) {
+    return <VoorstelKaart part={part} config={VOORSTEL} onApprovalResponse={onApprovalResponse} />
   } else if (part.type === 'dynamic-tool' || 'toolCallId' in part) {
     return <ToolPart part={part} onApprovalResponse={onApprovalResponse} />
   }
