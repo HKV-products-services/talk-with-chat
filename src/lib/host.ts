@@ -1,3 +1,7 @@
+import { useSyncExternalStore } from 'react'
+import { z } from 'zod'
+
+import { startupConfig, type Keuzelijsten } from '@/lib/config'
 import { isRecord } from '@/lib/is-record'
 
 /**
@@ -29,4 +33,34 @@ export function luisterNaarHost(op: (bericht: VanHost) => void): () => void {
   return () => {
     window.removeEventListener('message', ontvang)
   }
+}
+
+// De context van de host, voor de onderdelen buiten Chat.
+let hostContext: unknown
+const luisteraars = new Set<() => void>()
+
+export function zetHostContext(context: unknown): void {
+  hostContext = context
+  luisteraars.forEach((l) => {
+    l()
+  })
+}
+
+function luister(l: () => void): () => void {
+  luisteraars.add(l)
+  return () => luisteraars.delete(l)
+}
+
+const KEUZELIJSTEN = z.record(z.string(), z.array(z.string()))
+
+/** De keuzelijsten uit de configuratie; een lijst die de host in zijn context meegeeft, gaat voor. */
+export function useKeuzelijsten(): Keuzelijsten {
+  const context = useSyncExternalStore(luister, () => hostContext)
+  const vanHost = isRecord(context) && 'keuzelijsten' in context ? KEUZELIJSTEN.parse(context.keuzelijsten) : {}
+  return { ...startupConfig.keuzelijsten, ...vanHost }
+}
+
+/** De lijst met deze waarde erin, of null: dan blijft het een markering. */
+export function lijstMet(waarde: string, lijsten: Keuzelijsten): string[] | null {
+  return Object.values(lijsten).find((l) => l.includes(waarde)) ?? null
 }

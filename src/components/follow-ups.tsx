@@ -5,16 +5,19 @@ import {
   GitCompareArrowsIcon,
   LinkIcon,
   PencilIcon,
+  PlayIcon,
   RotateCcwIcon,
   SearchIcon,
   type LucideIcon,
 } from 'lucide-react'
-import { useLayoutEffect, useRef, useState, type KeyboardEvent } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent } from 'react'
 
 import { startupConfig, type Icoon } from '@/lib/config'
 import { isRecord } from '@/lib/is-record'
+import { KeuzeInTekst } from '@/components/keuze-in-tekst'
 import { Markering } from '@/components/markering'
-import { metTekens, zonderTekens } from '@/lib/ingevuld'
+import { lijstMet, useKeuzelijsten } from '@/lib/host'
+import { inStukken, metTekens, zonderTekens } from '@/lib/ingevuld'
 import { alsVeld } from '@/lib/tijdnotatie'
 import { cn } from '@/lib/utils'
 
@@ -28,6 +31,7 @@ const ICONEN: Record<Icoon, LucideIcon> = {
   onderbouwen: CircleHelpIcon,
   verbeteren: PencilIcon,
   verbinden: LinkIcon,
+  uitvoeren: PlayIcon,
 }
 
 // Vaste volgorde en een vast icoon per soort, uit de configuratie van de app: de gebruiker leert zo
@@ -56,7 +60,9 @@ export function FollowUps({ input, onSubmit, active }: FollowUpsProps) {
 
   return (
     <div className="flex flex-col gap-2">
-      <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">Verder vragen</p>
+      <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+        {startupConfig.vervolgopties.kop}
+      </p>
       <ul className="flex flex-col gap-2">
         {options.map((option) => (
           <li key={option.key}>
@@ -95,9 +101,31 @@ function FollowUpField({ label, icon: Icon, prompt, active, onSubmit }: FollowUp
   // en zonder de tekens «»: een vaste waarde valt op met de markering achter het veld
   const { tekst: weergave, waarden } = zonderTekens(alsVeld(prompt))
   const [draft, setDraft] = useState<string | undefined>(undefined)
+  // een andere keuze in een keuzelijst vervangt die waarde, ook in de lijst van waarden
+  const [eigenWaarden, setEigenWaarden] = useState<string[] | undefined>(undefined)
+  const [typen, setTypen] = useState(false)
   const value = draft ?? weergave
+  const waardenNu = eigenWaarden ?? waarden
   const edited = draft !== undefined && draft !== weergave
   const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const lijsten = useKeuzelijsten()
+
+  const kies = (stuk: number, nieuw: string) => {
+    const stukken = inStukken(value, waardenNu)
+    const oud = stukken[stuk]
+    if (typeof oud === 'string') return
+    setDraft(stukken.map((s, i) => (i === stuk ? nieuw : typeof s === 'string' ? s : s.waarde)).join(''))
+    setEigenWaarden(waardenNu.map((w) => (w === oud.waarde ? nieuw : w)))
+  }
+  const terug = () => {
+    setDraft(undefined)
+    setEigenWaarden(undefined)
+  }
+
+  // naar typen: de cursor in het veld
+  useEffect(() => {
+    if (typen) textareaRef.current?.focus()
+  }, [typen])
 
   // Het veld groeit mee met de tekst, zodat een lange vraag niet in een scrollvak verdwijnt.
   useLayoutEffect(() => {
@@ -109,7 +137,7 @@ function FollowUpField({ label, icon: Icon, prompt, active, onSubmit }: FollowUp
 
   const submit = () => {
     if (!active || value.trim() === '') return
-    onSubmit(value === weergave ? prompt : metTekens(value, waarden))
+    onSubmit(value === weergave ? prompt : metTekens(value, waardenNu))
   }
 
   const onKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -119,7 +147,7 @@ function FollowUpField({ label, icon: Icon, prompt, active, onSubmit }: FollowUp
       submit()
     } else if (e.key === 'Escape' && edited) {
       e.preventDefault()
-      setDraft(undefined)
+      terug()
     }
   }
 
@@ -134,7 +162,8 @@ function FollowUpField({ label, icon: Icon, prompt, active, onSubmit }: FollowUp
       </span>
       <div
         onClick={() => {
-          textareaRef.current?.focus()
+          if (!active) return
+          setTypen(true)
         }}
         className={cn(
           'bg-veld border-veld-rand flex cursor-text items-end gap-1.5 rounded-lg border py-1.5 pr-1.5 pl-2.5 text-sm shadow-[inset_0_1px_2px_rgb(11_11_11/0.06)] transition-[border-color,box-shadow]',
@@ -143,31 +172,60 @@ function FollowUpField({ label, icon: Icon, prompt, active, onSubmit }: FollowUp
           edited && 'border-plan',
         )}
       >
-        <div className="veldmarkering">
-          <Markering tekst={value} waarden={waarden} className="py-0.5 leading-6" />
-          <textarea
-            ref={textareaRef}
-            value={value}
-            rows={1}
-            readOnly={!active}
-            aria-label={`${label}: vervolgvraag, aan te passen voor versturen`}
-            onChange={(e) => {
-              setDraft(e.target.value)
-            }}
-            onKeyDown={onKeyDown}
-            className={cn(
-              'min-w-0 flex-1 resize-none overflow-hidden bg-transparent py-0.5 leading-6 outline-none',
-              !active && 'cursor-default',
-            )}
-          />
-        </div>
+        {/* lezen: de zin met keuzelijsten; typen: het tekstveld met de markering erachter */}
+        {!typen && (
+          <p className="min-w-0 flex-1 py-0.5 leading-6">
+            {inStukken(value, waardenNu).map((s, i) => {
+              if (typeof s === 'string') return s
+              const opties = lijstMet(s.waarde, lijsten)
+              return opties ? (
+                <KeuzeInTekst
+                  key={i}
+                  waarde={s.waarde}
+                  opties={opties}
+                  uit={!active}
+                  label={`${label}: ${s.waarde}, kies een andere waarde`}
+                  onKies={(nieuw) => {
+                    kies(i, nieuw)
+                  }}
+                />
+              ) : (
+                <mark key={i}>{s.waarde}</mark>
+              )
+            })}
+          </p>
+        )}
+        {typen && (
+          <div className="veldmarkering">
+            <Markering tekst={value} waarden={waardenNu} className="py-0.5 leading-6" />
+            <textarea
+              ref={textareaRef}
+              value={value}
+              rows={1}
+              readOnly={!active}
+              aria-label={`${label}: vervolgvraag, aan te passen voor versturen`}
+              onChange={(e) => {
+                setDraft(e.target.value)
+              }}
+              onKeyDown={onKeyDown}
+              onBlur={() => {
+                setTypen(false)
+              }}
+              className={cn(
+                'min-w-0 flex-1 resize-none overflow-hidden bg-transparent py-0.5 leading-6 outline-none',
+                !active && 'cursor-default',
+              )}
+            />
+          </div>
+        )}
         {active && (
           <div className="flex shrink-0 items-center gap-1">
             {edited && (
               <button
                 type="button"
-                onClick={() => {
-                  setDraft(undefined)
+                onClick={(e) => {
+                  e.stopPropagation()
+                  terug()
                 }}
                 aria-label={`${label}: terug naar het voorstel`}
                 title="Terug naar het voorstel (Esc)"
@@ -178,7 +236,10 @@ function FollowUpField({ label, icon: Icon, prompt, active, onSubmit }: FollowUp
             )}
             <button
               type="button"
-              onClick={submit}
+              onClick={(e) => {
+                e.stopPropagation()
+                submit()
+              }}
               disabled={value.trim() === ''}
               aria-label={`${label}: versturen`}
               title="Versturen (Enter)"
