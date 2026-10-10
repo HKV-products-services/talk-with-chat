@@ -1,9 +1,12 @@
 import type { ReactNode } from 'react'
 
 import { startupConfig } from '@/lib/config'
+import { alsTekst, vul } from '@/lib/ingevuld'
 
 interface WelcomeScreenProps {
   onSelect: (prompt: string) => void
+  /** Wat de pagina eromheen doorgeeft; vult `{sleutel}` in de startvragen. */
+  context: unknown
   /** The composer, rendered inline so an empty chat opens on one centred column. */
   composer?: ReactNode
 }
@@ -13,7 +16,7 @@ interface WelcomeScreenProps {
  * gives no sense of what the agent is for, so this states the purpose, puts the
  * composer where the eye already is, and offers a few one-click ways in.
  */
-export function WelcomeScreen({ onSelect, composer }: WelcomeScreenProps) {
+export function WelcomeScreen({ onSelect, context, composer }: WelcomeScreenProps) {
   // Talk with Optimalen: titel, zin en startvragen van deze chat (OptiMalen of de kennisbank)
   const { titel, zin, vragen } = startupConfig.welkom
   return (
@@ -28,19 +31,33 @@ export function WelcomeScreen({ onSelect, composer }: WelcomeScreenProps) {
       {composer && <div className="mt-9 w-full">{composer}</div>}
 
       <ul className="mt-6 flex flex-wrap justify-center gap-2 px-4">
-        {vragen.map((suggestion) => (
-          <li key={suggestion.label}>
-            <button
-              type="button"
-              onClick={() => {
-                onSelect(suggestion.prompt)
-              }}
-              className="startvraag"
-            >
-              {suggestion.label}
-            </button>
-          </li>
-        ))}
+        {vragen.map((suggestion) => {
+          // een vraag met een waarde die de pagina nu niet heeft (geen term open), staat er niet
+          const label = vul(suggestion.label, context)
+          const prompt = vul(suggestion.prompt, context)
+          if (!label || !prompt) return null
+          return (
+            <li key={suggestion.label}>
+              <button
+                type="button"
+                onClick={() => {
+                  onSelect(alsTekst(prompt))
+                }}
+                className="startvraag"
+              >
+                {label.map((s, i) =>
+                  typeof s === 'string' ? (
+                    s
+                  ) : (
+                    <mark key={i} className="ingevuld">
+                      {s.waarde}
+                    </mark>
+                  ),
+                )}
+              </button>
+            </li>
+          )
+        })}
       </ul>
     </div>
   )

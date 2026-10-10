@@ -16,6 +16,7 @@ import { ToolCallGroup } from '@/components/tool-call-group'
 import { ToolFiltersDialog } from '@/components/tool-filters-dialog'
 import { UsageSummary } from '@/components/usage-summary'
 import { WelcomeScreen } from '@/components/welcome-screen'
+import { metTekens, zonderTekens } from '@/lib/ingevuld'
 import { TurnActivity, TurnActivityStep } from '@/components/turn-activity'
 import { ToolFiltersProvider, useToolFilters } from '@/contexts/tool-filters'
 import { Chat as ChatSession, useChat } from '@ai-sdk/react'
@@ -62,6 +63,8 @@ const ChatInner = () => {
   const { isFiltered, filters } = useToolFilters()
   const [filtersDialogOpen, setFiltersDialogOpen] = useState(false)
   const [input, setInput] = useState('')
+  // de waarden die een startvraag in het invoerveld zette: gemarkeerd, en bij versturen weer tussen «»
+  const [ingevuld, setIngevuld] = useState<string[]>([])
   const [model, setModel] = useState('')
   const [effort, setEffort] = useState<ThinkingEffort>(() => readEffort())
   const [enabledTools, setEnabledTools] = useState<string[]>([])
@@ -76,7 +79,9 @@ const ChatInner = () => {
   const afdelingRef = useRef<string | null>(new URLSearchParams(window.location.search).get('afdeling'))
   // En bij een vervolgvraag op een begeleidende tekst: het scherm en de tekst (de server haalt de
   // feiten er zelf bij), zodat "die 11 kleine verschuivingen" ergens naar verwijzen.
-  const contextRef = useRef<unknown>(leesContext())
+  const [context, setContext] = useState<unknown>(leesContext)
+  const contextRef = useRef(context)
+  contextRef.current = context
   modelRef.current = model
   const effortRef = useRef(effort)
   effortRef.current = effort
@@ -390,7 +395,7 @@ const ChatInner = () => {
   useEffect(
     () =>
       luisterNaarHost((bericht) => {
-        if (bericht.soort === 'context') contextRef.current = bericht.context
+        if (bericht.soort === 'context') setContext(bericht.context)
         else sendTextRef.current(bericht.tekst)
       }),
     [],
@@ -398,7 +403,8 @@ const ChatInner = () => {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault()
-    sendText(input)
+    sendText(metTekens(input, ingevuld))
+    setIngevuld([])
   }
 
   // Talk with Optimalen: een startvraag via `?vraag=` (vanuit het dashboard) gaat vanzelf de deur
@@ -592,8 +598,10 @@ const ChatInner = () => {
     setEnabledTools((prev) => (prev.includes(id) ? prev.filter((entry) => entry !== id) : [...prev, id]))
   }, [])
 
-  const handleSuggestion = useCallback((prompt: string) => {
+  const handleSuggestion = useCallback((vraag: string) => {
+    const { tekst: prompt, waarden } = zonderTekens(vraag)
     setInput(prompt)
+    setIngevuld(waarden)
     const textarea = textareaRef.current
     textarea?.focus()
     // Land the caret at the end so an open-ended starter ("Explain how ") can
@@ -656,6 +664,7 @@ const ChatInner = () => {
       showHint={showHint}
       usage={<UsageSummary messages={messages} />}
       input={input}
+      ingevuld={ingevuld}
       onInputChange={setInput}
       onSubmit={handleSubmit}
       onStop={() => {
@@ -721,6 +730,7 @@ const ChatInner = () => {
           <div className="my-auto w-full">
             <WelcomeScreen
               onSelect={handleSuggestion}
+              context={context}
               composer={
                 <>
                   {configBanner}

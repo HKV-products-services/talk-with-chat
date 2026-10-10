@@ -22,9 +22,10 @@ export function namedTitle(entry: Pick<ConversationEntry, 'title' | 'firstMessag
   if (title) return title
   // Blank counts as absent, matching the `title` branch above. `??` here let an
   // empty first message through, so every surface rendered an empty name.
-  // talkwithoptimalen: zonder de tijdnotatie `[[…]]`; een titel is platte tekst.
+  // talkwithoptimalen: zonder de tijdnotatie `[[…]]` en zonder de tekens «»; een titel is platte tekst.
   const firstMessage = entry?.firstMessage
     ?.replace(NOTATIE, '')
+    .replace(/[«»]/g, '')
     .replace(/\s+([?.!,])/g, '$1')
     .trim()
   return firstMessage ?? ''
