@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from 'react'
+import { z } from 'zod'
 
 import { startupConfig, type Keuzelijsten } from '@/lib/config'
 import { isRecord } from '@/lib/is-record'
@@ -34,7 +35,7 @@ export function luisterNaarHost(op: (bericht: VanHost) => void): () => void {
   }
 }
 
-// De context van nu, voor elk onderdeel dat hem nodig heeft (welkomstscherm, vervolgvragen, kaart).
+// De context van de host, voor de onderdelen buiten Chat.
 let hostContext: unknown
 const luisteraars = new Set<() => void>()
 
@@ -45,27 +46,18 @@ export function zetHostContext(context: unknown): void {
   })
 }
 
-export function useHostContext(): unknown {
-  return useSyncExternalStore(
-    (l) => {
-      luisteraars.add(l)
-      return () => luisteraars.delete(l)
-    },
-    () => hostContext,
-  )
+function luister(l: () => void): () => void {
+  luisteraars.add(l)
+  return () => luisteraars.delete(l)
 }
 
-/**
- * De keuzelijsten van nu: die uit de configuratie, met per lijst die van de host als die er een meegeeft (zoals de
- * relaties die bij de soort van de open term passen).
- */
+const KEUZELIJSTEN = z.record(z.string(), z.array(z.string()))
+
+/** De keuzelijsten uit de configuratie; een lijst die de host in zijn context meegeeft, gaat voor. */
 export function useKeuzelijsten(): Keuzelijsten {
-  const context = useHostContext()
-  const vanHost = isRecord(context) && isRecord(context.keuzelijsten) ? context.keuzelijsten : {}
-  return {
-    ...startupConfig.keuzelijsten,
-    ...Object.fromEntries(Object.entries(vanHost).filter((e): e is [string, string[]] => Array.isArray(e[1]))),
-  }
+  const context = useSyncExternalStore(luister, () => hostContext)
+  const vanHost = isRecord(context) && 'keuzelijsten' in context ? KEUZELIJSTEN.parse(context.keuzelijsten) : {}
+  return { ...startupConfig.keuzelijsten, ...vanHost }
 }
 
 /** De lijst met deze waarde erin, of null: dan blijft het een markering. */

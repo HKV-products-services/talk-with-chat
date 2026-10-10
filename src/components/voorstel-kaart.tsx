@@ -60,9 +60,7 @@ interface VoorstelKaartProps {
  * Een voorgestelde wijziging als kaart: wat verandert ten opzichte van nu (het oude doorgestreept), en waarom. De
  * gebruiker beslist: Overnemen keurt de tool goed, Aanpassen zet het voorstel in het formulier van de pagina en
  * Laten wijst het af. Daarna blijft één regel staan met wat er gekozen is.
- *
- * Een veld met een keuzelijst kies je op de kaart om; Overnemen geeft dan de gekozen argumenten mee als reden (JSON),
- * en de server voert de tool daarmee uit.
+ * Overnemen met een andere keuze in een keuzelijst geeft de gekozen argumenten als reden (JSON).
  */
 export function VoorstelKaart({ part, config, onApprovalResponse }: VoorstelKaartProps) {
   const voorstel = isRecord(part.input) ? part.input : {}
@@ -72,7 +70,6 @@ export function VoorstelKaart({ part, config, onApprovalResponse }: VoorstelKaar
   const gemeld = useRef(false)
   const lijsten = useKeuzelijsten()
   const [keuzes, setKeuzes] = useState<Record<string, unknown>>({})
-  // overgenomen met andere keuzes: die staan in de reden
   const overgenomen: unknown = approval?.approved === true && reden ? JSON.parse(reden) : null
   const gekozen = isRecord(overgenomen) ? overgenomen : { ...voorstel, ...keuzes }
 
@@ -178,10 +175,6 @@ export function VoorstelKaart({ part, config, onApprovalResponse }: VoorstelKaar
   )
 }
 
-/**
- * De waarde van een veld: tekst, of een keuzelijst als het veld er een heeft en er nog gekozen wordt. Bij een lijst van
- * teksten met een scheiding ("soort van → gemaal") kies je per regel het deel ervoor.
- */
 function Waarde({
   veld,
   waarde,

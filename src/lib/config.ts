@@ -39,8 +39,7 @@ export type Icoon = 'zoeken' | 'vergelijken' | 'verklaren' | 'onderbouwen' | 've
 
 /**
  * De vervolgvragen: de output-functie van de agent die het antwoord afsluit, de kop erboven, en per soort de sleutel
- * van zijn argument, het label en het pictogram, in de volgorde waarin ze onder het antwoord staan. Een soort kan een
- * vraag zijn of een handeling ("Uitvoeren"): de chat verstuurt ze allebei als bericht.
+ * van zijn argument, het label en het pictogram, in de volgorde waarin ze onder het antwoord staan.
  */
 export interface Vervolgopties {
   tool: string
@@ -67,15 +66,12 @@ export interface Voorstel {
   tool: string
   titel: string
   toelichting: string
-  /**
-   * `lijst`: de naam van een keuzelijst; dan kies je de waarde op de kaart. Is het argument een lijst van teksten met
-   * `scheiding` erin (zoals "soort van → gemaal"), dan kies je het deel ervoor.
-   */
+  /** `lijst`: de keuzelijst voor de waarde; bij een lijst van teksten met `scheiding` voor het deel ervoor. */
   velden: { sleutel: string; label: string; lijst?: string; scheiding?: string }[]
   huidig: string
 }
 
-/** Vaste waarden per lijst (bijv. de relaties); een waarde uit een lijst wordt in de chat een keuzelijst. */
+/** Vaste waarden per lijst; een waarde uit een lijst is in de chat een keuzelijst. */
 export type Keuzelijsten = Record<string, string[]>
 
 export interface StartupConfig {

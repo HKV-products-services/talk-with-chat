@@ -1,9 +1,6 @@
 import { cn } from '@/lib/utils'
 
-/**
- * Een vaste waarde in een zin als keuzelijst, in de stijl van de markering: zo zet je hem om zonder te typen. Even
- * breed als de gekozen waarde (`field-sizing: content`), niet als de langste.
- */
+/** Een vaste waarde in een zin als keuzelijst, in de stijl van de markering. */
 export function KeuzeInTekst({
   waarde,
   opties,
