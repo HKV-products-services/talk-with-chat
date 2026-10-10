@@ -1,7 +1,8 @@
 /**
- * Een vaste of ingevulde waarde staat tussen «» (een term, een relatie, een keuze uit een lijst) en valt op: in een
- * bericht als `<mark>`, in een bewerkbaar veld met een markering erachter. Een startvraag vult `{sleutel}` in label of
- * vraag uit de context die de host doorgeeft (bijvoorbeeld de term die open staat), en zet de waarde tussen «».
+ * Een vaste of ingevulde waarde staat in de tekst tussen «» (een term, een relatie, een keuze uit een lijst). Die tekens
+ * zie je niet: de waarde valt op met een markering, in een bericht als `<mark>`, in een bewerkbaar veld met een laag
+ * erachter. Een startvraag vult `{sleutel}` in label of vraag uit de context die de host doorgeeft (bijvoorbeeld de term
+ * die open staat).
  */
 export type Stuk = string | { waarde: string }
 
@@ -34,10 +35,33 @@ export function ingevuldNaarHtml(tekst: string): string {
   return tekst.replace(GEMARKEERD, '<mark>$1</mark>')
 }
 
-/** Een tekst in stukken: gewone tekst, en «waarden» (met de tekens erbij, zoals ze in een veld staan). */
-export function inStukken(tekst: string): Stuk[] {
+/** De tekst zonder «», zoals hij in een veld staat, met de waarden die ertussen stonden. */
+export function zonderTekens(tekst: string): { tekst: string; waarden: string[] } {
+  const waarden = [...new Set([...tekst.matchAll(GEMARKEERD)].map((m) => m[1]))]
+  return { tekst: tekst.replace(GEMARKEERD, '$1'), waarden }
+}
+
+// de waarden als één patroon, de langste eerst, zodat «soort van» niet als «soort» wordt herkend
+const patroon = (waarden: string[]) =>
+  new RegExp(
+    [...waarden]
+      .sort((a, b) => b.length - a.length)
+      .map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+      .join('|'),
+    'g',
+  )
+
+/** De waarden weer tussen «», waar ze nog in de tekst staan: zo blijft een aangepaste vraag gemarkeerd. */
+export function metTekens(tekst: string, waarden: string[]): string {
+  return waarden.length ? tekst.replace(patroon(waarden), '«$&»') : tekst
+}
+
+/** Een tekst in stukken: gewone tekst en de waarden, voor de markering achter een veld. */
+export function inStukken(tekst: string, waarden: string[]): Stuk[] {
+  if (!waarden.length) return [tekst]
+  const waarde = new Set(waarden)
   return tekst
-    .split(/(«[^«»\n]+»)/)
+    .split(new RegExp(`(${patroon(waarden).source})`))
     .filter(Boolean)
-    .map((s) => (s.startsWith('«') && s.endsWith('»') ? { waarde: s } : s))
+    .map((s) => (waarde.has(s) ? { waarde: s } : s))
 }

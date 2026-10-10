@@ -13,8 +13,9 @@ import { useLayoutEffect, useRef, useState, type KeyboardEvent } from 'react'
 
 import { startupConfig, type Icoon } from '@/lib/config'
 import { isRecord } from '@/lib/is-record'
-import { inStukken } from '@/lib/ingevuld'
-import { alsVeld, teVersturen } from '@/lib/tijdnotatie'
+import { Markering } from '@/components/markering'
+import { metTekens, zonderTekens } from '@/lib/ingevuld'
+import { alsVeld } from '@/lib/tijdnotatie'
 import { cn } from '@/lib/utils'
 
 /** Naam van de output-functie van de agent die het antwoord met vervolgvragen afsluit. */
@@ -91,7 +92,8 @@ function FollowUpField({ label, icon: Icon, prompt, active, onSubmit }: FollowUp
   // gewoon doorloopt in het veld in plaats van op de eerste letters te bevriezen.
   // talkwithoptimalen: het veld toont alleen de mensentaal; onveranderd verstuurd gaat de notatie
   // `[[…]]` mee, aangepast precies wat er staat.
-  const weergave = alsVeld(prompt)
+  // en zonder de tekens «»: een vaste waarde valt op met de markering achter het veld
+  const { tekst: weergave, waarden } = zonderTekens(alsVeld(prompt))
   const [draft, setDraft] = useState<string | undefined>(undefined)
   const value = draft ?? weergave
   const edited = draft !== undefined && draft !== weergave
@@ -107,7 +109,7 @@ function FollowUpField({ label, icon: Icon, prompt, active, onSubmit }: FollowUp
 
   const submit = () => {
     if (!active || value.trim() === '') return
-    onSubmit(teVersturen(prompt, value))
+    onSubmit(value === weergave ? prompt : metTekens(value, waarden))
   }
 
   const onKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -141,12 +143,8 @@ function FollowUpField({ label, icon: Icon, prompt, active, onSubmit }: FollowUp
           edited && 'border-plan',
         )}
       >
-        {/* in een tekstveld kan geen opmaak: de markering van «waarden» ligt erachter, met dezelfde maten */}
         <div className="veldmarkering">
-          <div aria-hidden className="veldmarkering-achter">
-            {inStukken(value).map((s, i) => (typeof s === 'string' ? s : <mark key={i}>{s.waarde}</mark>))}
-            {'\u200b'}
-          </div>
+          <Markering tekst={value} waarden={waarden} className="py-0.5 leading-6" />
           <textarea
             ref={textareaRef}
             value={value}

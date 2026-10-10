@@ -604,8 +604,8 @@ mark,
   font-weight: 600;
 }
 
-/* een bewerkbaar veld met «waarden»: de markering ligt in een laag achter de textarea, die dezelfde tekst op dezelfde
-   plek zet (zelfde cel, lettertype, regelhoogte en opvulling) maar onzichtbaar; alleen de achtergrond van mark telt */
+/* een bewerkbaar veld met vaste of ingevulde waarden: de markering ligt in een laag achter de textarea, die dezelfde
+   tekst op dezelfde plek zet (zelfde cel, lettertype, regelhoogte en opvulling) maar onzichtbaar */
 .veldmarkering {
   display: grid;
   flex: 1;
@@ -613,18 +613,22 @@ mark,
 }
 .veldmarkering > * {
   grid-area: 1 / 1;
+  text-align: start;
 }
-.veldmarkering-achter {
-  padding: 0.125rem 0;
-  line-height: 1.5rem;
+.markering-achter {
   white-space: pre-wrap;
   overflow-wrap: break-word;
   color: transparent;
   pointer-events: none;
 }
-.veldmarkering-achter mark {
+.markering-achter mark {
   color: transparent;
   padding: 0;
   font-weight: inherit;
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--plan) 14%, transparent);
+}
+form.invoerpil .markering-achter,
+form.invoerpil textarea {
+  font-size: 16px;
+  line-height: 1.5;
 }

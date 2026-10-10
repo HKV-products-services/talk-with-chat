@@ -19,12 +19,15 @@ import { EffortMeter } from '@/components/effort-meter'
 import { ToolToggleBar } from '@/components/tool-toggle-bar'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { Markering } from '@/components/markering'
 import { startupConfig } from '@/lib/config'
 import type { ThinkingEffort } from '@/lib/generated/thinking-effort.gen'
 import type { BuiltinTool, ModelConfig } from '@/types'
 
 interface ChatComposerProps {
   input: string
+  /** Vaste of ingevulde waarden in het veld (uit een startvraag), gemarkeerd achter de tekst. */
+  ingevuld: string[]
   onInputChange: (value: string) => void
   onSubmit: (event: SyntheticEvent) => void
   onStop: () => void
@@ -59,6 +62,7 @@ interface ChatComposerProps {
  */
 export function ChatComposer({
   input,
+  ingevuld,
   onInputChange,
   onSubmit,
   onStop,
@@ -88,18 +92,21 @@ export function ChatComposer({
     <div className="mx-auto w-full max-w-3xl px-4">
       {/* talkwithoptimalen: één pil zoals op america.gov en in het dashboard; knop rechts in de pil */}
       <PromptInput onSubmit={onSubmit} className="invoerpil">
-        <PromptInputTextarea
-          placeholder={startupConfig.welkom.invoer}
-          // The vendored Textarea floors at min-h-16, which left a band of dead
-          // space under a one-line draft; grow from a single line instead.
-          className="min-h-11 px-5 py-3.5"
-          ref={textareaRef}
-          onChange={(e) => {
-            onInputChange(e.target.value)
-          }}
-          value={input}
-          autoFocus={true}
-        />
+        <div className="veldmarkering">
+          <Markering tekst={input} waarden={ingevuld} className="px-5 py-3.5" />
+          <PromptInputTextarea
+            placeholder={startupConfig.welkom.invoer}
+            // The vendored Textarea floors at min-h-16, which left a band of dead
+            // space under a one-line draft; grow from a single line instead.
+            className="min-h-11 px-5 py-3.5"
+            ref={textareaRef}
+            onChange={(e) => {
+              onInputChange(e.target.value)
+            }}
+            value={input}
+            autoFocus={true}
+          />
+        </div>
         <PromptInputToolbar className="gap-2">
           {/* The run controls scroll sideways on a narrow screen instead of
               pushing the send button off the edge. */}
