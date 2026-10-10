@@ -3,6 +3,7 @@ import { type ComponentProps } from 'react'
 
 import { Response } from '@/components/ai-elements/response'
 import { rehypePlugins } from '@/lib/markdown-plugins'
+import { ingevuldNaarHtml } from '@/lib/ingevuld'
 import { notatieNaarHtml, tijdLabel } from '@/lib/tijdnotatie'
 
 /**
@@ -19,12 +20,13 @@ import { notatieNaarHtml, tijdLabel } from '@/lib/tijdnotatie'
  * keeps that from being a thing anyone can do by accident.
  *
  * talkwithoptimalen: een tijd in de notatie `[[…]]` wordt vóór de Markdown een
- * `<time datetime>`, dat `Tijdstip` als klein klokje toont.
+ * `<time datetime>`, dat `Tijdstip` als klein klokje toont; een vaste of ingevulde waarde
+ * tussen «» een `<mark>`.
  */
 export function Markdown({ children, components, ...props }: Omit<ComponentProps<typeof Response>, 'rehypePlugins'>) {
   return (
     <Response {...props} components={{ ...components, time: Tijdstip }} rehypePlugins={rehypePlugins}>
-      {typeof children === 'string' ? notatieNaarHtml(children) : children}
+      {typeof children === 'string' ? notatieNaarHtml(ingevuldNaarHtml(children)) : children}
     </Response>
   )
 }

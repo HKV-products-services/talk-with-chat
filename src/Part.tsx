@@ -11,7 +11,6 @@ import { MessageUsage } from '@/components/message-usage'
 import { ReasoningBlock } from '@/components/reasoning-block'
 import { ToolPart } from '@/components/tool-part'
 import { UserBubble } from '@/components/user-bubble'
-import { ingevuldNaarHtml } from '@/lib/ingevuld'
 import { toolNameOfPart } from '@/lib/tool-filters'
 
 interface PartProps {
@@ -112,7 +111,7 @@ export function Part({
       return (
         <div className="py-3">
           <UserBubble>
-            <Markdown>{ingevuldNaarHtml(part.text)}</Markdown>
+            <Markdown>{part.text}</Markdown>
           </UserBubble>
           {/* `-mr-[7px]` undoes the icon buttons' own padding — a `size-7`
               button around a `size-3.5` icon insets the glyph 7px — so the last

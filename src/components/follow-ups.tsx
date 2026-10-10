@@ -13,6 +13,7 @@ import { useLayoutEffect, useRef, useState, type KeyboardEvent } from 'react'
 
 import { startupConfig, type Icoon } from '@/lib/config'
 import { isRecord } from '@/lib/is-record'
+import { inStukken } from '@/lib/ingevuld'
 import { alsVeld, teVersturen } from '@/lib/tijdnotatie'
 import { cn } from '@/lib/utils'
 
@@ -140,21 +141,28 @@ function FollowUpField({ label, icon: Icon, prompt, active, onSubmit }: FollowUp
           edited && 'border-plan',
         )}
       >
-        <textarea
-          ref={textareaRef}
-          value={value}
-          rows={1}
-          readOnly={!active}
-          aria-label={`${label}: vervolgvraag, aan te passen voor versturen`}
-          onChange={(e) => {
-            setDraft(e.target.value)
-          }}
-          onKeyDown={onKeyDown}
-          className={cn(
-            'min-w-0 flex-1 resize-none overflow-hidden bg-transparent py-0.5 leading-6 outline-none',
-            !active && 'cursor-default',
-          )}
-        />
+        {/* in een tekstveld kan geen opmaak: de markering van «waarden» ligt erachter, met dezelfde maten */}
+        <div className="veldmarkering">
+          <div aria-hidden className="veldmarkering-achter">
+            {inStukken(value).map((s, i) => (typeof s === 'string' ? s : <mark key={i}>{s.waarde}</mark>))}
+            {'\u200b'}
+          </div>
+          <textarea
+            ref={textareaRef}
+            value={value}
+            rows={1}
+            readOnly={!active}
+            aria-label={`${label}: vervolgvraag, aan te passen voor versturen`}
+            onChange={(e) => {
+              setDraft(e.target.value)
+            }}
+            onKeyDown={onKeyDown}
+            className={cn(
+              'min-w-0 flex-1 resize-none overflow-hidden bg-transparent py-0.5 leading-6 outline-none',
+              !active && 'cursor-default',
+            )}
+          />
+        </div>
         {active && (
           <div className="flex shrink-0 items-center gap-1">
             {edited && (

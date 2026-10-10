@@ -1,7 +1,7 @@
 /**
- * Een waarde van de pagina in een startvraag: `{sleutel}` in label of vraag wordt gevuld uit de context die de host
- * doorgeeft (bijvoorbeeld de term die open staat). In de vraag staat de waarde tussen «», zodat hij in het bericht
- * herkenbaar blijft als ingevuld.
+ * Een vaste of ingevulde waarde staat tussen «» (een term, een relatie, een keuze uit een lijst) en valt op: in een
+ * bericht als `<mark>`, in een bewerkbaar veld met een markering erachter. Een startvraag vult `{sleutel}` in label of
+ * vraag uit de context die de host doorgeeft (bijvoorbeeld de term die open staat), en zet de waarde tussen «».
  */
 export type Stuk = string | { waarde: string }
 
@@ -27,7 +27,17 @@ export function alsTekst(stukken: Stuk[]): string {
   return stukken.map((s) => (typeof s === 'string' ? s : `«${s.waarde}»`)).join('')
 }
 
-/** «waarde» in een bericht als `<mark>`, zodat hij anders oogt dan wat er getypt is. */
+const GEMARKEERD = /«([^«»\n]+)»/g
+
+/** «waarde» in een bericht als `<mark>`, zodat hij anders oogt dan gewone tekst. */
 export function ingevuldNaarHtml(tekst: string): string {
-  return tekst.replace(/«([^«»\n]+)»/g, '<mark>$1</mark>')
+  return tekst.replace(GEMARKEERD, '<mark>$1</mark>')
+}
+
+/** Een tekst in stukken: gewone tekst, en «waarden» (met de tekens erbij, zoals ze in een veld staan). */
+export function inStukken(tekst: string): Stuk[] {
+  return tekst
+    .split(/(«[^«»\n]+»)/)
+    .filter(Boolean)
+    .map((s) => (s.startsWith('«') && s.endsWith('»') ? { waarde: s } : s))
 }
