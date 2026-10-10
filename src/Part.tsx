@@ -33,6 +33,10 @@ interface PartProps {
   onFollowUp?: (prompt: string) => void
 }
 
+/** Vervolgvragen die de server heeft aangenomen: met uitvoer. */
+const aangenomen = (p: UIMessage['parts'][number]) =>
+  toolNameOfPart(p) === FOLLOW_UPS_TOOL && 'state' in p && p.state === 'output-available'
+
 export function Part({
   part,
   message,
@@ -178,12 +182,10 @@ export function Part({
       />
     )
   } else if (toolNameOfPart(part) === FOLLOW_UPS_TOOL && 'input' in part) {
-    // talkwithoptimalen: een afgewezen poging (de controle vond bijv. "run") blijft als deel in het
-    // bericht staan; alleen de laatste poging is het antwoord. Ook die laatste kan afgewezen zijn (de
-    // herkansingen op): dan staat er de foutkaart, en geen vervolgvragen die niet door de
-    // controle kwamen.
-    if (message.parts.slice(index + 1).some((p) => toolNameOfPart(p) === FOLLOW_UPS_TOOL)) return null
-    if ('state' in part && part.state === 'output-error') return null
+    // talkwithoptimalen: een afgewezen poging blijft als deel in het bericht staan, en een poging die de
+    // server nog toetst of daarna afwijst, heeft geen uitvoer. Alleen de laatste poging met uitvoer is het
+    // antwoord.
+    if (!aangenomen(part) || message.parts.slice(index + 1).some(aangenomen)) return null
     return (
       <FollowUps
         input={part.input}
