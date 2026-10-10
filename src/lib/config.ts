@@ -35,19 +35,22 @@ const WELKOM_OPTIMALEN: Welkom = {
 }
 
 /** Het pictogram bij een soort vervolgvraag. */
-export type Icoon = 'zoeken' | 'vergelijken' | 'verklaren' | 'onderbouwen' | 'verbeteren' | 'verbinden'
+export type Icoon = 'zoeken' | 'vergelijken' | 'verklaren' | 'onderbouwen' | 'verbeteren' | 'verbinden' | 'uitvoeren'
 
 /**
- * De vervolgvragen: de output-functie van de agent die het antwoord afsluit, en per soort de sleutel van zijn
- * argument, het label en het pictogram, in de volgorde waarin ze onder het antwoord staan.
+ * De vervolgvragen: de output-functie van de agent die het antwoord afsluit, de kop erboven, en per soort de sleutel
+ * van zijn argument, het label en het pictogram, in de volgorde waarin ze onder het antwoord staan. Een soort kan een
+ * vraag zijn of een handeling ("Uitvoeren"): de chat verstuurt ze allebei als bericht.
  */
 export interface Vervolgopties {
   tool: string
+  kop: string
   soorten: { sleutel: string; label: string; icoon: Icoon }[]
 }
 
 const VERVOLGOPTIES_OPTIMALEN: Vervolgopties = {
   tool: 'vervolgopties',
+  kop: 'Verder vragen',
   soorten: [
     { sleutel: 'inzoomen', label: 'Inzoomen', icoon: 'zoeken' },
     { sleutel: 'vergelijken', label: 'Vergelijken', icoon: 'vergelijken' },
@@ -64,9 +67,16 @@ export interface Voorstel {
   tool: string
   titel: string
   toelichting: string
-  velden: { sleutel: string; label: string }[]
+  /**
+   * `lijst`: de naam van een keuzelijst; dan kies je de waarde op de kaart. Is het argument een lijst van teksten met
+   * `scheiding` erin (zoals "soort van → gemaal"), dan kies je het deel ervoor.
+   */
+  velden: { sleutel: string; label: string; lijst?: string; scheiding?: string }[]
   huidig: string
 }
+
+/** Vaste waarden per lijst (bijv. de relaties); een waarde uit een lijst wordt in de chat een keuzelijst. */
+export type Keuzelijsten = Record<string, string[]>
 
 export interface StartupConfig {
   basePath?: string
@@ -86,6 +96,7 @@ export interface ResolvedStartupConfig {
   readonly opslag: string
   readonly welkom: Welkom
   readonly vervolgopties: Vervolgopties
+  readonly keuzelijsten: Keuzelijsten
   readonly voorstel: Voorstel | null
 }
 
@@ -132,17 +143,34 @@ const startupConfigSchema = z
             z.object({
               sleutel: z.string(),
               label: z.string(),
-              icoon: z.enum(['zoeken', 'vergelijken', 'verklaren', 'onderbouwen', 'verbeteren', 'verbinden']),
+              icoon: z.enum([
+                'zoeken',
+                'vergelijken',
+                'verklaren',
+                'onderbouwen',
+                'verbeteren',
+                'verbinden',
+                'uitvoeren',
+              ]),
             }),
           ),
+          kop: z.string(),
         })
         .optional(),
+      keuzelijsten: z.record(z.string(), z.array(z.string())).optional(),
       voorstel: z
         .object({
           tool: z.string(),
           titel: z.string(),
           toelichting: z.string(),
-          velden: z.array(z.object({ sleutel: z.string(), label: z.string() })),
+          velden: z.array(
+            z.object({
+              sleutel: z.string(),
+              label: z.string(),
+              lijst: z.string().optional(),
+              scheiding: z.string().optional(),
+            }),
+          ),
           huidig: z.string(),
         })
         .optional(),
@@ -159,7 +187,7 @@ export function resolveStartupConfig(
   if (!parsedConfig.success) {
     throw new TypeError(parsedConfig.error.issues[0].message)
   }
-  const { basePath, apiPath, naam, opslag, welkom, vervolgopties, voorstel } = parsedConfig.data ?? {}
+  const { basePath, apiPath, naam, opslag, welkom, vervolgopties, keuzelijsten, voorstel } = parsedConfig.data ?? {}
   return Object.freeze({
     basePath: basePath === undefined ? defaultBasePath(viteBase) : normalizeDirectoryPath(basePath, 'basePath'),
     apiPath: apiPath === undefined ? '/api/' : normalizeDirectoryPath(apiPath, 'apiPath'),
@@ -167,6 +195,7 @@ export function resolveStartupConfig(
     opslag: opslag ?? 'chat-storage',
     welkom: welkom ?? WELKOM_OPTIMALEN,
     vervolgopties: vervolgopties ?? VERVOLGOPTIES_OPTIMALEN,
+    keuzelijsten: keuzelijsten ?? {},
     voorstel: voorstel ?? null,
   })
 }

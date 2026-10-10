@@ -1,3 +1,6 @@
+import { useSyncExternalStore } from 'react'
+
+import { startupConfig, type Keuzelijsten } from '@/lib/config'
 import { isRecord } from '@/lib/is-record'
 
 /**
@@ -29,4 +32,43 @@ export function luisterNaarHost(op: (bericht: VanHost) => void): () => void {
   return () => {
     window.removeEventListener('message', ontvang)
   }
+}
+
+// De context van nu, voor elk onderdeel dat hem nodig heeft (welkomstscherm, vervolgvragen, kaart).
+let hostContext: unknown
+const luisteraars = new Set<() => void>()
+
+export function zetHostContext(context: unknown): void {
+  hostContext = context
+  luisteraars.forEach((l) => {
+    l()
+  })
+}
+
+export function useHostContext(): unknown {
+  return useSyncExternalStore(
+    (l) => {
+      luisteraars.add(l)
+      return () => luisteraars.delete(l)
+    },
+    () => hostContext,
+  )
+}
+
+/**
+ * De keuzelijsten van nu: die uit de configuratie, met per lijst die van de host als die er een meegeeft (zoals de
+ * relaties die bij de soort van de open term passen).
+ */
+export function useKeuzelijsten(): Keuzelijsten {
+  const context = useHostContext()
+  const vanHost = isRecord(context) && isRecord(context.keuzelijsten) ? context.keuzelijsten : {}
+  return {
+    ...startupConfig.keuzelijsten,
+    ...Object.fromEntries(Object.entries(vanHost).filter((e): e is [string, string[]] => Array.isArray(e[1]))),
+  }
+}
+
+/** De lijst met deze waarde erin, of null: dan blijft het een markering. */
+export function lijstMet(waarde: string, lijsten: Keuzelijsten): string[] | null {
+  return Object.values(lijsten).find((l) => l.includes(waarde)) ?? null
 }
