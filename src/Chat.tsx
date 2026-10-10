@@ -9,7 +9,7 @@ import { EditMessageDialog } from '@/components/edit-message-dialog'
 import { Bronnen, QUERY_TOOL, type Bron } from '@/components/bronnen'
 import { FOLLOW_UPS_TOOL } from '@/components/follow-ups'
 import { VOORSTEL } from '@/components/voorstel-kaart'
-import { luisterNaarHost } from '@/lib/host'
+import { luisterNaarHost, zetHostContext } from '@/lib/host'
 import { HiddenToolsGroup } from '@/components/hidden-tools-group'
 import { ThinkingIndicator } from '@/components/thinking-indicator'
 import { ToolCallGroup } from '@/components/tool-call-group'
@@ -82,6 +82,9 @@ const ChatInner = () => {
   const [context, setContext] = useState<unknown>(leesContext)
   const contextRef = useRef(context)
   contextRef.current = context
+  useEffect(() => {
+    zetHostContext(context)
+  }, [context])
   modelRef.current = model
   const effortRef = useRef(effort)
   effortRef.current = effort
