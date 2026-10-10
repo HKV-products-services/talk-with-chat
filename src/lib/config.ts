@@ -93,6 +93,8 @@ export interface ResolvedStartupConfig {
   readonly welkom: Welkom
   readonly vervolgopties: Vervolgopties
   readonly keuzelijsten: Keuzelijsten
+  /** Tools die de host uitvoert: de chat geeft de aanroep door en de uitkomst terug als uitvoer van de tool. */
+  readonly paginatools: string[]
   readonly voorstel: Voorstel | null
 }
 
@@ -154,6 +156,7 @@ const startupConfigSchema = z
         })
         .optional(),
       keuzelijsten: z.record(z.string(), z.array(z.string())).optional(),
+      paginatools: z.array(z.string()).optional(),
       voorstel: z
         .object({
           tool: z.string(),
@@ -183,7 +186,8 @@ export function resolveStartupConfig(
   if (!parsedConfig.success) {
     throw new TypeError(parsedConfig.error.issues[0].message)
   }
-  const { basePath, apiPath, naam, opslag, welkom, vervolgopties, keuzelijsten, voorstel } = parsedConfig.data ?? {}
+  const { basePath, apiPath, naam, opslag, welkom, vervolgopties, keuzelijsten, paginatools, voorstel } =
+    parsedConfig.data ?? {}
   return Object.freeze({
     basePath: basePath === undefined ? defaultBasePath(viteBase) : normalizeDirectoryPath(basePath, 'basePath'),
     apiPath: apiPath === undefined ? '/api/' : normalizeDirectoryPath(apiPath, 'apiPath'),
@@ -192,6 +196,7 @@ export function resolveStartupConfig(
     welkom: welkom ?? WELKOM_OPTIMALEN,
     vervolgopties: vervolgopties ?? VERVOLGOPTIES_OPTIMALEN,
     keuzelijsten: keuzelijsten ?? {},
+    paginatools: paginatools ?? [],
     voorstel: voorstel ?? null,
   })
 }
