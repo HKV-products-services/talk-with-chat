@@ -632,3 +632,24 @@ form.invoerpil textarea {
   font-size: 16px;
   line-height: 1.5;
 }
+
+/* een vaste waarde als keuzelijst in de tekst: zoals de markering, met een pijltje */
+.keuze-in-tekst {
+  appearance: none;
+  field-sizing: content;
+  font: inherit;
+  color: inherit;
+  background: color-mix(in srgb, var(--plan) 14%, transparent) no-repeat right 4px center / 10px
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230062a1' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  border: 0;
+  border-radius: 4px;
+  padding: 0 17px 0 4px;
+  cursor: pointer;
+}
+.keuze-in-tekst:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--plan) 22%, transparent);
+}
+.keuze-in-tekst:focus-visible {
+  outline: 2px solid var(--plan);
+  outline-offset: 1px;
+}
