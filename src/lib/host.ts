@@ -10,7 +10,7 @@ import { isRecord } from '@/lib/is-record'
  * Van de host: `context` gaat bij elke volgende vraag verborgen mee (wat de gebruiker nu ziet), en `vraag` stelt een
  * vraag alsof hij getypt is. Naar de host: `aanpassen` (de gebruiker zet een voorstel in het formulier van de pagina)
  * en `uitgevoerd` (een goedgekeurd voorstel is opgeslagen, de pagina kan vernieuwen). Een paginatool gaat als
- * `paginatool` naar de host, die met `uitkomst` antwoordt: wat er nu te zien is, of een `fout`.
+ * `paginatool` naar de host, die antwoordt met `uitkomst` of `fout`; de chat geeft dat als uitvoer van de tool terug.
  */
 export type VanHost = { soort: 'context'; context: unknown } | { soort: 'vraag'; tekst: string }
 
@@ -20,12 +20,18 @@ export type NaarHost =
   | { soort: 'paginatool'; id: string; tool: string; invoer: unknown }
 
 const inIframe = () => window.parent !== window
+const WACHTEN = 60_000 // ms
+
+/** Een bericht van de pagina eromheen, op dezelfde oorsprong; anders null. */
+function vanHost(e: MessageEvent): Record<string, unknown> | null {
+  return e.origin === window.location.origin && e.source === window.parent && isRecord(e.data) ? e.data : null
+}
 
 export function meldHost(bericht: NaarHost): void {
   if (inIframe()) window.parent.postMessage(bericht, window.location.origin)
 }
 
-/** Een paginatool door de host laten uitvoeren; `id` is die van de toolaanroep. */
+/** Een paginatool door de host laten uitvoeren (`id`: die van de toolaanroep); zonder antwoord na een minuut een fout. */
 export function vraagHost(
   id: string,
   tool: string,
@@ -33,12 +39,19 @@ export function vraagHost(
 ): Promise<{ uitkomst: unknown } | { fout: string }> {
   if (!inIframe()) return Promise.resolve({ fout: 'Geen pagina om te bedienen: de chat staat niet in een pagina' })
   return new Promise((resolve) => {
-    const ontvang = (e: MessageEvent) => {
-      if (e.origin !== window.location.origin || e.source !== window.parent || !isRecord(e.data)) return
-      if (e.data.soort !== 'uitkomst' || e.data.id !== id) return
+    const klaar = (antwoord: { uitkomst: unknown } | { fout: string }) => {
+      clearTimeout(wekker)
       window.removeEventListener('message', ontvang)
-      resolve(typeof e.data.fout === 'string' ? { fout: e.data.fout } : { uitkomst: e.data.uitkomst })
+      resolve(antwoord)
     }
+    const ontvang = (e: MessageEvent) => {
+      const bericht = vanHost(e)
+      if (bericht?.soort !== 'uitkomst' || bericht.id !== id) return
+      klaar(typeof bericht.fout === 'string' ? { fout: bericht.fout } : { uitkomst: bericht.uitkomst })
+    }
+    const wekker = setTimeout(() => {
+      klaar({ fout: `De pagina antwoordde niet binnen een minuut op ${tool}` })
+    }, WACHTEN)
     window.addEventListener('message', ontvang)
     meldHost({ soort: 'paginatool', id, tool, invoer })
   })
@@ -46,9 +59,10 @@ export function vraagHost(
 
 export function luisterNaarHost(op: (bericht: VanHost) => void): () => void {
   const ontvang = (e: MessageEvent) => {
-    if (e.origin !== window.location.origin || e.source !== window.parent || !isRecord(e.data)) return
-    if (e.data.soort === 'context') op({ soort: 'context', context: e.data.context })
-    else if (e.data.soort === 'vraag' && typeof e.data.tekst === 'string') op({ soort: 'vraag', tekst: e.data.tekst })
+    const bericht = vanHost(e)
+    if (bericht?.soort === 'context') op({ soort: 'context', context: bericht.context })
+    else if (bericht?.soort === 'vraag' && typeof bericht.tekst === 'string')
+      op({ soort: 'vraag', tekst: bericht.tekst })
   }
   window.addEventListener('message', ontvang)
   return () => {

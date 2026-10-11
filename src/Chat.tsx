@@ -63,18 +63,12 @@ function leesContext(): unknown {
   }
 }
 
-/**
- * De laatste stap riep een paginatool aan en alles in die stap heeft uitvoer: het gesprek gaat verder. Niet bij elke
- * stap met uitvoer, want ook de vervolgvragen hebben uitvoer.
- */
+/** De laatste stap riep een paginatool aan en alles in die stap heeft uitvoer: dan gaat het gesprek verder. */
 function naPaginatool(messages: UIMessage[]): boolean {
   const laatste = messages.at(-1)
   if (!laatste || !lastAssistantMessageIsCompleteWithToolCalls({ messages })) return false
   const stap = laatste.parts.slice(laatste.parts.map((p) => p.type).lastIndexOf('step-start') + 1)
-  return stap.some((p) => {
-    const naam = toolNameOfPart(p)
-    return naam !== null && startupConfig.paginatools.includes(naam)
-  })
+  return stap.map(toolNameOfPart).some((naam) => naam !== null && startupConfig.paginatools.includes(naam))
 }
 
 const ChatInner = () => {
@@ -127,18 +121,25 @@ const ChatInner = () => {
   // The session is owned here rather than left to `useChat` for two reasons:
   // the array it stores is only readable back off the session itself, and an
   // abandoned run can only be cut loose by handing the hook a different one.
+  // talkwithoptimalen: zolang de host een paginatool uitvoert, is de chat bezig: wie dan typt, zou de aanroep
+  // onafgemaakt achterlaten
+  const [paginaBezig, setPaginaBezig] = useState(0)
   const createSession = () => {
-    const sessie: ChatSession<UIMessage> = new ChatSession<UIMessage>({
+    const sessie = new ChatSession<UIMessage>({
       transport,
-      // talkwithoptimalen: een paginatool voert de host uit; zijn uitkomst gaat als uitvoer van de tool terug, en
-      // daarna verder (niet afwachten: de stroom wacht op deze functie)
+      // talkwithoptimalen: een paginatool voert de host uit; niet afwachten, want de stroom wacht op onToolCall
       onToolCall: ({ toolCall: { toolName: tool, toolCallId, input } }) => {
         if (!startupConfig.paginatools.includes(tool)) return
-        void vraagHost(toolCallId, tool, input).then((antwoord) =>
-          'fout' in antwoord
-            ? sessie.addToolOutput({ state: 'output-error', tool, toolCallId, errorText: antwoord.fout })
-            : sessie.addToolOutput({ tool, toolCallId, output: antwoord.uitkomst }),
-        )
+        setPaginaBezig((n) => n + 1)
+        void vraagHost(toolCallId, tool, input)
+          .then((antwoord) =>
+            'fout' in antwoord
+              ? sessie.addToolOutput({ state: 'output-error', tool, toolCallId, errorText: antwoord.fout })
+              : sessie.addToolOutput({ tool, toolCallId, output: antwoord.uitkomst }),
+          )
+          .then(() => {
+            setPaginaBezig((n) => n - 1)
+          })
       },
       sendAutomaticallyWhen: ({ messages }) =>
         lastAssistantMessageIsCompleteWithApprovalResponses({ messages }) || naPaginatool(messages),
@@ -151,9 +152,17 @@ const ChatInner = () => {
   // a history from a read that lands before React has re-rendered.
   const sessionRef = useRef(session)
   sessionRef.current = session
-  const { messages, sendMessage, status, regenerate, error, clearError, addToolApprovalResponse, stop } = useChat({
-    chat: session,
-  })
+  const {
+    messages,
+    sendMessage,
+    status: chatStatus,
+    regenerate,
+    error,
+    clearError,
+    addToolApprovalResponse,
+    stop,
+  } = useChat({ chat: session })
+  const status = paginaBezig > 0 ? 'submitted' : chatStatus
   const [conversationId, setConversationId] = useConversationIdFromUrl()
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 

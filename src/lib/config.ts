@@ -93,7 +93,7 @@ export interface ResolvedStartupConfig {
   readonly welkom: Welkom
   readonly vervolgopties: Vervolgopties
   readonly keuzelijsten: Keuzelijsten
-  /** Tools die de host uitvoert: de chat geeft de aanroep door en de uitkomst terug als uitvoer van de tool. */
+  /** Tools die de host uitvoert (zie `lib/host.ts`). */
   readonly paginatools: string[]
   readonly voorstel: Voorstel | null
 }
