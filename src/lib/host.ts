@@ -9,18 +9,39 @@ import { isRecord } from '@/lib/is-record'
  *
  * Van de host: `context` gaat bij elke volgende vraag verborgen mee (wat de gebruiker nu ziet), en `vraag` stelt een
  * vraag alsof hij getypt is. Naar de host: `aanpassen` (de gebruiker zet een voorstel in het formulier van de pagina)
- * en `uitgevoerd` (een goedgekeurd voorstel is opgeslagen, de pagina kan vernieuwen).
+ * en `uitgevoerd` (een goedgekeurd voorstel is opgeslagen, de pagina kan vernieuwen). Een paginatool gaat als
+ * `paginatool` naar de host, die met `uitkomst` antwoordt: wat er nu te zien is, of een `fout`.
  */
 export type VanHost = { soort: 'context'; context: unknown } | { soort: 'vraag'; tekst: string }
 
 export type NaarHost =
   | { soort: 'aanpassen'; tool: string; voorstel: Record<string, unknown> }
   | { soort: 'uitgevoerd'; tool: string; voorstel: Record<string, unknown> }
+  | { soort: 'paginatool'; id: string; tool: string; invoer: unknown }
 
 const inIframe = () => window.parent !== window
 
 export function meldHost(bericht: NaarHost): void {
   if (inIframe()) window.parent.postMessage(bericht, window.location.origin)
+}
+
+/** Een paginatool door de host laten uitvoeren; `id` is die van de toolaanroep. */
+export function vraagHost(
+  id: string,
+  tool: string,
+  invoer: unknown,
+): Promise<{ uitkomst: unknown } | { fout: string }> {
+  if (!inIframe()) return Promise.resolve({ fout: 'Geen pagina om te bedienen: de chat staat niet in een pagina' })
+  return new Promise((resolve) => {
+    const ontvang = (e: MessageEvent) => {
+      if (e.origin !== window.location.origin || e.source !== window.parent || !isRecord(e.data)) return
+      if (e.data.soort !== 'uitkomst' || e.data.id !== id) return
+      window.removeEventListener('message', ontvang)
+      resolve(typeof e.data.fout === 'string' ? { fout: e.data.fout } : { uitkomst: e.data.uitkomst })
+    }
+    window.addEventListener('message', ontvang)
+    meldHost({ soort: 'paginatool', id, tool, invoer })
+  })
 }
 
 export function luisterNaarHost(op: (bericht: VanHost) => void): () => void {

@@ -9,7 +9,7 @@ import { EditMessageDialog } from '@/components/edit-message-dialog'
 import { Bronnen, QUERY_TOOL, type Bron } from '@/components/bronnen'
 import { FOLLOW_UPS_TOOL } from '@/components/follow-ups'
 import { VOORSTEL } from '@/components/voorstel-kaart'
-import { luisterNaarHost, zetHostContext } from '@/lib/host'
+import { luisterNaarHost, vraagHost, zetHostContext } from '@/lib/host'
 import { HiddenToolsGroup } from '@/components/hidden-tools-group'
 import { ThinkingIndicator } from '@/components/thinking-indicator'
 import { ToolCallGroup } from '@/components/tool-call-group'
@@ -20,7 +20,11 @@ import { metTekens, zonderTekens } from '@/lib/ingevuld'
 import { TurnActivity, TurnActivityStep } from '@/components/turn-activity'
 import { ToolFiltersProvider, useToolFilters } from '@/contexts/tool-filters'
 import { Chat as ChatSession, useChat } from '@ai-sdk/react'
-import { DefaultChatTransport, lastAssistantMessageIsCompleteWithApprovalResponses } from 'ai'
+import {
+  DefaultChatTransport,
+  lastAssistantMessageIsCompleteWithApprovalResponses,
+  lastAssistantMessageIsCompleteWithToolCalls,
+} from 'ai'
 import type { UIDataTypes, UIMessage, UIMessagePart, UITools } from 'ai'
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode, type SyntheticEvent } from 'react'
 
@@ -57,6 +61,20 @@ function leesContext(): unknown {
   } catch {
     return null
   }
+}
+
+/**
+ * De laatste stap riep een paginatool aan en alles in die stap heeft uitvoer: het gesprek gaat verder. Niet bij elke
+ * stap met uitvoer, want ook de vervolgvragen hebben uitvoer.
+ */
+function naPaginatool(messages: UIMessage[]): boolean {
+  const laatste = messages.at(-1)
+  if (!laatste || !lastAssistantMessageIsCompleteWithToolCalls({ messages })) return false
+  const stap = laatste.parts.slice(laatste.parts.map((p) => p.type).lastIndexOf('step-start') + 1)
+  return stap.some((p) => {
+    const naam = toolNameOfPart(p)
+    return naam !== null && startupConfig.paginatools.includes(naam)
+  })
 }
 
 const ChatInner = () => {
@@ -109,11 +127,24 @@ const ChatInner = () => {
   // The session is owned here rather than left to `useChat` for two reasons:
   // the array it stores is only readable back off the session itself, and an
   // abandoned run can only be cut loose by handing the hook a different one.
-  const createSession = () =>
-    new ChatSession<UIMessage>({
+  const createSession = () => {
+    const sessie: ChatSession<UIMessage> = new ChatSession<UIMessage>({
       transport,
-      sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithApprovalResponses,
+      // talkwithoptimalen: een paginatool voert de host uit; zijn uitkomst gaat als uitvoer van de tool terug, en
+      // daarna verder (niet afwachten: de stroom wacht op deze functie)
+      onToolCall: ({ toolCall: { toolName: tool, toolCallId, input } }) => {
+        if (!startupConfig.paginatools.includes(tool)) return
+        void vraagHost(toolCallId, tool, input).then((antwoord) =>
+          'fout' in antwoord
+            ? sessie.addToolOutput({ state: 'output-error', tool, toolCallId, errorText: antwoord.fout })
+            : sessie.addToolOutput({ tool, toolCallId, output: antwoord.uitkomst }),
+        )
+      },
+      sendAutomaticallyWhen: ({ messages }) =>
+        lastAssistantMessageIsCompleteWithApprovalResponses({ messages }) || naPaginatool(messages),
     })
+    return sessie
+  }
   const [session, setSession] = useState(createSession)
   // Every message write goes through this, never through a session captured by
   // a render: the conversation-change effect can swap sessions and then install
