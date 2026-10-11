@@ -93,7 +93,9 @@ export function ChatComposer({
       {/* talkwithoptimalen: één pil zoals op america.gov en in het dashboard; knop rechts in de pil */}
       <PromptInput onSubmit={onSubmit} className="invoerpil">
         <div className="veldmarkering">
-          <Markering tekst={input} waarden={ingevuld} className="px-5 py-3.5" />
+          {/* leeg veld: de onzichtbare markering draagt de placeholder, zodat het veld hoog genoeg is als die op twee
+              regels valt (field-sizing telt de placeholder niet mee) */}
+          <Markering tekst={input || startupConfig.welkom.invoer} waarden={ingevuld} className="px-5 py-3.5" />
           <PromptInputTextarea
             placeholder={startupConfig.welkom.invoer}
             // The vendored Textarea floors at min-h-16, which left a band of dead
