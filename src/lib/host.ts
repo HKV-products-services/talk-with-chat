@@ -11,10 +11,12 @@ import { isRecord } from '@/lib/is-record'
  * vraag alsof hij getypt is. Naar de host: `aanpassen` (de gebruiker zet een voorstel in het formulier van de pagina)
  * en `uitgevoerd` (een goedgekeurd voorstel is opgeslagen, de pagina kan vernieuwen). Een paginatool gaat als
  * `paginatool` naar de host, die antwoordt met `uitkomst` of `fout`; de chat geeft dat als uitvoer van de tool terug.
+ * `klaar` meldt dat de chat luistert: een context die de host eerder stuurde, kan verloren zijn gegaan.
  */
 export type VanHost = { soort: 'context'; context: unknown } | { soort: 'vraag'; tekst: string }
 
 export type NaarHost =
+  | { soort: 'klaar' }
   | { soort: 'aanpassen'; tool: string; voorstel: Record<string, unknown> }
   | { soort: 'uitgevoerd'; tool: string; voorstel: Record<string, unknown> }
   | { soort: 'paginatool'; id: string; tool: string; invoer: unknown }
@@ -22,9 +24,10 @@ export type NaarHost =
 const inIframe = () => window.parent !== window
 const WACHTEN = 60_000 // ms
 
-/** Een bericht van de pagina eromheen, op dezelfde oorsprong; anders null. */
+/** Een bericht van de pagina eromheen, op dezelfde oorsprong; anders null. Niet op `e.source`: Safari geeft daar het
+ * venster van de chat zelf als de pagina het bericht vanuit een timer stuurt. */
 function vanHost(e: MessageEvent): Record<string, unknown> | null {
-  return e.origin === window.location.origin && e.source === window.parent && isRecord(e.data) ? e.data : null
+  return inIframe() && e.origin === window.location.origin && isRecord(e.data) ? e.data : null
 }
 
 export function meldHost(bericht: NaarHost): void {
@@ -65,6 +68,7 @@ export function luisterNaarHost(op: (bericht: VanHost) => void): () => void {
       op({ soort: 'vraag', tekst: bericht.tekst })
   }
   window.addEventListener('message', ontvang)
+  meldHost({ soort: 'klaar' })
   return () => {
     window.removeEventListener('message', ontvang)
   }
