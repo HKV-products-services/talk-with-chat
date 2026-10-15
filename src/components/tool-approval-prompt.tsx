@@ -36,10 +36,10 @@ export function ToolApprovalPrompt({ approval, toolName, state, onApprovalRespon
         <div className="flex gap-2.5">
           <ShieldAlertIcon className="mt-0.5 size-4 shrink-0 text-amber-500" />
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-medium">This tool requires your approval to run</p>
+            <p className="text-sm font-medium">Deze tool vraagt je akkoord</p>
             <p className="text-muted-foreground mt-0.5 text-sm">
-              <span className="font-mono text-xs">{toolName}</span> has not run yet. Review the arguments above before
-              deciding.
+              <span className="font-mono text-xs">{toolName}</span> is nog niet uitgevoerd. Bekijk de invoer hierboven
+              voordat je beslist.
             </p>
 
             <div className="mt-3 flex flex-wrap gap-2">
@@ -50,7 +50,7 @@ export function ToolApprovalPrompt({ approval, toolName, state, onApprovalRespon
                 }}
               >
                 <CheckIcon className="size-3.5" />
-                Approve
+                Akkoord
               </Button>
               <Button
                 size="sm"
@@ -60,7 +60,7 @@ export function ToolApprovalPrompt({ approval, toolName, state, onApprovalRespon
                   void onApprovalResponse({ id: approval.id, approved: false })
                 }}
               >
-                Deny
+                Niet doen
               </Button>
             </div>
           </div>
@@ -76,12 +76,12 @@ export function ToolApprovalPrompt({ approval, toolName, state, onApprovalRespon
   return approval.approved ? (
     <p className="text-muted-foreground flex items-center gap-1.5 border-t px-3 py-2 text-xs">
       <ShieldCheckIcon className="text-primary size-3.5 shrink-0" />
-      {state === 'approval-responded' ? 'Approved. Executing tool…' : 'Approved by you.'}
+      {state === 'approval-responded' ? 'Akkoord. Wordt uitgevoerd…' : 'Akkoord gegeven.'}
     </p>
   ) : (
     <p className="text-muted-foreground flex items-center gap-1.5 border-t px-3 py-2 text-xs">
       <ShieldXIcon className="text-destructive size-3.5 shrink-0" />
-      Denied. Tool will not run.
+      Niet gedaan. De tool is niet uitgevoerd.
     </p>
   )
 }

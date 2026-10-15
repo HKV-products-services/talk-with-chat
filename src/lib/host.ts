@@ -9,7 +9,7 @@ import { isRecord } from '@/lib/is-record'
  *
  * Van de host: `context` gaat bij elke volgende vraag verborgen mee (wat de gebruiker nu ziet), en `vraag` stelt een
  * vraag alsof hij getypt is. Naar de host: `aanpassen` (de gebruiker zet een voorstel in het formulier van de pagina)
- * en `uitgevoerd` (een goedgekeurd voorstel is opgeslagen, de pagina kan vernieuwen). Een paginatool gaat als
+ * en `uitgevoerd` (een goedgekeurde tool is uitgevoerd, de pagina kan vernieuwen). Een paginatool gaat als
  * `paginatool` naar de host, die antwoordt met `uitkomst` of `fout`; de chat geeft dat als uitvoer van de tool terug.
  * `klaar` meldt dat de chat luistert: een context die de host eerder stuurde, kan verloren zijn gegaan.
  */

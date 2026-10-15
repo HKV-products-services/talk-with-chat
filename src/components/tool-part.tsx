@@ -7,10 +7,12 @@ import { RunCodeInput } from '@/components/run-code-input'
 import { isRunCodeOutput, RunCodeOutput } from '@/components/run-code-output'
 import { Collapsible, CollapsibleContent } from '@/components/ui/collapsible'
 import { useToolFilters } from '@/contexts/tool-filters'
+import { meldHost } from '@/lib/host'
+import { isRecord } from '@/lib/is-record'
 import { cn } from '@/lib/utils'
 import type { ChatAddToolApproveResponseFunction, DynamicToolUIPart, ToolUIPart } from 'ai'
 import { EyeOffIcon } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 // The card's left edge carries the state, so a run of cards can be scanned for
 // the one that needs attention without reading a word.
@@ -39,6 +41,15 @@ export function ToolPart({ part, onApprovalResponse }: ToolPartProps) {
   }, [part.state])
 
   const toolName = part.type === 'dynamic-tool' ? part.toolName : part.type.split('-').slice(1).join('-')
+
+  // een goedgekeurde tool is uitgevoerd: de pagina eromheen kan vernieuwen
+  const gemeld = useRef(false)
+  useEffect(() => {
+    if (part.state === 'output-available' && approval?.approved === true && !gemeld.current) {
+      gemeld.current = true
+      meldHost({ soort: 'uitgevoerd', tool: toolName, voorstel: isRecord(part.input) ? part.input : {} })
+    }
+  }, [part.state, approval?.approved, toolName, part.input])
   const isRunCode = toolName === 'run_code'
   // Only the copy action inside the open card needs this. Serialising it up
   // front made reopening a conversation walk every tool payload it holds,
